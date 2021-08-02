@@ -1,0 +1,28 @@
+{
+    "name": null,
+    "description": null,
+    "author": null,
+    "version": null,
+    "version_name": null,
+    "background": {
+        "scripts": [
+            "index.js"
+        ]
+    },
+    "chrome_url_overrides": {
+        "newtab": "index.html"
+    },
+    "content_security_policy": "script-src 'self' 'unsafe-eval' ; object-src 'self'",
+    "content_scripts": [],
+    "manifest_version": 2,
+    "permissions": [
+    ],
+    "web_accessible_resources": [
+        "090a7ab82aa6f26df7ce.js",
+        "ae63a61dabb8faec63e3.css",
+        "c2166f5503ee2bf34cfe.js",
+        "img/e775ece3c0fa6aaa6589dc6d6bb281ff.png",
+        "index.html"
+    ]
+}
+

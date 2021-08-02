@@ -1,0 +1,5 @@
+packages/backend/.idea
+packages/backend/target
+packages/frontend/.idea
+packages/frontend/node_modules
+volume

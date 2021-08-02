@@ -1,0 +1,62 @@
+version: "3.7"
+
+services:
+
+  backend:
+    image: ajedrzejowski/wstartpage:latest
+    environment:
+      WSTARTPAGE_DASHBOARD_ROOT: /volume/dashboards
+      WSTARTPAGE_IMAGE_ROOT: /volume/img
+    volumes:
+      - ${VOLUME}/dashboards:/volume/dashboards
+      - ${VOLUME}/img:/volume/img
+    expose:
+      - "8080"
+    networks: 
+      - default
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+
+#      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_backend.tls=true"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_backend.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_backend.entrypoints=web"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_backend.service=${COMPOSE_PROJECT_NAME}_backend"
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME}_backend.loadbalancer.server.port=8080"
+    restart: unless-stopped
+
+  code:
+    image: codercom/code-server:latest
+    volumes:
+      - ${VOLUME}/code:/home/coder
+      - ${VOLUME}/dashboards:/home/coder/dashboards
+      - ${VOLUME}/img:/home/coder/img
+    networks:
+      - default
+      - proxy
+    user: 1000:985
+    environment:
+      DOCKER_USER: ${COMPOSE_PROJECT_NAME}
+    command:
+      - --disable-telemetry
+      - /home/coder/workspace.code-workspace
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}_code.stripprefix.prefixes=/editor"
+
+#      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_code.tls=true"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_code.rule=Host(`${HOSTNAME}`) && PathPrefix(`/editor`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_code.entrypoints=web"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_code.middlewares=${COMPOSE_PROJECT_NAME}_code"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_code.service=${COMPOSE_PROJECT_NAME}_code"
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME}_code.loadbalancer.server.port=8080"
+    restart: unless-stopped
+
+networks:
+  default:
+  proxy:
+    external:
+      name: proxy

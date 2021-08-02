@@ -1,0 +1,8 @@
+.idea
+node_modules
+dist
+*.crx
+/pkg
+*.pkg.tar.xz
+*.zip
+volume/
