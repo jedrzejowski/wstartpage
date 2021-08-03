@@ -1,6 +1,6 @@
 
 VERSION=0.0.2
-DOCKER_TAG=ajedrzejowski/wstartpage
+DOCKER_TAG?=ajedrzejowski/wstartpage
 
 docker-build:
 	docker build . \
