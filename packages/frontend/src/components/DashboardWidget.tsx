@@ -1,18 +1,42 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
 import Icon from "../lib/Icon";
 import styled from "@emotion/styled";
 import type {DashboardWidgetT} from "../types";
+import {searchEngine, useSearchQuery} from "../data/slice/searchSlice";
+import {useDisplayTitles} from "../data/slice/settingsSlice";
 
 export const DashboardWidget: FC<{
     widget: DashboardWidgetT
 }> = ({widget}) => {
+    const searchQuery = useSearchQuery();
+    const [visible, setVisible] = useState(true);
+    const displayTitles = useDisplayTitles();
+
+    useEffect(() => {
+
+        if (searchQuery) {
+            setVisible(searchEngine(searchQuery, widget.title));
+        } else {
+            setVisible(true);
+        }
+    }, [searchQuery])
 
     const url = widget.url === "#" ? undefined : widget.url;
 
     return (
-        <Root href={url}>
+        <Root href={url} style={{
+            display: visible ? undefined : "none",
+        }}>
             <Icon icon={widget.icon}/>
-            <Title>{widget.title}</Title>
+
+            <Title
+                style={{
+                    display: displayTitles ? undefined : "none",
+                }}
+            >
+                {widget.title}
+            </Title>
+
         </Root>
     );
 };

@@ -2,13 +2,13 @@ import {DashboardSourceT} from "../types";
 import {useEffect, useState} from "react";
 import {List} from "immutable";
 
-export function useNamedDashboard(id: string): DashboardSourceT | null {
+export function useNamedIconSet(id: string): DashboardSourceT | null {
     const [dashboardSource, setDashboardSource] = useState<DashboardSourceT | null>(null);
 
     useEffect(() => {
         let canceled = false;
 
-        fetchDashboard(id).then(async dashboardSource => {
+        fetchIconSets(id).then(async dashboardSource => {
 
             if (canceled) {
                 return;
@@ -25,15 +25,15 @@ export function useNamedDashboard(id: string): DashboardSourceT | null {
     return dashboardSource;
 }
 
-export default useNamedDashboard;
+export default useNamedIconSet;
 
-export function useNamedDashboards(ids: string[] | List<string>): DashboardSourceT[] {
+export function useNamedIconSets(ids: string[] | List<string>): DashboardSourceT[] {
     const [dashboardSources, setDashboardSources] = useState<DashboardSourceT[]>([]);
 
     useEffect(() => {
         let canceled = false;
 
-        Promise.all(ids.map(id => fetchDashboard(id))).then(async dashboardSources => {
+        Promise.all(ids.map(id => fetchIconSets(id))).then(async dashboardSources => {
 
             if (canceled) {
                 return;
@@ -50,7 +50,7 @@ export function useNamedDashboards(ids: string[] | List<string>): DashboardSourc
     return dashboardSources;
 }
 
-export async function fetchDashboard(id: string): Promise<DashboardSourceT> {
+export async function fetchIconSets(id: string): Promise<DashboardSourceT> {
     const response = await fetch(`api/dashboardSources/${id}`, {
         headers: {
             "Content-Type": "application/json",

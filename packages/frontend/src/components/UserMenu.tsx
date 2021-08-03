@@ -3,12 +3,13 @@ import {SmallButton} from "../lib/UtilityElements";
 import Emoji from "../lib/Emoji";
 import styled from "@emotion/styled";
 import Modal from "react-modal";
-import {useCurrentDashboardNames, useSetCurrentDashboardNames} from "../data/currentDashboards";
+import settingsSlice, {useIconSetNames} from "../data/slice/settingsSlice";
+import {useAppDispatch} from "../data/hooks";
 
 const UserMenu: FC<{}> = React.memo(props => {
     const [isOpen, setIsOpen] = useState(false);
-    const currentNames = useCurrentDashboardNames();
-    const setCurrentNames = useSetCurrentDashboardNames();
+    const currentNames = useIconSetNames();
+    const dispatch = useAppDispatch();
 
     return <div>
         <SmallButton onClick={handleOpenModal}>{Emoji.GEAR}</SmallButton>
@@ -47,7 +48,7 @@ const UserMenu: FC<{}> = React.memo(props => {
     }
 
     function handleNamesChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setCurrentNames(event.target.value);
+        dispatch(settingsSlice.actions.setIconSetName(event.target.value.split(";")));
     }
 });
 

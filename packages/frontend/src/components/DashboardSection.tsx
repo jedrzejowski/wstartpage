@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import DashboardWidget from "./DashboardWidget";
 import type {DashboardSectionT} from "../types";
 import styled from "@emotion/styled";
