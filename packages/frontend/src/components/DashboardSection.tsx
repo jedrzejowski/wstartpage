@@ -4,15 +4,23 @@ import type {DashboardSectionT} from "../types";
 import styled from "@emotion/styled";
 import {isNumber} from "../lib/is";
 import {useTheme} from "@emotion/react";
+import {useDisplayTitles} from "../data/slice/settingsSlice";
 
 const DashboardSection: FC<{
     section: DashboardSectionT;
 }> = ({section}) => {
     const theme = useTheme();
+    const displayTitles = useDisplayTitles();
 
     return (
         <SectionRoot>
-            <Title>{section.title}</Title>
+            <Title
+                style={{
+                    display: displayTitles ? undefined : "none"
+                }}
+            >
+                {section.title}
+            </Title>
 
             <WidgetsContainer style={{
                 width: isNumber(section.width) ? section.width * (theme.spacingNum(3) + theme.iconSize) : undefined

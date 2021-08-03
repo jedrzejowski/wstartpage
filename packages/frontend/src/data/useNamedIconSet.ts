@@ -1,6 +1,5 @@
 import {DashboardSourceT} from "../types";
 import {useEffect, useState} from "react";
-import {List} from "immutable";
 
 export function useNamedIconSet(id: string): DashboardSourceT | null {
     const [dashboardSource, setDashboardSource] = useState<DashboardSourceT | null>(null);
@@ -27,7 +26,7 @@ export function useNamedIconSet(id: string): DashboardSourceT | null {
 
 export default useNamedIconSet;
 
-export function useNamedIconSets(ids: string[] | List<string>): DashboardSourceT[] {
+export function useNamedIconSets(ids: string[]): DashboardSourceT[] {
     const [dashboardSources, setDashboardSources] = useState<DashboardSourceT[]>([]);
 
     useEffect(() => {

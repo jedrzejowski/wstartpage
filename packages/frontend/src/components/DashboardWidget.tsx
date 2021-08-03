@@ -27,15 +27,17 @@ export const DashboardWidget: FC<{
         <Root href={url} style={{
             display: visible ? undefined : "none",
         }}>
-            <Icon icon={widget.icon}/>
+            <IconRoot>
+                <Icon icon={widget.icon}/>
+            </IconRoot>
 
-            <Title
+            <TitleRoot
                 style={{
                     display: displayTitles ? undefined : "none",
                 }}
             >
                 {widget.title}
-            </Title>
+            </TitleRoot>
 
         </Root>
     );
@@ -53,10 +55,13 @@ const Root = styled.a`
   margin-bottom: ${props => props.theme.spacing(0.5)};
 `
 
-const Title = styled.div`
+const IconRoot = styled.div`
+  margin-bottom: ${props => props.theme.spacing(1)};
+`;
+
+const TitleRoot = styled.div`
   display: block;
   width: 100%;
-  padding-top: ${props => props.theme.spacing(1)};
   color: black;
   cursor: pointer;
   text-align: center;

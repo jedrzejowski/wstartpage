@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 
 export function useKeyboardEventEmitter(cb: (key: KeyboardEvent) => void) {
 
@@ -15,6 +15,6 @@ export function useKeyboardEventEmitter(cb: (key: KeyboardEvent) => void) {
         return () => {
             window.removeEventListener("keydown", eventCallback);
         }
-    }, []);
+    }, [cb]);
 }
 

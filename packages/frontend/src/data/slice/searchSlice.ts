@@ -25,7 +25,7 @@ export const searchSlice = createSlice({
                 state.query = state.query.substr(0, state.query.length - 1);
             }
         },
-    },
+    }
 })
 
 export const selectQuery = (state: RootState) => state.search.query;
