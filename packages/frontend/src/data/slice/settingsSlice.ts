@@ -1,7 +1,9 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {useAppSelector} from "../hooks";
-import {fromStorage} from "../storage";
 import {FC, useEffect} from "react";
+import {fromLocalStorage, toLocalStorage} from "../../lib/localStorage";
+
+const STORAGE_NAME = "settings";
 
 interface SettingsState {
     iconSetNames: string[];
@@ -9,11 +11,14 @@ interface SettingsState {
     displayTitles: boolean;
 }
 
-const initialState: SettingsState = fromStorage("settings", {
+const default_value: SettingsState = {
     iconSetNames: [],
     darkMode: false,
     displayTitles: true,
-});
+};
+
+const initialState: SettingsState = fromLocalStorage(STORAGE_NAME, default_value);
+initialState.iconSetNames = new URL(location.href).searchParams.get("iconSets")?.split(/[,;]/) ?? initialState.iconSetNames;
 
 export const settingsSlice = createSlice({
     name: "settings",
@@ -37,7 +42,7 @@ export const SettingsSaver: FC = props => {
     const settings = useAppSelector(state => state.settings);
 
     useEffect(() => {
-        localStorage.setItem("settings", JSON.stringify(settings));
+        toLocalStorage(STORAGE_NAME, settings);
     }, [settings]);
 
     return null;

@@ -2,13 +2,13 @@ import React from "react";
 import AppLayout from "../lib/AppLayout";
 import DashboardTop from "./DashboardTop";
 import DashboardContainer from "./DashboardContainer";
-import {useNamedIconSets} from "../data/useNamedIconSet";
-import {mergeDashboards} from "../types";
+import {useIconSets} from "../data/iconSets";
+import {mergeIconSets} from "../types";
 import SearchView from "./SearchView";
 import {useIconSetNames} from "../data/slice/settingsSlice";
 
 function Dashboard() {
-    const dashboard = mergeDashboards(useNamedIconSets(useIconSetNames()));
+    const dashboard = mergeIconSets(useIconSets(useIconSetNames(), {recursive: true}));
 
     if (!dashboard) return null;
 

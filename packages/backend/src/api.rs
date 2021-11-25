@@ -1,9 +1,10 @@
-mod dashboard_sources;
+mod icon_sets;
 
 use actix_web::{web};
 
 pub fn service(cfg: &mut web::ServiceConfig) {
     cfg
-        .service(dashboard_sources::select)
-        .service(dashboard_sources::search);
+        .service(icon_sets::select)
+    // .service(dashboard::search)
+    ;
 }

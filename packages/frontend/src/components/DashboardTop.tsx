@@ -1,12 +1,12 @@
 import React, {FC} from "react";
-import {DashboardSectionT} from "../types";
+import {IconSectionT} from "../types";
 import styled from "@emotion/styled";
 import theme from "../theme";
 import UserMenu from "./UserMenu";
 import {FlexExpand, HFlexContainer} from "../lib/UtilityElements";
 
 const DashboardTop: FC<{
-    sections: DashboardSectionT[]
+    sections: IconSectionT[]
 }> = React.memo(props => {
     return (
         <Root>
@@ -45,7 +45,7 @@ const Widget = styled.a`
 `;
 
 function TextSection(props: {
-    section?: DashboardSectionT,
+    section?: IconSectionT,
     className?: string
 }) {
     if (!props.section) return null;

@@ -1,38 +1,36 @@
-export type DashboardWidgetT = {
+export type IconT = {
     title?: string;
     icon?: string;
     url: string;
     order?: number;
 }
 
-export type DashboardSectionT = {
+export type IconSectionT = {
     title: string;
     width?: number;
-    widgets: DashboardWidgetT[];
+    widgets: IconT[];
     order?: number;
 }
 
-export type DashboardContainerT = DashboardSectionT[];
+export type IconContainerT = IconSectionT[];
 
-export type DashboardContainersT =
+export type IconContainersT =
     | "top"
     | "middle"
     | "left"
     | "right"
     | "bottom";
 
-export  type DashboardSourceT = Partial<Record<DashboardContainersT, DashboardContainerT | null>>;
+export  type IconSetT = Partial<{
+    includes: string[];
+} & Record<IconContainersT, IconContainerT | null>>;
 
-export type DashboardStyleT = {
-    logo: string;
-}
+export function mergeIconSets(iconSets: IconSetT[]) {
 
-export function mergeDashboards(dashboards: DashboardSourceT[]) {
-
-    function reduce(name: DashboardContainersT): DashboardSectionT[] {
-        return dashboards.reduce((sum, cur) => {
+    function reduce(name: IconContainersT): IconSectionT[] {
+        return iconSets.reduce((sum, cur) => {
             return (cur[name] ? [...sum, ...cur[name]] : sum);
-        }, [] as DashboardSectionT[]).sort((a, b) => {
+        }, [] as IconSectionT[]).sort((a, b) => {
             return (a.order ?? 1000) - (b.order ?? 1000);
         });
     }

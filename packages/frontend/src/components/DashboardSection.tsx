@@ -1,13 +1,13 @@
 import React, {FC, useEffect} from "react";
 import DashboardWidget from "./DashboardWidget";
-import type {DashboardSectionT} from "../types";
+import type {IconSectionT} from "../types";
 import styled from "@emotion/styled";
-import {isNumber} from "../lib/is";
+import {isNumber} from "../lib/util";
 import {useTheme} from "@emotion/react";
 import {useDisplayTitles} from "../data/slice/settingsSlice";
 
 const DashboardSection: FC<{
-    section: DashboardSectionT;
+    section: IconSectionT;
 }> = ({section}) => {
     const theme = useTheme();
     const displayTitles = useDisplayTitles();

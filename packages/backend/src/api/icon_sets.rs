@@ -1,30 +1,32 @@
 use actix_web::{Error, web, HttpResponse, get};
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use crate::config;
 use std::vec::Vec;
 
 #[derive(Deserialize, Serialize)]
-pub struct DashboardWidget {
+pub struct Icon {
     title: Option<String>,
     icon: Option<String>,
     url: String,
 }
 
 #[derive(Deserialize, Serialize)]
-pub struct DashboardSection {
+pub struct IconSection {
     title: String,
     width: Option<i32>,
-    widgets: Vec<DashboardWidget>,
+    widgets: Vec<Icon>,
     order: Option<i32>,
 }
 
 #[derive(Deserialize, Serialize)]
-pub struct Dashboard {
-    top: Option<Vec<DashboardSection>>,
-    middle: Option<Vec<DashboardSection>>,
-    right: Option<Vec<DashboardSection>>,
-    left: Option<Vec<DashboardSection>>,
-    bottom: Option<Vec<DashboardSection>>,
+pub struct IconSet {
+    includes: Option<Vec<String>>,
+    top: Option<Vec<IconSection>>,
+    middle: Option<Vec<IconSection>>,
+    right: Option<Vec<IconSection>>,
+    left: Option<Vec<IconSection>>,
+    bottom: Option<Vec<IconSection>>,
 }
 
 #[derive(Deserialize)]
@@ -32,7 +34,7 @@ pub struct SelectParams {
     id: String,
 }
 
-#[get("/dashboardSources/{id}")]
+#[get("/icon-sets/{id}")]
 pub async fn select(
     params: web::Path<SelectParams>,
 ) -> Result<HttpResponse, Error> {
@@ -46,23 +48,25 @@ pub async fn select(
         return Ok(HttpResponse::NotFound().finish());
     }
 
-    let file_content: serde_yaml::Result<Dashboard> = serde_yaml::from_reader(file.unwrap());
+    let file_content: serde_yaml::Result<IconSet> = serde_yaml::from_reader(file.unwrap());
 
     if file_content.is_err() {
-        eprintln!("Application error: {}", file_content.err().unwrap());
-        return Ok(HttpResponse::InternalServerError().finish());
+        return Ok(HttpResponse::InternalServerError()
+            .json(json!({
+                "error": file_content.err().unwrap().to_string()
+            })));
     }
 
-    Ok(HttpResponse::Ok().json(file_content.unwrap()))
+    return Ok(HttpResponse::Ok().json(file_content.unwrap()));
 }
 
-#[get("/dashboardSources")]
+#[get("/icon-sets")]
 pub async fn search() -> Result<HttpResponse, Error> {
     let paths = std::fs::read_dir(config::dashboard_files_root.as_str())?;
 
-    let names: Vec<String> = paths.flatten().filter(|dir_entry|{
+    let names: Vec<String> = paths.flatten().filter(|dir_entry| {
         dir_entry.file_type().unwrap().is_file()
-    }).map(|dir_entry|{
+    }).map(|dir_entry| {
         dir_entry.path()
     }).filter(|path| {
         match path.extension().unwrap().to_str().unwrap() {

@@ -1,12 +1,12 @@
 import React, {FC, useEffect, useState} from "react";
 import Icon from "../lib/Icon";
 import styled from "@emotion/styled";
-import type {DashboardWidgetT} from "../types";
+import type {IconT} from "../types";
 import {searchEngine, useSearchQuery} from "../data/slice/searchSlice";
 import {useDisplayTitles} from "../data/slice/settingsSlice";
 
 export const DashboardWidget: FC<{
-    widget: DashboardWidgetT
+    widget: IconT
 }> = ({widget}) => {
     const searchQuery = useSearchQuery();
     const [visible, setVisible] = useState(true);

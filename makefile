@@ -1,9 +1,9 @@
 
-VERSION=0.0.2
+VERSION=0.0.4
 DOCKER_TAG?=ajedrzejowski/wstartpage
 
 docker-build:
-	docker build . \
+	docker build . --pull \
 		--tag ${DOCKER_TAG}:${VERSION} \
 		--tag ${DOCKER_TAG}:latest
 

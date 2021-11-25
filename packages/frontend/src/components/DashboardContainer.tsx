@@ -1,10 +1,10 @@
 import React, {FC} from "react";
-import {DashboardContainerT} from "../types";
+import {IconContainerT} from "../types";
 import DashboardSection from "./DashboardSection";
 import styled from "@emotion/styled";
 
 const DashboardContainer: FC<{
-    sections: DashboardContainerT;
+    sections: IconContainerT;
 }> = React.memo(({sections}) => {
 
     return <Root>
