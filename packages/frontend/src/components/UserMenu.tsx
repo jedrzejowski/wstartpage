@@ -3,12 +3,12 @@ import {SmallButton} from "../lib/UtilityElements";
 import Emoji from "../lib/Emoji";
 import styled from "@emotion/styled";
 import Modal from "react-modal";
-import settingsSlice, {useIconSetNames} from "../data/slice/settingsSlice";
+import settingsSlice, {useSettings} from "../data/slice/settingsSlice";
 import {useAppDispatch} from "../data/hooks";
 
 const UserMenu: FC<{}> = React.memo(props => {
     const [isOpen, setIsOpen] = useState(false);
-    const currentNames = useIconSetNames();
+    const currentNames = useSettings.iconSetNames();
     const dispatch = useAppDispatch();
 
     return <div>

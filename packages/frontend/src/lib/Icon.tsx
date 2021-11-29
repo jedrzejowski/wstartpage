@@ -1,11 +1,11 @@
 import React, {FC} from "react";
 import CenterJS from "./CenterJS";
 import styled from "@emotion/styled";
-import theme from "../theme";
+import {useTheme} from "@emotion/react";
 
 const Background = styled.div`
-  width: ${theme.iconSize}px;
-  height: ${theme.iconSize}px;
+  width: ${props => props.theme.iconSize}px;
+  height: ${props => props.theme.iconSize}px;
 
   background-repeat: no-repeat;
   background-position: center;
@@ -13,8 +13,9 @@ const Background = styled.div`
 `;
 
 const Icon: FC<{
-    icon: string
+    icon: string;
 }> = React.memo(props => {
+    const theme = useTheme();
 
     if (props.icon[0] === '!') {
         const data: any = {};

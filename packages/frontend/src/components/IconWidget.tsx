@@ -3,14 +3,14 @@ import Icon from "../lib/Icon";
 import styled from "@emotion/styled";
 import type {IconT} from "../types";
 import {searchEngine, useSearchQuery} from "../data/slice/searchSlice";
-import {useDisplayTitles} from "../data/slice/settingsSlice";
+import {useSettings} from "../data/slice/settingsSlice";
 
-export const DashboardWidget: FC<{
+export const IconWidget: FC<{
     widget: IconT
 }> = ({widget}) => {
     const searchQuery = useSearchQuery();
     const [visible, setVisible] = useState(true);
-    const displayTitles = useDisplayTitles();
+    const displayTitles = useSettings.displayTitles();
 
     useEffect(() => {
 
@@ -28,7 +28,7 @@ export const DashboardWidget: FC<{
             display: visible ? undefined : "none",
         }}>
             <IconRoot>
-                <Icon icon={widget.icon}/>
+                <Icon icon={widget.icon ?? '!text=: (&bgColor=#0079d9&fontSize=32'}/>
             </IconRoot>
 
             <TitleRoot
@@ -73,4 +73,4 @@ const TitleRoot = styled.div`
   font-size: 0.8em;
 `;
 
-export default DashboardWidget;
+export default IconWidget;

@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import theme from "../theme";
 
 export const Square = styled.div`
   width: 100%;

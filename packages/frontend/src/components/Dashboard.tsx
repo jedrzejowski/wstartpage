@@ -1,25 +1,25 @@
 import React from "react";
 import AppLayout from "../lib/AppLayout";
-import DashboardTop from "./DashboardTop";
-import DashboardContainer from "./DashboardContainer";
+import IconTextSection from "./IconTextSection";
+import IconContainer from "./IconContainer";
 import {useIconSets} from "../data/iconSets";
 import {mergeIconSets} from "../types";
 import SearchView from "./SearchView";
-import {useIconSetNames} from "../data/slice/settingsSlice";
+import {useSettings} from "../data/slice/settingsSlice";
 
 function Dashboard() {
-    const dashboard = mergeIconSets(useIconSets(useIconSetNames(), {recursive: true}));
+    const dashboard = mergeIconSets(useIconSets(useSettings.iconSetNames(), {recursive: true}));
 
     if (!dashboard) return null;
 
     return (<div>
 
         <AppLayout
-            top={<DashboardTop sections={dashboard.top}/>}
-            left={<DashboardContainer sections={dashboard.left}/>}
-            middle={<DashboardContainer sections={dashboard.middle}/>}
-            right={<DashboardContainer sections={dashboard.right}/>}
-            bottom={<DashboardContainer sections={dashboard.bottom}/>}
+            top={<IconTextSection sections={dashboard.top}/>}
+            left={<IconContainer sections={dashboard.left}/>}
+            middle={<IconContainer sections={dashboard.middle}/>}
+            right={<IconContainer sections={dashboard.right}/>}
+            bottom={<IconTextSection sections={dashboard.bottom}/>}
         />
 
         <SearchView/>

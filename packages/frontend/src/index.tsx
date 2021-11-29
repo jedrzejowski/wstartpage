@@ -3,8 +3,7 @@ import ReactDom from "react-dom";
 import Dashboard from "./components/Dashboard";
 import EnsureFontLoaded from "./lib/EnsureFontLoaded";
 import Modal from "react-modal";
-import {ThemeProvider} from "@emotion/react";
-import theme from "./theme";
+import {ThemeProvider} from "./theme";
 import {Provider as ReduxProvider} from "react-redux";
 import {store} from "./data/store";
 import Shortcuts from "./components/Shortcuts";
@@ -23,7 +22,7 @@ ReactDom.render(
         <ReduxProvider store={store}>
             <Shortcuts/>
             <SettingsSaver/>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider>
                 <Dashboard/>
             </ThemeProvider>
         </ReduxProvider>

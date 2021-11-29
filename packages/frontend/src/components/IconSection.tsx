@@ -1,24 +1,23 @@
-import React, {FC, useEffect} from "react";
-import DashboardWidget from "./DashboardWidget";
+import React, {FC} from "react";
+import IconWidget from "./IconWidget";
 import type {IconSectionT} from "../types";
 import styled from "@emotion/styled";
 import {isNumber} from "../lib/util";
 import {useTheme} from "@emotion/react";
-import {useDisplayTitles} from "../data/slice/settingsSlice";
+import {useSettings} from "../data/slice/settingsSlice";
+import {isMobile} from "react-device-detect";
 
-const DashboardSection: FC<{
+const IconSection: FC<{
     section: IconSectionT;
 }> = ({section}) => {
     const theme = useTheme();
-    const displayTitles = useDisplayTitles();
+    const displayTitles = useSettings.displayTitles();
 
     return (
         <SectionRoot>
-            <Title
-                style={{
-                    display: displayTitles ? undefined : "none"
-                }}
-            >
+            <Title style={{
+                display: displayTitles ? undefined : "none"
+            }}>
                 {section.title}
             </Title>
 
@@ -26,7 +25,7 @@ const DashboardSection: FC<{
                 width: isNumber(section.width) ? section.width * (theme.spacingNum(3) + theme.iconSize) : undefined
             }}>
                 {section.widgets.map((widget, i) => {
-                    return <DashboardWidget key={i} widget={widget}/>
+                    return <IconWidget key={i} widget={widget}/>
                 })}
             </WidgetsContainer>
 
@@ -36,7 +35,7 @@ const DashboardSection: FC<{
 };
 
 const SectionRoot = styled.div`
-  width: max-content;
+  width: ${isMobile ? "inherit" : "max-content"};
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -60,4 +59,4 @@ const WidgetsContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-export default DashboardSection;
+export default IconSection;

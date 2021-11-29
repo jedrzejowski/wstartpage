@@ -1,28 +1,30 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {useAppSelector} from "../hooks";
 import {FC, useEffect} from "react";
-import {fromLocalStorage, toLocalStorage} from "../../lib/localStorage";
+import {toLocalStorage} from "../../lib/localStorage";
 
 const STORAGE_NAME = "settings";
 
 interface SettingsState {
+    logoUrl: string | null;
     iconSetNames: string[];
     darkMode: boolean;
     displayTitles: boolean;
+    zoomLevel: number;
 }
 
+const search_params = new URL(location.href).searchParams;
 const default_value: SettingsState = {
-    iconSetNames: [],
-    darkMode: false,
-    displayTitles: true,
+    logoUrl: search_params.get("logoUrl") ?? null,
+    iconSetNames: search_params.get("iconSets")?.split(/[,;]/) ?? [],
+    darkMode: search_params.has("darkMode"),
+    displayTitles: !search_params.has("hideTitles"),
+    zoomLevel: 100,
 };
-
-const initialState: SettingsState = fromLocalStorage(STORAGE_NAME, default_value);
-initialState.iconSetNames = new URL(location.href).searchParams.get("iconSets")?.split(/[,;]/) ?? initialState.iconSetNames;
 
 export const settingsSlice = createSlice({
     name: "settings",
-    initialState,
+    initialState: default_value,
     reducers: {
         setIconSetName(state, action: PayloadAction<string[]>) {
             state.iconSetNames = action.payload;
@@ -30,11 +32,20 @@ export const settingsSlice = createSlice({
         setDisplayTitles(state, action: PayloadAction<boolean>) {
             state.displayTitles = action.payload;
         },
+        setDarkMode(state, action: PayloadAction<boolean>) {
+            state.darkMode = action.payload;
+        },
+        setZoomLevel(state, action: PayloadAction<number>) {
+            state.zoomLevel = action.payload;
+        },
     },
 });
 
-export const useIconSetNames = () => useAppSelector(state => state.settings.iconSetNames);
-export const useDisplayTitles = () => useAppSelector(state => state.settings.displayTitles);
+export const useSettings = () => useAppSelector(state => state.settings);
+useSettings.iconSetNames = () => useAppSelector(state => state.settings.iconSetNames);
+useSettings.displayTitles = () => useAppSelector(state => state.settings.displayTitles);
+useSettings.logoUrl = () => useAppSelector(state => state.settings.logoUrl);
+useSettings.zoomLevel = () => useAppSelector(state => state.settings.zoomLevel);
 
 export default settingsSlice;
 
