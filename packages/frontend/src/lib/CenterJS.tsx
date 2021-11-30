@@ -29,7 +29,7 @@ const CenterJS: FC<Options> = React.memo(props => {
         return () => {
             cancel = true;
         }
-    }, [ref]);
+    }, [ref, props]);
 
     return <canvas
         ref={ref}

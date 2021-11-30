@@ -2,6 +2,7 @@ import React, {FC} from "react";
 import CenterJS from "./CenterJS";
 import styled from "@emotion/styled";
 import {useTheme} from "@emotion/react";
+import {useSettings} from "../data/slice/settingsSlice";
 
 const Background = styled.div`
   width: ${props => props.theme.iconSize}px;
@@ -16,6 +17,7 @@ const Icon: FC<{
     icon: string;
 }> = React.memo(props => {
     const theme = useTheme();
+    const zoom_ratio = useSettings.zoomRatio();
 
     if (props.icon[0] === '!') {
         const data: any = {};
@@ -29,7 +31,7 @@ const Icon: FC<{
                 height={theme.iconSize} width={theme.iconSize}
                 text={data.text}
                 backgroundColor={data.bgColor}
-                fontSize={Number.parseFloat(data.fontSize) || 32}
+                fontSize={Number.parseFloat(data.fontSize) * zoom_ratio}
                 fontFamily="'Yanone Kaffeesatz', sans-serif"
             />
         );

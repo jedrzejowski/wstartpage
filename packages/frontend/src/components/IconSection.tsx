@@ -13,25 +13,36 @@ const IconSection: FC<{
     const theme = useTheme();
     const displayTitles = useSettings.displayTitles();
 
-    return (
-        <SectionRoot>
-            <Title style={{
-                display: displayTitles ? undefined : "none"
-            }}>
-                {section.title}
-            </Title>
-
-            <WidgetsContainer style={{
-                width: isNumber(section.width) ? section.width * (theme.spacingNum(3) + theme.iconSize) : undefined
-            }}>
-                {section.widgets.map((widget, i) => {
-                    return <IconWidget key={i} widget={widget}/>
-                })}
-            </WidgetsContainer>
-
-        </SectionRoot>
+    const title = (
+        <Title style={{
+            display: displayTitles ? undefined : "none"
+        }}>
+            {section.title}
+        </Title>
     );
 
+    const widgets = section.widgets.map((widget, i) => {
+        return <IconWidget key={i} widget={widget}/>
+    });
+
+    if (isMobile) {
+        return <>
+            {title}
+            {widgets}
+        </>
+    } else {
+        return (
+            <SectionRoot>
+                {title}
+
+                <WidgetsContainer style={{
+                    width: isNumber(section.width) ? section.width * (theme.spacingNum(3) + theme.iconSize) : undefined
+                }}>
+                    {widgets}
+                </WidgetsContainer>
+            </SectionRoot>
+        );
+    }
 };
 
 const SectionRoot = styled.div`
@@ -45,18 +56,24 @@ const SectionRoot = styled.div`
   border: 1px solid ${props => props.theme.color.border};
 `;
 
-const Title = styled.label`
-  display: block;
-  font-size: 0.8em;
-  opacity: 0.5;
-  text-transform: uppercase;
-  margin: ${props => props.theme.spacing(-0.5)} 0 0 ${props => props.theme.spacing(-1.3)};
+const Title = isMobile ? styled.div`  
+    text-align: center;
+    opacity: 0.5;
+    text-transform: uppercase;
+    margin: 0 ${props => props.theme.spacing(2)};
+  
+    writing-mode: tb-rl;
+    transform: rotate(-170deg);
+` : styled.div`
+    opacity: 0.5;
+    text-transform: uppercase;
+    margin: ${props => props.theme.spacing(-0.5)} 0 0 ${props => props.theme.spacing(-1.3)};
 `;
 
 const WidgetsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 `;
 
 export default IconSection;

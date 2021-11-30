@@ -1,11 +1,11 @@
 import React from "react";
 import AppLayout from "../lib/AppLayout";
-import IconTextSection from "./IconTextSection";
 import IconContainer from "./IconContainer";
 import {useIconSets} from "../data/iconSets";
 import {mergeIconSets} from "../types";
 import SearchView from "./SearchView";
 import {useSettings} from "../data/slice/settingsSlice";
+import DashboardHeader from "./DashboardHeader";
 
 function Dashboard() {
     const dashboard = mergeIconSets(useIconSets(useSettings.iconSetNames(), {recursive: true}));
@@ -15,11 +15,14 @@ function Dashboard() {
     return (<div>
 
         <AppLayout
-            top={<IconTextSection sections={dashboard.top}/>}
+            top={<>
+                <DashboardHeader/>
+                <IconContainer textOnly sections={dashboard.top}/>
+            </>}
             left={<IconContainer sections={dashboard.left}/>}
             middle={<IconContainer sections={dashboard.middle}/>}
             right={<IconContainer sections={dashboard.right}/>}
-            bottom={<IconTextSection sections={dashboard.bottom}/>}
+            bottom={<IconContainer textOnly sections={dashboard.bottom}/>}
         />
 
         <SearchView/>

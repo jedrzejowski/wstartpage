@@ -46,6 +46,7 @@ useSettings.iconSetNames = () => useAppSelector(state => state.settings.iconSetN
 useSettings.displayTitles = () => useAppSelector(state => state.settings.displayTitles);
 useSettings.logoUrl = () => useAppSelector(state => state.settings.logoUrl);
 useSettings.zoomLevel = () => useAppSelector(state => state.settings.zoomLevel);
+useSettings.zoomRatio = () => useAppSelector(state => state.settings.zoomLevel / 100);
 
 export default settingsSlice;
 
