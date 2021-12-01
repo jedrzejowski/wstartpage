@@ -7,6 +7,7 @@ const STORAGE_NAME = "settings";
 
 interface SettingsState {
     logoUrl: string | null;
+    backgroundUrl: string | null;
     iconSetNames: string[];
     darkMode: boolean;
     displayTitles: boolean;
@@ -14,13 +15,59 @@ interface SettingsState {
 }
 
 const search_params = new URL(location.href).searchParams;
-const default_value: SettingsState = {
-    logoUrl: search_params.get("logoUrl") ?? null,
-    iconSetNames: search_params.get("iconSets")?.split(/[,;]/) ?? [],
-    darkMode: search_params.has("darkMode"),
-    displayTitles: !search_params.has("hideTitles"),
-    zoomLevel: 100,
-};
+const default_value: SettingsState = getSettings({
+    get: key => search_params.get(key),
+    has: key => search_params.has(key),
+});
+
+console.log(default_value)
+
+interface SettingsStorageI {
+    has(key: string): boolean;
+
+    get(key: string): string | null;
+}
+
+function getSettings(storage: SettingsStorageI): SettingsState {
+    function getBoolean(key: string, default_: boolean): boolean {
+        switch (storage.get(key)) {
+            case "true":
+                return true;
+            case "false":
+                return false;
+            default:
+                return default_;
+        }
+    }
+
+    function getString(key: string, default_: string | null = null): string | null {
+        let value: string | null = storage.get(key) ?? null;
+        return typeof value === "string" && value.length > 0 ? value : null;
+    }
+
+    const logoUrl = getString("logoUrl");
+    const backgroundUrl = getString("backgroundUrl");
+
+    const iconSetNameRegex = /[a-zA-Z0-9]+/;
+    const iconSetsStr: any = storage.get("iconSets") ?? "";
+    const iconSetNames = (iconSetsStr + "").split(/[,;]/).filter(str => iconSetNameRegex.test(str));
+
+    const darkMode = getBoolean("darkMode", false);
+
+    const displayTitles = !getBoolean("hideTitles", false);
+
+    let zoomLevel = Number.parseInt(storage.get("zoomLevel"));
+    zoomLevel = isNaN(zoomLevel) ? 100 : zoomLevel;
+
+    return {
+        logoUrl,
+        backgroundUrl,
+        iconSetNames,
+        darkMode,
+        displayTitles,
+        zoomLevel,
+    };
+}
 
 export const settingsSlice = createSlice({
     name: "settings",
@@ -47,6 +94,7 @@ useSettings.displayTitles = () => useAppSelector(state => state.settings.display
 useSettings.logoUrl = () => useAppSelector(state => state.settings.logoUrl);
 useSettings.zoomLevel = () => useAppSelector(state => state.settings.zoomLevel);
 useSettings.zoomRatio = () => useAppSelector(state => state.settings.zoomLevel / 100);
+useSettings.backgroundUrl = () => useAppSelector(state => state.settings.backgroundUrl);
 
 export default settingsSlice;
 
