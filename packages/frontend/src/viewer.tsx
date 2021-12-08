@@ -17,7 +17,16 @@ Modal.setAppElement(app);
 
 ReactDom.render(
     <>
-        <EnsureFontLoaded fontFamily="Yanone Kaffeesatz"/>
+        <EnsureFontLoaded
+            fontFamily="Yanone Kaffeesatz"
+            href="https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700|Roboto:100,300,400"/>
+        <EnsureFontLoaded
+            fontFamily="Roboto"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+        <EnsureFontLoaded
+            fontFamily="Material Icons"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+
 
         <ReduxProvider store={store}>
             <Shortcuts/>

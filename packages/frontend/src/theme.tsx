@@ -1,9 +1,9 @@
-import {Theme, ThemeProvider as LibThemeProvider} from "@emotion/react";
+import {createGlobalStyle, DefaultTheme, ThemeProvider as LibThemeProvider} from "styled-components";
 import React, {FC, useEffect, useState} from "react";
 import {useSettings} from "./data/slice/settingsSlice";
 
-declare module '@emotion/react' {
-    interface Theme {
+declare module 'styled-components' {
+    interface DefaultTheme {
 
         baseSpacing: number;
         baseFontSize: number;
@@ -21,7 +21,7 @@ declare module '@emotion/react' {
     }
 }
 
-export const default_theme: Theme = {
+export const default_theme: DefaultTheme = {
     baseSpacing: 6,
     baseFontSize: 16,
 
@@ -38,6 +38,27 @@ export const default_theme: Theme = {
         border: "#bbbebf"
     }
 }
+
+const globalStyles = document.createElement("style");
+globalStyles.innerHTML = `
+    body {
+        margin: 0;
+        color: black;
+        font-family: sans-serif;
+    
+        background-attachment: fixed;
+        background-color: #fcfcfc;
+        background-position: 0 0;
+    }
+    
+    #app {
+    }
+    
+    body::-webkit-scrollbar {
+        display: none;
+    }
+`;
+document.head.append(globalStyles);
 
 export const ThemeProvider: FC = (props) => {
     const [theme, setTheme] = useState(default_theme);
@@ -59,9 +80,9 @@ export const ThemeProvider: FC = (props) => {
         document.body.style.fontSize = theme.baseFontSize + "px";
     }, [theme.baseFontSize]);
 
-    return (
+    return <>
         <LibThemeProvider theme={theme}>
             {props.children}
         </LibThemeProvider>
-    )
+    </>
 }

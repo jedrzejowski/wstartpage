@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import type {IconSectionT} from "../types";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 export const TextSection: FC<{
     section?: IconSectionT;

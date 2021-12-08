@@ -1,9 +1,8 @@
 import React, {FC} from "react";
 import IconWidget from "./IconWidget";
 import type {IconSectionT} from "../types";
-import styled from "@emotion/styled";
+import styled, {useTheme} from "styled-components";
 import {isNumber} from "../lib/util";
-import {useTheme} from "@emotion/react";
 import {useSettings} from "../data/slice/settingsSlice";
 import {isMobile} from "react-device-detect";
 

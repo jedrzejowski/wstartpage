@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import CenterJS from "./CenterJS";
-import styled from "@emotion/styled";
-import {useTheme} from "@emotion/react";
+import styled from "styled-components";
+import {useTheme} from "styled-components";
 import {useSettings} from "../data/slice/settingsSlice";
 
 const Background = styled.div`

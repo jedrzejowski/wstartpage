@@ -1,8 +1,20 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useMemo} from "react";
 
 const EnsureFontLoaded: FC<{
     fontFamily: string;
+    href: string;
 }> = React.memo(props => {
+
+    const linkTag = useMemo(() => {
+        const link = document.createElement("link")
+        link.rel = "stylesheet";
+        document.head.append(link);
+        return link;
+    }, []);
+
+    useEffect(() => {
+        linkTag.href = props.href;
+    }, [props.href]);
 
     return (
         <div style={{

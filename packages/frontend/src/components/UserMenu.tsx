@@ -1,7 +1,7 @@
 import React, {FC, useState} from "react";
 import {SmallButton} from "../lib/UtilityElements";
 import Emoji from "../lib/Emoji";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import Modal from "react-modal";
 import settingsSlice, {useSettings} from "../data/slice/settingsSlice";
 import {useAppDispatch} from "../data/hooks";

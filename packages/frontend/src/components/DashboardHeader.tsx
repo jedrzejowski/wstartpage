@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {FlexExpand, HFlexContainer} from "../lib/UtilityElements";
 import {useSettings} from "../data/slice/settingsSlice";
-import {useTheme} from "@emotion/react";
+import {useTheme} from "styled-components";
 
 export const DashboardHeader: FC = props => {
     const log_url = useSettings.logoUrl();

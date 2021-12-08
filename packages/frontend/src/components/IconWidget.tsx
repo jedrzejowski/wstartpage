@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from "react";
 import Icon from "../lib/Icon";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import type {IconT} from "../types";
 import {searchEngine, useSearchQuery} from "../data/slice/searchSlice";
 import {useSettings} from "../data/slice/settingsSlice";

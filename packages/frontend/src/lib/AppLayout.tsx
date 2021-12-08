@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 const Root = styled.div`
   display: flex;
