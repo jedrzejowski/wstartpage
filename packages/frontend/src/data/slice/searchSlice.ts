@@ -28,9 +28,8 @@ export const searchSlice = createSlice({
     }
 })
 
-export const selectQuery = (state: RootState) => state.search.query;
 
-export const useSearchQuery = () => useAppSelector(selectQuery);
+export const useSearchQuery = () => useAppSelector(state => state.search.query);
 
 export default searchSlice;
 

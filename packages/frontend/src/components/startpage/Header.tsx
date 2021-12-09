@@ -1,9 +1,9 @@
 import React, {FC} from "react";
-import {FlexExpand, HFlexContainer} from "../lib/UtilityElements";
-import {useSettings} from "../data/slice/settingsSlice";
+import {FlexExpand, HFlexContainer} from "../UtilityElements";
+import {useSettings} from "../../data/slice/settingsSlice";
 import {useTheme} from "styled-components";
 
-export const DashboardHeader: FC = props => {
+export const Header: FC = props => {
     const log_url = useSettings.logoUrl();
     const theme = useTheme();
 
@@ -20,4 +20,4 @@ export const DashboardHeader: FC = props => {
     </HFlexContainer>
 };
 
-export default DashboardHeader
+export default Header

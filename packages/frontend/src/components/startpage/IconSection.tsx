@@ -1,9 +1,9 @@
 import React, {FC} from "react";
 import IconWidget from "./IconWidget";
-import type {IconSectionT} from "../types";
+import type {IconSectionT} from "../../types";
 import styled, {useTheme} from "styled-components";
-import {isNumber} from "../lib/util";
-import {useSettings} from "../data/slice/settingsSlice";
+import {isNumber} from "../../lib/util";
+import {useSettings} from "../../data/slice/settingsSlice";
 import {isMobile} from "react-device-detect";
 
 const IconSection: FC<{

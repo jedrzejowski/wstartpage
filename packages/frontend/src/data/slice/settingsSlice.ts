@@ -20,8 +20,6 @@ const default_value: SettingsState = getSettings({
     has: key => search_params.has(key),
 });
 
-console.log(default_value)
-
 interface SettingsStorageI {
     has(key: string): boolean;
 

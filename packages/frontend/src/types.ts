@@ -21,11 +21,11 @@ export type IconContainersT =
     | "right"
     | "bottom";
 
-export  type IconSetT = Partial<{
+export  type IconCollection = Partial<{
     includes: string[];
 } & Record<IconContainersT, IconContainerT | null>>;
 
-export function mergeIconSets(iconSets: IconSetT[]) {
+export function mergeIconCollections(iconSets: IconCollection[]): IconCollection {
 
     function reduce(name: IconContainersT): IconSectionT[] {
         return iconSets.reduce((sum, cur) => {

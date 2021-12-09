@@ -1,32 +1,10 @@
 import React from "react";
-import ReactDom from "react-dom";
-import Dashboard from "./components/Dashboard";
-import EnsureFontLoaded from "./lib/EnsureFontLoaded";
-import Modal from "react-modal";
-import {ThemeProvider} from "./theme";
-import {Provider as ReduxProvider} from "react-redux";
-import {store} from "./data/store";
-import Shortcuts from "./components/Shortcuts";
+import StartPage from "./components/startpage/StartPage";
+import StartPageShortcuts from "./components/startpage/StartPageShortcuts";
 import {SettingsSaver} from "./data/slice/settingsSlice";
+import app_render from "./app_render";
+import StartPageEditor from "./components/editor/StartPageEditor";
 
-const app = document.createElement("div");
-app.id = "app";
-document.body.append(app);
-
-Modal.setAppElement(app);
-
-ReactDom.render(
-    <>
-        {/*<EnsureFontLoaded fontFamily="Yanone Kaffeesatz"/>*/}
-
-        <ReduxProvider store={store}>
-            <Shortcuts/>
-            <SettingsSaver/>
-            <ThemeProvider>
-                <Dashboard/>
-            </ThemeProvider>
-        </ReduxProvider>
-
-    </>,
-    app
-);
+app_render(<>
+    <StartPageEditor/>
+</>);

@@ -3,8 +3,8 @@
     "version": "0.0.1",
     "description": "Strona startowa",
     "scripts": {
-        "build": "rollup --config rollup.config.ts",
-        "watch": "rollup --config rollup.config.ts --watch"
+        "build": "rollup --config rollup.config.Js",
+        "watch": "rollup --config rollup.config.Js --watch"
     },
     "repository": {
         "type": "git",
@@ -17,6 +17,7 @@
         "react-device-detect": "^2.1.2",
         "react-dom": "^17.0.2",
         "react-modal": "^3.14.4",
+        "react-query": "^3.34.0",
         "react-redux": "^7.2.6",
         "redux": "^4.1.2",
         "rollup": "^2.60.2",

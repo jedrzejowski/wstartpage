@@ -1,5 +1,5 @@
 import React, {FC, useState} from "react";
-import {SmallButton} from "../lib/UtilityElements";
+import {SmallButton} from "./UtilityElements";
 import Emoji from "../lib/Emoji";
 import styled from "styled-components";
 import Modal from "react-modal";

@@ -34,7 +34,7 @@ pub struct SelectParams {
     id: String,
 }
 
-#[get("/icon-sets/{id}")]
+#[get("/icon-collections/{id}")]
 pub async fn select(
     params: web::Path<SelectParams>,
 ) -> Result<HttpResponse, Error> {
@@ -60,7 +60,7 @@ pub async fn select(
     return Ok(HttpResponse::Ok().json(file_content.unwrap()));
 }
 
-#[get("/icon-sets")]
+#[get("/icon-collections")]
 pub async fn search() -> Result<HttpResponse, Error> {
     let paths = std::fs::read_dir(config::dashboard_files_root.as_str())?;
 

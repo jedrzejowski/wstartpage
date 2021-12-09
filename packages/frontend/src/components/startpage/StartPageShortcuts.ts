@@ -1,9 +1,9 @@
 import {FC} from "react";
-import {useKeyboardEventEmitter} from "./KeyboardEventEmitter";
-import settingsSlice, {useSettings} from "../data/slice/settingsSlice";
-import {useAppDispatch} from "../data/hooks";
+import {useKeyboardEventEmitter} from "../KeyboardEventEmitter";
+import settingsSlice, {useSettings} from "../../data/slice/settingsSlice";
+import {useAppDispatch} from "../../data/hooks";
 
-export const Shortcuts: FC = props => {
+export const StartPageShortcuts: FC = props => {
     const settings = useSettings()
     const dispatch = useAppDispatch();
 
@@ -33,4 +33,4 @@ export const Shortcuts: FC = props => {
     return null;
 }
 
-export default Shortcuts;
+export default StartPageShortcuts;

@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import type {IconSectionT} from "../types";
+import type {IconSectionT} from "../../types";
 import styled from "styled-components";
 
 export const TextSection: FC<{

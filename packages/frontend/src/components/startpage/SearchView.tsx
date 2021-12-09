@@ -1,8 +1,8 @@
 import React, {FC} from "react";
 import styled from "styled-components";
-import searchSlice, {useSearchQuery} from "../data/slice/searchSlice";
-import {useKeyboardEventEmitter} from "./KeyboardEventEmitter";
-import {useAppDispatch} from "../data/hooks";
+import searchSlice, {useSearchQuery} from "../../data/slice/searchSlice";
+import {useKeyboardEventEmitter} from "../KeyboardEventEmitter";
+import {useAppDispatch} from "../../data/hooks";
 
 export const SearchView: FC = props => {
     const searchQuery = useSearchQuery()

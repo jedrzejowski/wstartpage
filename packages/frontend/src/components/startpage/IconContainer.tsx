@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {IconContainerT} from "../types";
+import {IconContainerT} from "../../types";
 import IconSection from "./IconSection";
 import styled from "styled-components";
 import TextSection from "./TextSection";

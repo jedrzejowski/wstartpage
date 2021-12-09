@@ -26,13 +26,13 @@ const Center = styled.div`
 `;
 
 const Left = styled.div`
-  height: 100%;
+  min-height: 100%;
   flex-grow: 0;
   box-sizing: border-box;
 `;
 
 const Right = styled.div`
-  height: 100%;
+  min-height: 100%;
   flex-grow: 0;
   box-sizing: border-box;
 `;

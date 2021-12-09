@@ -13,9 +13,11 @@ const plugins = [
         meta: [
             {charset: "UTF-8"},
             {name: "viewport", content: "minimum-scale=1, initial-scale=1, width=device-width"}
-        ],
+        ]
     }),
-    typescript(),
+    typescript({
+        sourceMap: false
+    }),
     nodeResolve({
         extensions: [".js", ".ts", ".tsx"],
     }),
@@ -30,12 +32,12 @@ export default [
         },
         plugins,
     },
-    // {
-    //     input: './src/editor.tsx',
-    //     output: {
-    //         format: 'iife',
-    //         file: 'dist/editor.js',
-    //     },
-    //     plugins,
-    // }
+    {
+        input: './src/editor.tsx',
+        output: {
+            format: 'iife',
+            file: 'dist/editor2/editor.js',
+        },
+        plugins,
+    }
 ];
