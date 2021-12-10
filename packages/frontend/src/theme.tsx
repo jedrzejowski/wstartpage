@@ -10,14 +10,17 @@ declare module 'styled-components' {
 
         spacing(num?: number): string;
 
+        spacing4(top: number, right: number, bottom: number, left: number): string;
+
         spacingNum(num?: number): number;
 
         iconSize: number;
         buttonHoverBg: string;
+        zoomFactor: number;
 
         color: {
             border: string;
-        }
+        },
     }
 }
 
@@ -31,12 +34,21 @@ export const default_theme: DefaultTheme = {
     spacing(num = 1) {
         return this.spacingNum(num) + "px";
     },
+    spacing4(top, right, bottom, left) {
+        return [
+            this.spacing(top),
+            this.spacing(right),
+            this.spacing(bottom),
+            this.spacing(left),
+        ].join(' ');
+    },
     iconSize: 64,
     buttonHoverBg: "#bbbebf",
+    zoomFactor: 1,
 
     color: {
         border: "#bbbebf"
-    }
+    },
 }
 
 const globalStyles = document.createElement("style");
@@ -66,12 +78,14 @@ export const ThemeProvider: FC = (props) => {
     const zoom_level = useSettings.zoomLevel();
 
     useEffect(() => {
+        const zoomFactor = zoom_level / 100;
 
         setTheme({
             ...theme,
-            baseSpacing: default_theme.baseSpacing * zoom_level / 100,
-            iconSize: default_theme.iconSize * zoom_level / 100,
-            baseFontSize: default_theme.baseFontSize * zoom_level / 100,
+            baseSpacing: default_theme.baseSpacing * zoomFactor,
+            iconSize: default_theme.iconSize * zoomFactor,
+            baseFontSize: default_theme.baseFontSize * zoomFactor,
+            zoomFactor: zoomFactor,
         });
 
     }, [zoom_level]);
