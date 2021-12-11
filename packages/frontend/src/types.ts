@@ -1,5 +1,7 @@
-export type IconT = {
-    title?: string;
+type Normalize<T, K extends keyof T> = Omit<T, K> & { [k in K]: number[] };
+
+export type IconWidgetT = {
+    title: string;
     icon?: string;
     url: string;
     order?: number;
@@ -8,9 +10,11 @@ export type IconT = {
 export type IconSectionT = {
     title: string;
     width?: number;
-    widgets: IconT[];
+    widgets: IconWidgetT[];
     order?: number;
 }
+
+export type NormalizedIconSectionT = Normalize<IconSectionT, "widgets">;
 
 export type IconContainerT = IconSectionT[];
 
@@ -21,11 +25,13 @@ export type IconContainersT =
     | "right"
     | "bottom";
 
-export  type IconCollection = Partial<{
+export  type IconCollectionT = Partial<{
     includes: string[];
 } & Record<IconContainersT, IconContainerT | null>>;
 
-export function mergeIconCollections(iconSets: IconCollection[]): IconCollection {
+export type NormalizedIconCollectionT = Normalize<IconCollectionT, IconContainersT>;
+
+export function mergeIconCollections(iconSets: IconCollectionT[]): IconCollectionT {
 
     function reduce(name: IconContainersT): IconSectionT[] {
         return iconSets.reduce((sum, cur) => {

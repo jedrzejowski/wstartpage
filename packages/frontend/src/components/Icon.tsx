@@ -41,3 +41,18 @@ const Icon: FC<{
 });
 
 export default Icon;
+
+export type TextIconT = Partial<{
+    text: string;
+    bgColor: string;
+    fontSize: string;
+}>
+
+export function textIcon2Obj(iconText: string) {
+    const data: any = {};
+    for (let entry of iconText.substring(1).split('&')) {
+        const [name, value] = entry.split(/=(.+)/);
+        data[name] = value;
+    }
+    return data;
+}

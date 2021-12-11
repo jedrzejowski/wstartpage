@@ -6,16 +6,16 @@ import TextSection from "./TextSection";
 
 const IconContainer: FC<{
     textOnly?: boolean;
-    sections: IconContainerT;
+    sections: number[];
 }> = React.memo(({sections, textOnly = false}) => {
 
     return <Root>
 
-        {sections.map((section, i) => {
+        {sections.map(sectionId => {
             if (textOnly) {
-                return <TextSection key={i} section={section}/>
+                return <TextSection key={sectionId} sectionId={sectionId}/>
             } else {
-                return <IconSection key={i} section={section}/>
+                return <IconSection key={sectionId} sectionId={sectionId}/>
             }
         })}
 

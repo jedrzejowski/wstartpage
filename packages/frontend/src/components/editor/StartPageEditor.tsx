@@ -1,21 +1,26 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import AppLayout from "../AppLayout";
 import EditorHeader from "./EditorHeader";
 import styled from "styled-components";
-import EditorIconList from "./EditorIconList";
-import {useAppSelector} from "../../data/hooks";
+import EditorIconCollectionList from "./EditorIconCollectionList";
+import {useAppDispatch, useAppSelector} from "../../data/hooks";
 import StartPage from "../startpage/StartPage";
-import {useIconCollection} from "../../data/iconCollection";
 import EditorFormContainer from "./EditorFormContainer";
+import editorSlice from "../../data/slice/editorSlice";
 
 const StartPageEditor: FC = props => {
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(editorSlice.actions.setIsOn(true));
+    }, [])
 
     return <Root>
         <AppLayout
             top={<EditorHeader/>}
             middle={<StartPagePreview/>}
-            left={<SidePanel border="right"><EditorIconList/></SidePanel>}
-            right={<SidePanel border="left"><EditorFormContainer/>qwe</SidePanel>}
+            left={<SidePanel border="right"><EditorIconCollectionList/></SidePanel>}
+            right={<SidePanel border="left"><EditorFormContainer/></SidePanel>}
         />
     </Root>;
 }
@@ -26,14 +31,14 @@ const Root = styled.div`
 
 const StartPagePreview = React.memo(props => {
     const selectedIconCollectionName = useAppSelector(state => state.editor.selectedIconCollectionName);
-    const iconCollection = useIconCollection(selectedIconCollectionName);
 
-    if (!iconCollection.data) {
+    if (!selectedIconCollectionName) {
         return null;
     }
 
-    return <StartPage iconCollection={iconCollection.data}/>;
+    return <StartPage iconCollectionName={selectedIconCollectionName}/>;
 });
+
 
 const SidePanel = styled.div<{ border: "right" | "left" }>`
     min-height: 100%;

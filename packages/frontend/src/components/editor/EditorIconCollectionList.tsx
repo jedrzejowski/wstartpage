@@ -3,8 +3,9 @@ import {useIconCollectionList} from "../../data/iconCollection";
 import styled from "styled-components";
 import {useAppDispatch, useAppSelector} from "../../data/hooks";
 import editorSlice from "../../data/slice/editorSlice";
+import iconCollectionSlice from "../../data/slice/iconCollectionSlice";
 
-export const EditorIconList: FC = React.memo(props => {
+export const EditorIconCollectionList: FC = React.memo(props => {
     const collectionList = useIconCollectionList();
     const selectedIconCollectionName = useAppSelector(state => state.editor.selectedIconCollectionName);
     const dispatch = useAppDispatch();
@@ -20,10 +21,17 @@ export const EditorIconList: FC = React.memo(props => {
 
             return <Root
                 key={iconCollectionName}
-                onClick={() => dispatch(editorSlice.actions.setSelectedIconCollectionName(iconCollectionName))}
+                onClick={handleClickFactory(iconCollectionName)}
             >{iconCollectionName}</Root>
         })}
     </>;
+
+    function handleClickFactory(iconCollectionName: string) {
+        return () => {
+            dispatch(iconCollectionSlice.actions.requestCollectionLoad(iconCollectionName));
+            dispatch(editorSlice.actions.setSelectedIconCollectionName(iconCollectionName));
+        }
+    }
 });
 
 const Item = styled.div`
@@ -44,4 +52,4 @@ const SelectedItem = styled(Item)`
     background-color: ${props => props.theme.color.border};
 `;
 
-export default EditorIconList;
+export default EditorIconCollectionList;

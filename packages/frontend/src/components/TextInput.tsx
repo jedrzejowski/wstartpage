@@ -1,11 +1,13 @@
-import React, {FC, ReactNode, useMemo} from "react";
-import IconWidgetForm from "./IconWidgetForm";
+import React, {ChangeEventHandler, FC, InputHTMLAttributes, ReactNode, useMemo} from "react";
+import IconWidgetForm from "./editor/IconWidgetForm";
 import styled from "styled-components";
 
 let i = 0;
 
 export const TextInput: FC<{
     label?: ReactNode;
+    value: string;
+    onChange: (newValue: string) => void;
 }> = React.memo(props => {
     const {label} = props;
 
@@ -13,7 +15,7 @@ export const TextInput: FC<{
 
     return <Root>
         {label ? <Label htmlFor={id}>{label}</Label> : null}
-        <Input id={id}/>
+        <Input id={id} value={props.value} onChange={e => props.onChange(e.target.value)}/>
     </Root>
 });
 

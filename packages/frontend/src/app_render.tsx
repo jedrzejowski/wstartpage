@@ -6,6 +6,7 @@ import {ThemeProvider} from "./theme";
 import {Provider as ReduxProvider} from "react-redux";
 import {store} from "./data/store";
 import {QueryClient, QueryClientProvider} from "react-query";
+import IconCollectionLoader from "./components/IconCollectionLoader";
 
 export function app_render(app: FunctionComponentElement<any>) {
     const root = document.createElement("div");
@@ -30,6 +31,8 @@ export function app_render(app: FunctionComponentElement<any>) {
 
             <QueryClientProvider client={queryClient}>
                 <ReduxProvider store={store}>
+                    <IconCollectionLoader/>
+
                     <ThemeProvider>
 
                         {app}

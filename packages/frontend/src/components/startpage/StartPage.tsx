@@ -1,20 +1,25 @@
 import React, {FC, useEffect} from "react";
 import AppLayout from "../AppLayout";
 import IconContainer from "./IconContainer";
-import type {IconCollection} from "../../types";
+import type {IconCollectionT} from "../../types";
 import SearchView from "./SearchView";
 import {useSettings} from "../../data/slice/settingsSlice";
 import Header from "./Header";
+import {useIconCollection} from "../../data/slice/iconCollectionSlice";
 
-const StartPage: FC<{
-    iconCollection: IconCollection;
-}> = React.memo(({iconCollection}) => {
+const StartPage: FC<({
+    iconCollectionName: string;
+})> = React.memo(({iconCollectionName}) => {
     const backgroundUrl = useSettings.backgroundUrl();
-    console.log('iconCollection', iconCollection)
+    const iconCollection = useIconCollection(iconCollectionName);
 
     useEffect(() => {
-        document.body.style.backgroundImage = backgroundUrl ? `url(${backgroundUrl})` : undefined;
+        document.body.style.backgroundImage = backgroundUrl ? `url(${backgroundUrl})` : '';
     }, [backgroundUrl]);
+
+    if (!iconCollection) {
+        return null;
+    }
 
     return (<div>
 

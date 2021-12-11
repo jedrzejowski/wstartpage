@@ -5,12 +5,18 @@ import styled, {useTheme} from "styled-components";
 import {isNumber} from "../../lib/util";
 import {useSettings} from "../../data/slice/settingsSlice";
 import {isMobile} from "react-device-detect";
+import {useIconSection} from "../../data/slice/iconCollectionSlice";
 
 const IconSection: FC<{
-    section: IconSectionT;
-}> = ({section}) => {
+    sectionId: number;
+}> = ({sectionId}) => {
     const theme = useTheme();
     const displayTitles = useSettings.displayTitles();
+    const section = useIconSection(sectionId);
+
+    if (!section) {
+        return null;
+    }
 
     const title = (
         <Title style={{
@@ -20,8 +26,8 @@ const IconSection: FC<{
         </Title>
     );
 
-    const widgets = section.widgets.map((widget, i) => {
-        return <IconWidget key={i} widget={widget}/>
+    const widgets = section.widgets.map(widgetId => {
+        return <IconWidget key={widgetId} widgetId={widgetId}/>
     });
 
     if (isMobile) {

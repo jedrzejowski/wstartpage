@@ -14,7 +14,8 @@ interface Options {
 const promise = (document as any).fonts.ready;
 
 const CenterJS: FC<Options> = React.memo(props => {
-    const ref = useRef<HTMLCanvasElement>();
+    const ref = useRef<HTMLCanvasElement>(null);
+    console.log(props)
 
     useEffect(() => {
         let cancel = false;
@@ -43,6 +44,10 @@ export default CenterJS;
 
 function centerJS(canvas: HTMLCanvasElement, options: Options) {
     const ctx = canvas.getContext("2d");
+
+    if (!ctx) {
+        return;
+    }
 
     /**
      * Set defaults.

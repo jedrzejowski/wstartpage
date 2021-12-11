@@ -5,6 +5,7 @@
 		"target": "esnext",
 		"esModuleInterop": true,
 		"jsx": "react",
-		"moduleResolution": "node"
+		"moduleResolution": "node",
+		"strictNullChecks": true
 	}
 }

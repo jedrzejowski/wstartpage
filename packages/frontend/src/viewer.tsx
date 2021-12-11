@@ -3,7 +3,7 @@ import StartPage from "./components/startpage/StartPage";
 import StartPageShortcuts from "./components/startpage/StartPageShortcuts";
 import {SettingsSaver, useSettings} from "./data/slice/settingsSlice";
 import app_render from "./app_render";
-import {IconCollection, mergeIconCollections} from "./types";
+import {IconCollectionT, mergeIconCollections} from "./types";
 import {fromLocalStorage, toLocalStorage} from "./lib/localStorage";
 import {fetchIconCollection} from "./data/iconCollection";
 
@@ -11,15 +11,15 @@ const CACHE_NAME = "icon_sets";
 
 const CachedStartPage: FC = () => {
     const iconCollectionNames = useSettings.iconSetNames();
-    const [iconCollections, setIconCollections] = useState<IconCollection[]>([]);
+    const [iconCollections, setIconCollections] = useState<IconCollectionT[]>([]);
     const mergedIconCollection = useMemo(() => mergeIconCollections(iconCollections), [iconCollections]);
 
     useEffect(() => {
-        setIconCollections(fromLocalStorage<IconCollection[]>(CACHE_NAME, []));
+        setIconCollections(fromLocalStorage<IconCollectionT[]>(CACHE_NAME, []));
 
         let canceled = false;
 
-        const icon_sets: IconCollection[] = [];
+        const icon_sets: IconCollectionT[] = [];
         const loaded = new Set<string>();
         const loading = new Set<string>();
 

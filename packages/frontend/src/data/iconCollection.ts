@@ -1,4 +1,4 @@
-import type {IconCollection} from "../types";
+import type {IconCollectionT} from "../types";
 import {useEffect} from "react";
 import {useQuery, UseQueryResult} from "react-query";
 
@@ -8,9 +8,9 @@ export function useIconCollectionList() {
     return useQuery([STORAGE_NAME], () => fetchIconCollectionList())
 }
 
-export function useIconCollection(name: string): UseQueryResult<IconCollection>;
+export function useIconCollection(name: string): UseQueryResult<IconCollectionT>;
 export function useIconCollection(name: null): UseQueryResult<null>;
-export function useIconCollection(name: string | null): UseQueryResult<IconCollection | null> {
+export function useIconCollection(name: string | null): UseQueryResult<IconCollectionT | null> {
     const queryState = useQuery([STORAGE_NAME, name], () => {
         if (!name) return null;
         return fetchIconCollection(name)
@@ -23,7 +23,7 @@ export function useIconCollection(name: string | null): UseQueryResult<IconColle
     return queryState;
 }
 
-export async function fetchIconCollection(id: string): Promise<IconCollection> {
+export async function fetchIconCollection(id: string): Promise<IconCollectionT> {
     const response = await fetch(`/api/icon-collections/${id}`, {
         headers: {
             "Accept": "application/json"
