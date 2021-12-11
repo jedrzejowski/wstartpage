@@ -35,7 +35,7 @@ export function mergeIconCollections(iconSets: IconCollectionT[]): IconCollectio
 
     function reduce(name: IconContainersT): IconSectionT[] {
         return iconSets.reduce((sum, cur) => {
-            return (cur[name] ? [...sum, ...cur[name]] : sum);
+            return (name in cur ? [...sum, ...cur[name]] : sum);
         }, [] as IconSectionT[]).sort((a, b) => {
             return (a.order ?? 1000) - (b.order ?? 1000);
         });
@@ -48,4 +48,25 @@ export function mergeIconCollections(iconSets: IconCollectionT[]): IconCollectio
         bottom: reduce("bottom"),
         middle: reduce("middle"),
     }
+}
+
+
+export type TextIconT = {
+    text: string;
+    bgColor: string;
+    fontSize: string;
+};
+
+export function textIconFromStr(iconText: string): TextIconT {
+    const data: any = {};
+    iconText = iconText.substring(1);
+    const params = new URLSearchParams(iconText);
+    for (let [key, value] of params) {
+        data[key] = value;
+    }
+    return data;
+}
+
+export function textIconToStr(iconText: TextIconT): string {
+    return "!" + new URLSearchParams(iconText).toString();
 }

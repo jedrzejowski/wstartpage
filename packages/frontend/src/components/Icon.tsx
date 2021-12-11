@@ -3,6 +3,7 @@ import CenterJS from "./CenterJS";
 import styled from "styled-components";
 import {useTheme} from "styled-components";
 import {useSettings} from "../data/slice/settingsSlice";
+import {textIconFromStr} from "../types";
 
 const Background = styled.div`
   width: ${props => props.theme.iconSize}px;
@@ -20,18 +21,16 @@ const Icon: FC<{
     const zoom_ratio = useSettings.zoomRatio();
 
     if (props.icon[0] === '!') {
-        const data: any = {};
-        for (let entry of props.icon.substr(1).split('&')) {
-            const [name, value] = entry.split(/=(.+)/);
-            data[name] = value;
-        }
+        const textIcon = textIconFromStr(props.icon);
+
+        console.log(textIcon)
 
         return (
             <CenterJS
                 height={theme.iconSize} width={theme.iconSize}
-                text={data.text}
-                backgroundColor={data.bgColor}
-                fontSize={Number.parseFloat(data.fontSize) * zoom_ratio}
+                text={textIcon.text}
+                backgroundColor={textIcon.bgColor}
+                fontSize={Number.parseFloat(textIcon.fontSize) * zoom_ratio}
                 fontFamily="'Yanone Kaffeesatz', sans-serif"
             />
         );
@@ -41,18 +40,3 @@ const Icon: FC<{
 });
 
 export default Icon;
-
-export type TextIconT = Partial<{
-    text: string;
-    bgColor: string;
-    fontSize: string;
-}>
-
-export function textIcon2Obj(iconText: string) {
-    const data: any = {};
-    for (let entry of iconText.substring(1).split('&')) {
-        const [name, value] = entry.split(/=(.+)/);
-        data[name] = value;
-    }
-    return data;
-}

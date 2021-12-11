@@ -3,6 +3,7 @@ import TextInput from "../TextInput";
 import {iconCollectionSlice, useIconWidget} from "../../data/slice/iconCollectionSlice";
 import type {IconWidgetT} from "../../types";
 import {useAppDispatch} from "../../data/hooks";
+import CheckBoxInput from "../CheckBoxInput";
 
 export const IconWidgetForm: FC<{
     widgetId: number;
@@ -17,6 +18,7 @@ export const IconWidgetForm: FC<{
     return <>
         <TextInput label="Tytuł" value={widget.title} onChange={handleChangeFactory("title")}/>
         <TextInput label="URL" value={widget.url} onChange={handleChangeFactory("url")}/>
+        <CheckBoxInput label="Ikona tekstowa"/>
         {widget?.icon?.[0] === '!' ? (
             null
         ) : (

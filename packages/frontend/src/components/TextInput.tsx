@@ -5,16 +5,16 @@ import styled from "styled-components";
 let i = 0;
 
 export const TextInput: FC<{
-    label?: ReactNode;
+    label: ReactNode;
     value: string;
     onChange: (newValue: string) => void;
 }> = React.memo(props => {
     const {label} = props;
 
-    const id = useMemo(() => (++i) + "", []);
+    const id = useMemo(() => "text-input-" + (++i), []);
 
     return <Root>
-        {label ? <Label htmlFor={id}>{label}</Label> : null}
+        <Label htmlFor={id}>{label}</Label>
         <Input id={id} value={props.value} onChange={e => props.onChange(e.target.value)}/>
     </Root>
 });
