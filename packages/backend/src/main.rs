@@ -2,6 +2,7 @@ extern crate serde;
 
 mod config;
 mod api;
+mod types;
 
 use actix_files::Files as ActixFiles;
 use actix_web::{App, HttpServer, web};

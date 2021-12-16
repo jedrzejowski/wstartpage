@@ -1,33 +1,10 @@
 use actix_web::{Error, web, HttpResponse, get};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize};
 use serde_json::json;
 use crate::config;
 use std::vec::Vec;
+use crate::types::{IconCollection, normalize_icon_collection};
 
-#[derive(Deserialize, Serialize)]
-pub struct Icon {
-    title: Option<String>,
-    icon: Option<String>,
-    url: String,
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct IconSection {
-    title: String,
-    width: Option<i32>,
-    widgets: Vec<Icon>,
-    order: Option<i32>,
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct IconSet {
-    includes: Option<Vec<String>>,
-    top: Option<Vec<IconSection>>,
-    middle: Option<Vec<IconSection>>,
-    right: Option<Vec<IconSection>>,
-    left: Option<Vec<IconSection>>,
-    bottom: Option<Vec<IconSection>>,
-}
 
 #[derive(Deserialize)]
 pub struct SelectParams {
@@ -48,7 +25,7 @@ pub async fn select(
         return Ok(HttpResponse::NotFound().finish());
     }
 
-    let file_content: serde_yaml::Result<IconSet> = serde_yaml::from_reader(file.unwrap());
+    let file_content: serde_yaml::Result<IconCollection> = serde_yaml::from_reader(file.unwrap());
 
     if file_content.is_err() {
         return Ok(HttpResponse::InternalServerError()
@@ -57,7 +34,11 @@ pub async fn select(
             })));
     }
 
-    return Ok(HttpResponse::Ok().json(file_content.unwrap()));
+    let mut icon_collection = file_content.unwrap();
+
+    normalize_icon_collection(&mut icon_collection);
+
+    return Ok(HttpResponse::Ok().json(icon_collection));
 }
 
 #[get("/icon-collections")]

@@ -6,9 +6,9 @@ let i = 0;
 export const CheckBoxInput: FC<{
     label: ReactNode;
 } & ({
-    tristate: false | undefined;
+    tristate?: false;
     value: boolean;
-    onChange: (newValue: string) => void;
+    onChange: (newValue: boolean) => void;
 } | {
     tristate: true;
     value: boolean | null;
@@ -31,7 +31,7 @@ export const CheckBoxInput: FC<{
     </Root>;
 
     function handleCheck(e: ChangeEvent<HTMLInputElement>) {
-
+        onChange(e.target.checked)
     }
 });
 

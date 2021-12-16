@@ -1,8 +1,27 @@
 type Normalize<T, K extends keyof T> = Omit<T, K> & { [k in K]: number[] };
 
+export type UrlIconT = string;
+
+export function isUrlIconT(icon: AnyIconT | undefined): icon is UrlIconT {
+    return typeof icon === "string";
+}
+
+export type TextIconT = {
+    text: string;
+    bgColor: string;
+    fontSize: string;
+};
+
+export function isTextIconT(icon: AnyIconT | undefined): icon is TextIconT {
+    return typeof icon === "object";
+}
+
+
+export type AnyIconT = UrlIconT | TextIconT;
+
 export type IconWidgetT = {
     title: string;
-    icon?: string;
+    icon?: AnyIconT;
     url: string;
     order?: number;
 }
@@ -50,13 +69,6 @@ export function mergeIconCollections(iconSets: IconCollectionT[]): IconCollectio
     }
 }
 
-
-export type TextIconT = {
-    text: string;
-    bgColor: string;
-    fontSize: string;
-};
-
 export function textIconFromStr(iconText: string): TextIconT {
     const data: any = {};
     iconText = iconText.substring(1);
@@ -64,7 +76,12 @@ export function textIconFromStr(iconText: string): TextIconT {
     for (let [key, value] of params) {
         data[key] = value;
     }
-    return data;
+
+    return {
+        text: data.text ?? "",
+        bgColor: data.bgColor ?? "",
+        fontSize: data.fontSize ?? "",
+    };
 }
 
 export function textIconToStr(iconText: TextIconT): string {

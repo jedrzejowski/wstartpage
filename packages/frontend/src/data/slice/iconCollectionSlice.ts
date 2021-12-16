@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {useAppDispatch, useAppSelector} from "../hooks";
+import {useAppSelector} from "../hooks";
 import type {
     IconCollectionT,
     IconContainerT,
