@@ -8,6 +8,7 @@ import iconCollectionSlice from "../../data/slice/iconCollectionSlice";
 export const EditorIconCollectionList: FC = React.memo(props => {
     const collectionList = useIconCollectionList();
     const selectedIconCollectionName = useAppSelector(state => state.editor.selectedIconCollectionName);
+    const editedIconCollections = useAppSelector(state => state.editor.editedIconCollections);
     const dispatch = useAppDispatch();
 
     if (!collectionList.data) {
@@ -22,7 +23,10 @@ export const EditorIconCollectionList: FC = React.memo(props => {
             return <Root
                 key={iconCollectionName}
                 onClick={handleClickFactory(iconCollectionName)}
-            >{iconCollectionName}</Root>
+            >
+                {iconCollectionName}
+                {editedIconCollections.includes(iconCollectionName) ? "*" : null}
+            </Root>
         })}
     </>;
 

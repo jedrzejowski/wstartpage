@@ -5,12 +5,13 @@ interface EditorData {
     isOn: boolean;
     selectedIconCollectionName: string | null;
     selectedObj: {
-        iconCollectionName: number;
+        iconCollectionName: string;
     } | {
         sectionId: number;
     } | {
         widgetId: number;
     } | null;
+    editedIconCollections: string[];
 }
 
 let i = 0;
@@ -19,6 +20,7 @@ const initialState: EditorData = {
     isOn: false,
     selectedIconCollectionName: null,
     selectedObj: null,
+    editedIconCollections: [],
 };
 
 export const editorSlice = createSlice({
@@ -27,14 +29,19 @@ export const editorSlice = createSlice({
     reducers: {
         setSelectedIconCollectionName(state, action: PayloadAction<string>) {
             state.selectedIconCollectionName = action.payload;
+            state.selectedObj = {iconCollectionName: action.payload};
         },
         setIsOn(state, action: PayloadAction<boolean>) {
             state.isOn = action.payload;
         },
         setSelectedObj(state, action: PayloadAction<EditorData["selectedObj"]>) {
-            console.log('HERE')
             state.selectedObj = action.payload;
         },
+        makeCurrentCollectionAsEdited(state, action: PayloadAction) {
+            if (state.selectedIconCollectionName) {
+                state.editedIconCollections.push(state.selectedIconCollectionName);
+            }
+        }
     }
 });
 

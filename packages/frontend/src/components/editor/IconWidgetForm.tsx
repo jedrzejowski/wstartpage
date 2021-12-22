@@ -1,12 +1,14 @@
 import React, {FC, useState} from "react";
-import TextInput from "../TextInput";
+import TextInput from "../input/TextInput";
 import {iconCollectionSlice, useIconWidget} from "../../data/slice/iconCollectionSlice";
 import type {IconWidgetT, TextIconT, UrlIconT} from "../../types";
-import {useAppDispatch} from "../../data/hooks";
-import CheckBoxInput from "../CheckBoxInput";
+import {useAppDispatch, useAppSelector} from "../../data/hooks";
+import CheckBoxInput from "../input/CheckBoxInput";
 import {isTextIconT, isUrlIconT} from "../../types";
 import styled from "styled-components";
 import {SketchPicker} from "react-color";
+import editorSlice from "../../data/slice/editorSlice";
+import ColorInput from "../input/ColorInput";
 
 const ICON_RESTORE_CACHE: Partial<Record<string, {
     urlIcon?: UrlIconT;
@@ -32,7 +34,8 @@ export const IconWidgetForm: FC<{
         {typeof widget.icon === "object" ? (<>
             <TextInput label="Test" value={widget.icon.text ?? ""}
                        onChange={handleIconChangeFactory("text")}/>
-            <SketchPicker color={widget.icon.bgColor} onChangeComplete={handleIconChangeFactory("bgColor")}/>
+            <ColorInput label="Kolor" value={widget.icon.bgColor}
+                        onChange={handleIconChangeFactory("bgColor")}/>
             <TextInput label="Wielkość czcionki" value={(widget.icon.fontSize ?? "").toString()}
                        onChange={handleIconChangeFactory("fontSize")}/>
         </>) : (
@@ -50,7 +53,9 @@ export const IconWidgetForm: FC<{
                 ...widget,
                 [field]: newValue,
             };
+
             dispatch(iconCollectionSlice.actions.updateWidget({widgetId, widget: newWidget}));
+            dispatch(editorSlice.actions.makeCurrentCollectionAsEdited());
         }
     }
 
@@ -60,8 +65,12 @@ export const IconWidgetForm: FC<{
                 return null;
             }
 
-            if (typeof widget.icon !== "object") {
+            if (!isTextIconT(widget.icon)) {
                 return;
+            }
+
+            if (field === "bgColor") {
+                newValue = newValue.hex;
             }
 
             const newWidget: IconWidgetT = {
@@ -71,12 +80,13 @@ export const IconWidgetForm: FC<{
                     [field]: newValue
                 }
             };
+
             dispatch(iconCollectionSlice.actions.updateWidget({widgetId, widget: newWidget}));
+            dispatch(editorSlice.actions.makeCurrentCollectionAsEdited());
         }
     }
 
     function handleIconTypeChange(isText: boolean) {
-        console.log("HERE", isText);
         if (!widget) {
             return null;
         }
@@ -109,6 +119,8 @@ export const IconWidgetForm: FC<{
 
         }
 
+        dispatch(editorSlice.actions.makeCurrentCollectionAsEdited());
+
         if (isUrlIconT(widget.icon))
             current_cache.urlIcon = widget.icon;
         if (isTextIconT(widget.icon))
@@ -123,5 +135,6 @@ const Root = styled.div`
         margin-top: ${props => props.theme.spacing(2)};
     }
 `
+
 
 export default IconWidgetForm;

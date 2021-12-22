@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from "react";
 import AppLayout from "../AppLayout";
-import EditorHeader from "./EditorHeader";
+import EditorTopBar from "./EditorTopBar";
 import styled from "styled-components";
 import EditorIconCollectionList from "./EditorIconCollectionList";
 import {useAppDispatch, useAppSelector} from "../../data/hooks";
@@ -17,10 +17,10 @@ const StartPageEditor: FC = props => {
 
     return <Root>
         <AppLayout
-            top={<EditorHeader/>}
+            top={<HPanel border="bottom"><EditorTopBar/></HPanel>}
             middle={<StartPagePreview/>}
-            left={<SidePanel border="right"><EditorIconCollectionList/></SidePanel>}
-            right={<SidePanel border="left"><EditorFormContainer/></SidePanel>}
+            left={<VPanel border="right"><EditorIconCollectionList/></VPanel>}
+            right={<VPanel border="left"><EditorFormContainer/></VPanel>}
         />
     </Root>;
 }
@@ -39,12 +39,19 @@ const StartPagePreview = React.memo(props => {
     return <StartPage iconCollectionName={selectedIconCollectionName}/>;
 });
 
+const HPanel = styled.div<{ border: "top" | "bottom" }>`
+    width: 100%;
+    height: 48px;
+    border-${props => props.border}: 1px solid ${props => props.theme.color.border};
+    box-sizing: border-box;
+    padding: ${props => props.theme.spacing(1)};
+`
 
-const SidePanel = styled.div<{ border: "right" | "left" }>`
+const VPanel = styled.div<{ border: "right" | "left" }>`
     min-height: 100%;
     width: 340px;
     border-${props => props.border}: 1px solid ${props => props.theme.color.border};
-    box-sizing: broder-box;
+    box-sizing: border-box;
 `
 
 export default StartPageEditor
