@@ -33,9 +33,14 @@ export const IconWidget: FC<{
     const url = widget.url === "#" ? undefined : widget.url;
 
     return (
-        <Root href={url} style={{
-            display: visible ? undefined : "none",
-        }} onClick={handleClick}>
+        <Root
+            href={url}
+            target="_parent"
+            style={{
+                display: visible ? undefined : "none",
+            }}
+            onClick={handleClick}
+        >
             <IconRoot>
                 <Icon icon={widget.icon ?? '!text=: (&bgColor=#0079d9&fontSize=32'}/>
             </IconRoot>

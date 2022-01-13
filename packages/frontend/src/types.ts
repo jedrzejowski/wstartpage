@@ -1,5 +1,7 @@
 type Normalize<T, K extends keyof T> = Omit<T, K> & { [k in K]: number[] };
 
+export const isProduction = process.env.NODE_ENV === 'production';
+
 export type UrlIconT = string;
 
 export function isUrlIconT(icon: AnyIconT | undefined): icon is UrlIconT {

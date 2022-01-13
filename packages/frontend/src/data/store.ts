@@ -1,12 +1,18 @@
-import {configureStore} from "@reduxjs/toolkit";
+import {configureStore, Middleware} from "@reduxjs/toolkit";
 import searchSlice from "./slice/searchSlice";
 import settingsSlice from "./slice/settingsSlice";
 import editorSlice from "./slice/editorSlice";
 import iconCollectionSlice from "./slice/iconCollectionSlice";
 import {createLogger} from "redux-logger";
+import {isProduction} from "../types";
 
-const logger = createLogger({});
 
+const middleware: Middleware[] = []
+
+if (isProduction) {
+    const logger = createLogger({});
+    middleware.push(logger);
+}
 
 export const store = configureStore({
     reducer: {
@@ -15,9 +21,7 @@ export const store = configureStore({
         editor: editorSlice.reducer,
         iconCollection: iconCollectionSlice.reducer,
     },
-    middleware: [
-        logger,
-    ]
+    middleware,
 })
 
 export type RootState = ReturnType<typeof store.getState>;

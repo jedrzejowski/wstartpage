@@ -3,8 +3,8 @@
     "version": "0.0.1",
     "description": "Strona startowa",
     "scripts": {
-        "build": "rollup --config rollup.config.Js",
-        "watch": "rollup --config rollup.config.Js --watch"
+        "build": "rollup --config rollup.config.js --environment NODE_ENV:production",
+        "watch": "rollup --config rollup.config.js --watch"
     },
     "repository": {
         "type": "git",
@@ -24,7 +24,6 @@
         "react-redux": "^7.2.6",
         "redux": "^4.1.2",
         "redux-logger": "^3.0.6",
-        "rollup": "^2.60.2",
         "styled-components": "^5.3.3"
     },
     "devDependencies": {
@@ -40,6 +39,8 @@
         "@types/react-dom": "^17.0.11",
         "@types/react-modal": "^3.13.1",
         "@types/styled-components": "^5.1.17",
+        "rollup": "^2.60.2",
+        "rollup-plugin-terser": "^7.0.2",
         "typescript": "^4.5.2"
     },
     "optionalDependencies": {
