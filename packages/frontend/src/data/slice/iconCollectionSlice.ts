@@ -7,9 +7,13 @@ import type {
     NormalizedIconCollectionT,
     NormalizedIconSectionT
 } from "../../types";
+import genId from "../genId()";
+import actions from "../actions";
+import {useMemo} from "react";
+import {mergeIconCollections} from "../../types";
 
 interface IconCollectionData {
-    widget: Partial<Record<number, IconWidgetT>>;
+    widgets: Partial<Record<number, IconWidgetT>>;
     sections: Partial<Record<number, NormalizedIconSectionT>>;
     collections: Partial<Record<string, NormalizedIconCollectionT>>;
     requests: string[]
@@ -18,7 +22,7 @@ interface IconCollectionData {
 let i = 0;
 
 const initialState: IconCollectionData = {
-    widget: {},
+    widgets: {},
     sections: {},
     collections: {},
     requests: [],
@@ -40,7 +44,7 @@ export const iconCollectionSlice = createSlice({
             function normalizeContainer(iconContainer: IconContainerT | null | undefined): number[] {
                 iconContainer = iconContainer ?? [];
                 return iconContainer.map(iconSection => {
-                    const id = ++i;
+                    const id = genId();
 
                     state.sections[id] = {
                         ...iconSection,
@@ -53,9 +57,9 @@ export const iconCollectionSlice = createSlice({
 
             function normalizeWidgets(iconWidgets: IconWidgetT[]): number[] {
                 return iconWidgets.map(iconWidget => {
-                    const id = ++i;
+                    const id = genId();
 
-                    state.widget[id] = iconWidget;
+                    state.widgets[id] = iconWidget;
 
                     return id;
                 });
@@ -77,15 +81,47 @@ export const iconCollectionSlice = createSlice({
         },
         updateWidget(state, action: PayloadAction<{ widgetId: number, widget: IconWidgetT }>) {
             const {widgetId, widget} = action.payload;
-            state.widget[widgetId] = widget;
+            state.widgets[widgetId] = widget;
         },
-    }
+    },
+    extraReducers: (builder) => builder
+        .addCase(actions.addWidgetIcon, (state, action) => {
+            const {sectionId, widgetId} = action.payload
+            state.widgets[widgetId] = {
+                title: "Example",
+                url: "http://example.com",
+                icon: {
+                    text: "Example",
+                    bgColor: "#FF000",
+                    fontSize: "30"
+                }
+            }
+            state.sections[sectionId]?.widgets.push(widgetId);
+        })
 });
 
-export const useIconCollection = (name: string) => useAppSelector(state => state.iconCollection.collections[name] ?? null);
-export const useIconSection = (id: number) => useAppSelector(state => state.iconCollection.sections[id] ?? null);
-export const useIconWidget = (id: number) => useAppSelector(state => state.iconCollection.widget[id] ?? null);
+export const useIconCollection = (name: string | string[]) => {
+    if (Array.isArray(name)) {
+        const collections = useAppSelector(state => Object.entries(state.iconCollection.collections)
+            .filter(entry => name.includes(entry[0])).map(entry => entry[1]));
 
+        if (collections.length != name.length) {
+            return null;
+        }
+
+        return {
+            top: collections.map(col => col?.top ?? []).flat(),
+            bottom: collections.map(col => col?.bottom ?? []).flat(),
+            middle: collections.map(col => col?.middle ?? []).flat(),
+            right: collections.map(col => col?.right ?? []).flat(),
+            left: collections.map(col => col?.left ?? []).flat(),
+        }
+    } else {
+        return useAppSelector(state => state.iconCollection.collections[name] ?? null);
+    }
+}
+export const useIconSection = (id: number) => useAppSelector(state => state.iconCollection.sections[id] ?? null);
+export const useIconWidget = (id: number) => useAppSelector(state => state.iconCollection.widgets[id] ?? null);
 
 export default iconCollectionSlice;
 

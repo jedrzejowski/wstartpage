@@ -1,7 +1,6 @@
 import React, {ChangeEvent, ChangeEventHandler, FC, ReactNode, useMemo, useRef} from "react";
 import styled from "styled-components";
-
-let i = 0;
+import genId from "../../data/genId()";
 
 export const CheckBoxInput: FC<{
     label: ReactNode;
@@ -16,7 +15,7 @@ export const CheckBoxInput: FC<{
 })> = React.memo(({label, tristate, value, onChange}) => {
 
     const inputRef = useRef<HTMLInputElement>(null);
-    const id = useMemo(() => "check-input-" + (++i), []);
+    const id = useMemo(() => genId("check-input-"), []);
 
     return <Root htmlFor={id}>
         <Input

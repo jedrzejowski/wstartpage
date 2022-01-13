@@ -54,7 +54,8 @@ export function mergeIconCollections(iconSets: IconCollectionT[]): IconCollectio
 
     function reduce(name: IconContainersT): IconSectionT[] {
         return iconSets.reduce((sum, cur) => {
-            return (name in cur ? [...sum, ...cur[name]] : sum);
+            // @ts-ignore
+            return (cur[name] ? [...sum, ...cur[name]] : sum);
         }, [] as IconSectionT[]).sort((a, b) => {
             return (a.order ?? 1000) - (b.order ?? 1000);
         });

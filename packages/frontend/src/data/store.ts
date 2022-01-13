@@ -5,8 +5,8 @@ import editorSlice from "./slice/editorSlice";
 import iconCollectionSlice from "./slice/iconCollectionSlice";
 import {createLogger} from "redux-logger";
 
-const logger = createLogger({
-});
+const logger = createLogger({});
+
 
 export const store = configureStore({
     reducer: {
@@ -16,9 +16,10 @@ export const store = configureStore({
         iconCollection: iconCollectionSlice.reducer,
     },
     middleware: [
-        logger
+        logger,
     ]
 })
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+

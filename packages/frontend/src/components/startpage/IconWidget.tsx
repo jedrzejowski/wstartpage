@@ -1,4 +1,4 @@
-import React, {FC, MouseEvent, useEffect, useState} from "react";
+import React, {FC, MouseEvent, MouseEventHandler, useEffect, useState} from "react";
 import Icon from "../Icon";
 import styled from "styled-components";
 import {searchEngine, useSearchQuery} from "../../data/slice/searchSlice";

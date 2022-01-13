@@ -7,8 +7,8 @@ import {useSettings} from "../../data/slice/settingsSlice";
 import Header from "./Header";
 import {useIconCollection} from "../../data/slice/iconCollectionSlice";
 
-const StartPage: FC<({
-    iconCollectionName: string;
+export const StartPage: FC<({
+    iconCollectionName: string | string[];
 })> = React.memo(({iconCollectionName}) => {
     const backgroundUrl = useSettings.backgroundUrl();
     const iconCollection = useIconCollection(iconCollectionName);
@@ -26,12 +26,15 @@ const StartPage: FC<({
         <AppLayout
             top={<>
                 <Header/>
-                {iconCollection.top ? <IconContainer textOnly sections={iconCollection.top}/> : null}
+                {iconCollection.top ?
+                    <IconContainer containerName="top" textOnly sections={iconCollection.top}/> : null}
             </>}
-            left={iconCollection.left ? <IconContainer sections={iconCollection.left}/> : null}
-            middle={iconCollection.middle ? <IconContainer sections={iconCollection.middle}/> : null}
-            right={iconCollection.right ? <IconContainer sections={iconCollection.right}/> : null}
-            bottom={iconCollection.bottom ? <IconContainer textOnly sections={iconCollection.bottom}/> : null}
+            left={iconCollection.left ? <IconContainer containerName="left" sections={iconCollection.left}/> : null}
+            middle={iconCollection.middle ?
+                <IconContainer containerName="middle" sections={iconCollection.middle}/> : null}
+            right={iconCollection.right ? <IconContainer containerName="right" sections={iconCollection.right}/> : null}
+            bottom={iconCollection.bottom ?
+                <IconContainer containerName="bottom" textOnly sections={iconCollection.bottom}/> : null}
         />
 
         <SearchView/>

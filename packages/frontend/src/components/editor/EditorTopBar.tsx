@@ -6,7 +6,7 @@ export const EditorTopBar: FC = React.memo(props => {
     return <Root>
         <Title>WStartpage</Title>
         <Spacer/>
-        <Button>Zapisz</Button>
+        <Button onClick={() => null}>Zapisz</Button>
     </Root>
 });
 
@@ -21,7 +21,7 @@ const Spacer = styled.div`
 `;
 
 const Title = styled.h1`
-    display: inline-block; 
+    display: inline-block;
     margin: 0;
     font-size: 2em;
 `;

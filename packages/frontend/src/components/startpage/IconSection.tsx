@@ -6,6 +6,9 @@ import {isNumber} from "../../lib/util";
 import {useSettings} from "../../data/slice/settingsSlice";
 import {isMobile} from "react-device-detect";
 import {useIconSection} from "../../data/slice/iconCollectionSlice";
+import {useIsEditor} from "../../data/slice/editorSlice";
+import {AddIconButton} from "../editor/AddButton";
+import {FlexExpand, HFlexContainer} from "../UtilityElements";
 
 const IconSection: FC<{
     sectionId: number;
@@ -13,6 +16,7 @@ const IconSection: FC<{
     const theme = useTheme();
     const displayTitles = useSettings.displayTitles();
     const section = useIconSection(sectionId);
+    const isEditor = useIsEditor();
 
     if (!section) {
         return null;
@@ -38,7 +42,11 @@ const IconSection: FC<{
     } else {
         return (
             <SectionRoot>
-                {title}
+                <Header>
+                    {title}
+                    <FlexExpand/>
+                    {isEditor ? <AddIconButton sectionId={sectionId}/> : null}
+                </Header>
 
                 <WidgetsContainer style={{
                     width: isNumber(section.width) ? section.width * (theme.spacingNum(3) + theme.iconSize) : undefined
@@ -61,6 +69,10 @@ const SectionRoot = styled.div`
   border: 1px solid ${props => props.theme.color.border};
 `;
 
+const Header = styled(HFlexContainer)`
+    margin: ${props => props.theme.spacing(-0.5)} 0 0 ${props => props.theme.spacing(-1.3)};
+`;
+
 const Title = isMobile ? styled.div`  
     text-align: center;
     opacity: 0.5;
@@ -72,7 +84,6 @@ const Title = isMobile ? styled.div`
 ` : styled.div`
     opacity: 0.5;
     text-transform: uppercase;
-    margin: ${props => props.theme.spacing(-0.5)} 0 0 ${props => props.theme.spacing(-1.3)};
 `;
 
 const WidgetsContainer = styled.div`

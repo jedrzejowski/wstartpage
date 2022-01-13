@@ -5,6 +5,7 @@ import React, {
     useRef,
 } from "react";
 import styled from "styled-components";
+import genId from "../../data/genId()";
 
 let i = 0;
 
@@ -17,7 +18,7 @@ export const TextInput: FC<{
     const {label} = props;
 
     const ref = useRef<HTMLInputElement>(null);
-    const id = useMemo(() => props.id ?? ("text-input-" + (++i)), [props.id]);
+    const id = useMemo(() => props.id ?? genId("text-input-"), [props.id]);
 
     return <Root>
         <Label htmlFor={id}>{label}</Label>

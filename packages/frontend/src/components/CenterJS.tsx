@@ -15,7 +15,6 @@ const promise = (document as any).fonts.ready;
 
 const CenterJS: FC<Options> = React.memo(props => {
     const ref = useRef<HTMLCanvasElement>(null);
-    console.log(props)
 
     useEffect(() => {
         let cancel = false;
@@ -43,7 +42,7 @@ const CenterJS: FC<Options> = React.memo(props => {
 export default CenterJS;
 
 function centerJS(canvas: HTMLCanvasElement, options: Options) {
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     if (!ctx) {
         return;
@@ -155,7 +154,7 @@ function centerJS(canvas: HTMLCanvasElement, options: Options) {
          * Create and setup canvas
          */
         const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
         ctx.font = fontSize + "px " + fontFamily;
 
         /**
@@ -208,6 +207,7 @@ function centerJS(canvas: HTMLCanvasElement, options: Options) {
          * canvas and the horizontal center of the text on the canvas.
          */
         const canvasHorizontalCenterLine = canvas.height / 2;
+        // @ts-ignore
         const textHorizontalCenterLine = (textBottom - textTop) / 2 + textTop;
 
         let textLeft;
@@ -232,6 +232,7 @@ function centerJS(canvas: HTMLCanvasElement, options: Options) {
          * canvas and the vertical center of the text on the canvas.
          */
         const canvasVerticalCenterLine = canvas.width / 2;
+        // @ts-ignore
         const textVerticalCenterLine = (textRight - textLeft) / 2 + textLeft;
 
         return {

@@ -5,6 +5,7 @@ function normalizeName(name: string) {
 export function fromLocalStorage<T>(name: string, def: T): T {
     try {
         name = normalizeName(name);
+        // @ts-ignore
         return JSON.parse(localStorage.getItem(name)) ?? def
     } catch (e) {
         return def;

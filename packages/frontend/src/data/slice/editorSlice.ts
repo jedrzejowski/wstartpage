@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {useAppSelector} from "../hooks";
+import actions from "../actions";
 
 interface EditorData {
     isOn: boolean;
@@ -42,7 +43,14 @@ export const editorSlice = createSlice({
                 state.editedIconCollections.push(state.selectedIconCollectionName);
             }
         }
-    }
+    },
+    extraReducers: (builder) => builder
+        .addCase(actions.addWidgetIcon, (state, action) => {
+            const {sectionId, widgetId} = action.payload
+            state.selectedObj = {
+                widgetId: widgetId,
+            };
+        })
 });
 
 export const useIsEditor = () => useAppSelector(state => state.editor.isOn);

@@ -54,7 +54,7 @@ function getSettings(storage: SettingsStorageI): SettingsState {
 
     const displayTitles = !getBoolean("hideTitles", false);
 
-    let zoomLevel = Number.parseInt(storage.get("zoomLevel"));
+    let zoomLevel = Number.parseInt(storage.get("zoomLevel") ?? "1");
     zoomLevel = isNaN(zoomLevel) ? 100 : zoomLevel;
 
     return {

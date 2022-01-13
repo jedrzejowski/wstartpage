@@ -1,8 +1,12 @@
-import React, {FC} from "react";
+import React, {FC, MouseEventHandler} from "react";
 import styled from "styled-components";
 import {InputRoot} from "./styled";
 
-export const Button: FC = React.memo(props => {
+interface ButtonProps {
+    onClick: MouseEventHandler;
+}
+
+export const Button: FC<ButtonProps> = React.memo(props => {
 
     return <InputRoot>
         <ButtonInput>{props.children}</ButtonInput>
@@ -17,5 +21,39 @@ const ButtonInput = styled.button`
     cursor: pointer;
 `;
 
-
 export default Button;
+
+export const InlineButton: FC<ButtonProps> = React.memo(props => {
+
+    return <InlineButtonInput onClick={props.onClick}>
+        <InlineBackground>
+            {props.children}
+        </InlineBackground>
+        <span>{props.children}</span>
+    </InlineButtonInput>;
+});
+
+const InlineBackground = styled.span`
+    display: none;
+    position: absolute;
+    content: "";
+    background: red;
+    margin: ${props => props.theme.spacing(-1)};
+    padding: ${props => props.theme.spacing(1)};
+`
+
+const InlineButtonInput = styled.button`
+    display: inline-block;
+    background: none;
+    position: relative;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+
+    &:hover > ${InlineBackground} {
+        display: inline-block;
+    }
+`;
+
