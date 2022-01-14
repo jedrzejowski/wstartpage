@@ -3,7 +3,7 @@ extern crate serde;
 mod config;
 mod api;
 mod types;
-mod tilda;
+mod redirect;
 
 use actix_files::Files as ActixFiles;
 use actix_web::{App, HttpServer, web};
@@ -12,7 +12,8 @@ use actix_web::{App, HttpServer, web};
 async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| App::new()
-        .service(tilda::tilda_redirect)
+        .service(redirect::tilda)
+        .service(redirect::monkey)
         .service(web::scope("/api").configure(api::service))
         .service(ActixFiles::new("/img", config::image_files_root.as_str()))
         .service(ActixFiles::new("/", config::static_files_root.as_str()).index_file("index.html"))

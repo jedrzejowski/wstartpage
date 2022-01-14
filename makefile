@@ -1,5 +1,5 @@
 
-PKG_VERSION=0.0.12
+PKG_VERSION=0.0.13
 DOCKER_TAG?=ajedrzejowski/wstartpage
 
 docker-build:
