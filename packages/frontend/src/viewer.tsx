@@ -3,9 +3,8 @@ import StartPage from "./components/startpage/StartPage";
 import StartPageShortcuts from "./components/startpage/StartPageShortcuts";
 import {SettingsSaver, useSettings} from "./data/slice/settingsSlice";
 import app_render from "./app_render";
-import {IconCollectionT, mergeIconCollections} from "./types";
+import {IconCollectionT, mergeIconCollections, NormalizedIconCollectionT} from "./types";
 import {fromLocalStorage} from "./lib/localStorage";
-import {fetchIconCollection} from "./data/iconCollection";
 import {useAppDispatch, useAppSelector} from "./data/hooks";
 import iconCollectionSlice from "./data/slice/iconCollectionSlice";
 
@@ -13,25 +12,51 @@ const CACHE_NAME = "icon_sets";
 
 const CachedStartPage: FC = () => {
     const dispatch = useAppDispatch();
-    const iconCollectionNames = useSettings.iconSetNames();
 
-    const fetchedIconCollectionNames = useAppSelector(state => Object.keys(state.iconCollection.collections));
-    const fetchedIconCollections = useAppSelector(state => Object.entries(state.iconCollection.collections).map(entry => entry[1]));
+    // kopiuje aby posortować
+    const requestedIconCollectionNames = [...useSettings.iconSetNames()].sort();
 
-    const [iconCollections, setIconCollections] = useState<IconCollectionT[]>([]);
-    const mergedIconCollection = useMemo(() => mergeIconCollections(iconCollections), [iconCollections]);
+    const fetchedIconCollections = useAppSelector(state => state.iconCollection.collections);
+    // const fetchedIconCollections = useAppSelector(state => Object.entries(state.iconCollection.collections).map(entry => entry[1]));
 
-    useEffect(() => {
-        iconCollectionNames.forEach(iconCollectionName => {
-            dispatch(iconCollectionSlice.actions.requestCollectionLoad(iconCollectionName));
-        });
-    }, [iconCollectionNames.sort().join()]);
+    // const [iconCollections, setIconCollections] = useState<IconCollectionT[]>([]);
+    // const mergedIconCollection = useMemo(() => mergeIconCollections(iconCollections), [iconCollections]);
 
     useEffect(() => {
-        setIconCollections(fromLocalStorage<IconCollectionT[]>(CACHE_NAME, []));
-    }, [fetchedIconCollectionNames.sort().join()]);
+        for (const collectionName of requestedIconCollectionNames) {
+            dispatch(iconCollectionSlice.actions.requestCollectionLoad({collectionName}));
+        }
+        for (const fetchedCollectionName in fetchedIconCollections) {
+            for (const collectionName of fetchedIconCollections[fetchedCollectionName]?.includes ?? []) {
+                dispatch(iconCollectionSlice.actions.requestCollectionLoad({collectionName}));
+            }
+        }
+    }, [requestedIconCollectionNames, fetchedIconCollections]);
 
-    return <StartPage iconCollectionName={fetchedIconCollectionNames}/>
+    // useEffect(() => {
+    //     setIconCollections(fromLocalStorage<IconCollectionT[]>(CACHE_NAME, []));
+    // }, [fetchedIconCollectionNames.sort().join()]);
+
+    const iconCollectionNames = useMemo(() => {
+        const iconCollectionNames = new Set<string>();
+
+        function add(iconCollectionName: string) {
+            const iconCollection = fetchedIconCollections[iconCollectionName];
+            if (iconCollection) {
+                iconCollectionNames.add(iconCollectionName);
+
+                if (Array.isArray(iconCollection.includes)) {
+                    iconCollection.includes.forEach(add);
+                }
+            }
+        }
+
+        requestedIconCollectionNames.forEach(add)
+
+        return Array.from(iconCollectionNames)
+    }, [requestedIconCollectionNames, fetchedIconCollections]);
+
+    return <StartPage iconCollectionName={iconCollectionNames}/>
 }
 
 app_render(<>

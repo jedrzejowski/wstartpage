@@ -9,8 +9,6 @@ import type {
 } from "../../types";
 import genId from "../genId()";
 import actions from "../actions";
-import {useMemo} from "react";
-import {mergeIconCollections} from "../../types";
 
 interface IconCollectionData {
     widgets: Partial<Record<number, IconWidgetT>>;
@@ -32,12 +30,13 @@ export const iconCollectionSlice = createSlice({
     name: "editor",
     initialState,
     reducers: {
-        requestCollectionLoad(state, action: PayloadAction<string>) {
-            if (action.payload in state.collections) {
+        requestCollectionLoad(state, action: PayloadAction<{ collectionName: string, hard?: boolean }>) {
+            const {collectionName, hard = false} = action.payload;
+            if (collectionName in state.collections && !hard) {
                 return;
             }
 
-            state.requests.push(action.payload);
+            state.requests.push(collectionName);
         },
         addCollection(state, action: PayloadAction<{ name: string, collection: IconCollectionT }>) {
 
@@ -89,7 +88,7 @@ export const iconCollectionSlice = createSlice({
             const {sectionId, widgetId} = action.payload
             state.widgets[widgetId] = {
                 title: "Example",
-                url: "http://example.com",
+                url: "https://example.com",
                 icon: {
                     text: "Example",
                     bgColor: "#FF000",

@@ -32,7 +32,7 @@ export const EditorIconCollectionList: FC = React.memo(props => {
 
     function handleClickFactory(iconCollectionName: string) {
         return () => {
-            dispatch(iconCollectionSlice.actions.requestCollectionLoad(iconCollectionName));
+            dispatch(iconCollectionSlice.actions.requestCollectionLoad({collectionName: iconCollectionName}));
             dispatch(editorSlice.actions.setSelectedIconCollectionName(iconCollectionName));
         }
     }
@@ -42,11 +42,11 @@ const Item = styled.div`
     padding: ${props => props.theme.spacing(2)};
     cursor: pointer;
     user-select: none;
-    
+
     & + & {
         border-top: 1px solid ${props => props.theme.color.border};
     }
-    
+
     &:hover {
         background-color: ${props => props.theme.color.border};
     }
