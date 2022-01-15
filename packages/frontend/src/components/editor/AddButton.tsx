@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {InlineButton} from "../input/Button";
 import {useAppDispatch} from "../../data/hooks";
 import actions from "../../data/actions";
-import genId from "../../data/genId()";
+import genId from "../../data/genId";
 import type {IconContainersT} from "../../types";
 
 

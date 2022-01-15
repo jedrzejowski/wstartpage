@@ -7,7 +7,7 @@ import type {
     NormalizedIconCollectionT,
     NormalizedIconSectionT
 } from "../../types";
-import genId from "../genId()";
+import genId from "../genId";
 import actions from "../actions";
 
 interface IconCollectionData {

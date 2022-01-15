@@ -1,6 +1,6 @@
 import React, {ChangeEvent, ChangeEventHandler, FC, ReactNode, useMemo, useRef} from "react";
 import styled from "styled-components";
-import genId from "../../data/genId()";
+import genId from "../../data/genId";
 
 export const CheckBoxInput: FC<{
     label: ReactNode;

@@ -1,7 +1,7 @@
 import React, {FC, ReactNode, useMemo} from "react";
 import {SketchPicker, Color, ColorChangeHandler} from "react-color";
 import styled from "styled-components";
-import genId from "../../data/genId()";
+import genId from "../../data/genId";
 
 export const ColorInput: FC<{
     id?: string;

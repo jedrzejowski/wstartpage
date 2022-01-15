@@ -2,16 +2,21 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {useAppSelector} from "../hooks";
 import {FC, useEffect} from "react";
 import {toLocalStorage} from "../../lib/localStorage";
+import {IconCollectionSettingsT} from "../../types";
 
 const STORAGE_NAME = "settings";
 
-interface SettingsState {
-    logoUrl: string | null;
-    backgroundUrl: string | null;
+type SettingsState = IconCollectionSettingsT & {
     iconSetNames: string[];
-    darkMode: boolean;
-    displayTitles: boolean;
-    zoomLevel: number;
+};
+
+const default_settings_state: SettingsState = {
+    backgroundUrl: null,
+    displayTitles: true,
+    iconSetNames: [],
+    logoUrl: null,
+    zoomLevel: 100,
+    darkMode: false,
 }
 
 const search_params = new URL(location.href).searchParams;
@@ -43,19 +48,19 @@ function getSettings(storage: SettingsStorageI): SettingsState {
         return typeof value === "string" && value.length > 0 ? value : null;
     }
 
-    const logoUrl = getString("logoUrl");
-    const backgroundUrl = getString("backgroundUrl");
+    const logoUrl = getString("logoUrl", default_settings_state.logoUrl);
+    const backgroundUrl = getString("backgroundUrl", default_settings_state.backgroundUrl);
 
     const iconSetNameRegex = /[a-zA-Z0-9]+/;
     const iconSetsStr: any = storage.get("iconSets") ?? "";
     const iconSetNames = (iconSetsStr + "").split(/[,;]/).filter(str => iconSetNameRegex.test(str));
 
-    const darkMode = getBoolean("darkMode", false);
+    const darkMode = getBoolean("darkMode", default_settings_state.darkMode);
 
-    const displayTitles = !getBoolean("hideTitles", false);
+    const displayTitles = !getBoolean("hideTitles", !default_settings_state.displayTitles);
 
-    let zoomLevel = Number.parseInt(storage.get("zoomLevel") ?? "100");
-    zoomLevel = isNaN(zoomLevel) ? 100 : zoomLevel;
+    let zoomLevel = Number.parseInt(storage.get("zoomLevel") ?? default_settings_state.zoomLevel.toString());
+    zoomLevel = isNaN(zoomLevel) ? default_settings_state.zoomLevel : zoomLevel;
 
     return {
         logoUrl,

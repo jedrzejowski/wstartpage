@@ -5,7 +5,7 @@ import React, {
     useRef,
 } from "react";
 import styled from "styled-components";
-import genId from "../../data/genId()";
+import genId from "../../data/genId";
 
 let i = 0;
 

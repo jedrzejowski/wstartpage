@@ -46,9 +46,19 @@ export type IconContainersT =
     | "right"
     | "bottom";
 
-export  type IconCollectionT = Partial<{
-    includes: string[];
-} & Record<IconContainersT, IconContainerT | null>>;
+export  type IconCollectionT = {
+    includes: string[] | null;
+    settings: IconCollectionSettingsT | null,
+} & Record<IconContainersT, IconContainerT | null>;
+
+export interface IconCollectionSettingsT {
+    logoUrl: string | null;
+    backgroundUrl: string | null;
+    darkMode: boolean;
+    displayTitles: boolean;
+    zoomLevel: number;
+}
+
 
 export type NormalizedIconCollectionT = Normalize<IconCollectionT, IconContainersT>;
 

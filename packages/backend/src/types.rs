@@ -34,6 +34,8 @@ pub struct IconSection {
 #[derive(Deserialize, Serialize)]
 pub struct IconCollection {
     includes: Option<Vec<String>>,
+    settings: Option<IconCollectionSettings>,
+
     top: Option<Vec<IconSection>>,
     middle: Option<Vec<IconSection>>,
     right: Option<Vec<IconSection>>,
@@ -41,6 +43,19 @@ pub struct IconCollection {
     bottom: Option<Vec<IconSection>>,
 }
 
+#[derive(Deserialize, Serialize)]
+pub struct IconCollectionSettings {
+    #[serde(rename = "logoUrl", alias = "logo-url", alias = "logo_url")]
+    logo_url: Option<String>,
+    #[serde(rename = "backgroundUrl", alias = "background-url", alias = "background_url")]
+    background_url: Option<String>,
+    #[serde(rename = "darkMode", alias = "dark-mode", alias = "dark_mode")]
+    dark_mode: Option<bool>,
+    #[serde(rename = "displayTitles", alias = "display-titles", alias = "display_titles")]
+    display_titles: Option<bool>,
+    #[serde(rename = "zoomLevel", alias = "zoom-level", alias = "zoom_level")]
+    zoom_level: Option<u32>,
+}
 
 fn normalize_container(container: &mut Option<Vec<IconSection>>) {
     match container {
