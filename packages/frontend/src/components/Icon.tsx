@@ -6,12 +6,12 @@ import {useSettings} from "../data/slice/settingsSlice";
 import {TextIconT} from "../types";
 
 const Background = styled.div`
-  width: ${props => props.theme.iconSize}px;
-  height: ${props => props.theme.iconSize}px;
+    width: ${props => props.theme.iconSize}px;
+    height: ${props => props.theme.iconSize}px;
 
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
 `;
 
 const Icon: FC<{

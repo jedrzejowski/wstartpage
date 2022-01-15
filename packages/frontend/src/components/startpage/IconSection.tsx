@@ -59,26 +59,27 @@ const IconSection: FC<{
 };
 
 const SectionRoot = styled.div`
-  width: ${isMobile ? "inherit" : "max-content"};
-  display: flex;
-  flex-direction: column;
-  background-color: white;
+    width: ${isMobile ? "inherit" : "max-content"};
+    display: flex;
+    flex-direction: column;
+    background-color: white;
 
-  margin: ${props => props.theme.spacing()};
-  padding: ${props => props.theme.spacing()} ${props => props.theme.spacing(2)};
-  border: 1px solid ${props => props.theme.color.border};
+    //margin: ${props => props.theme.spacing()} ${props => ((props.theme.iconSize - props.theme.spacingNum() - 2) / 2)}px;
+    margin: ${props => props.theme.spacing()};
+    padding: ${props => props.theme.spacing()} ${props => props.theme.spacing(2)};
+    border: 1px solid ${props => props.theme.color.border};
 `;
 
 const Header = styled(HFlexContainer)`
     margin: ${props => props.theme.spacing(-0.5)} 0 0 ${props => props.theme.spacing(-1.3)};
 `;
 
-const Title = isMobile ? styled.div`  
+const Title = isMobile ? styled.div`
     text-align: center;
     opacity: 0.5;
     text-transform: uppercase;
     margin: 0 ${props => props.theme.spacing(2)};
-  
+
     writing-mode: tb-rl;
     transform: rotate(-170deg);
 ` : styled.div`
