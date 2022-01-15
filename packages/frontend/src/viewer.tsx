@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useMemo, useState} from "react";
 import StartPage from "./components/startpage/StartPage";
 import StartPageShortcuts from "./components/startpage/StartPageShortcuts";
-import {SettingsSaver, useSettings} from "./data/slice/settingsSlice";
+import {SettingsSaver, settingsSlice, useSettings} from "./data/slice/settingsSlice";
 import app_render from "./app_render";
 import {IconCollectionT, mergeIconCollections, NormalizedIconCollectionT} from "./types";
 import {fromLocalStorage} from "./lib/localStorage";
@@ -13,14 +13,23 @@ const CACHE_NAME = "icon_sets";
 const CachedStartPage: FC = () => {
     const dispatch = useAppDispatch();
 
-    // kopiuje aby posortować
-    const requestedIconCollectionNames = [...useSettings.iconSetNames()].sort();
-
+    const requestedIconCollectionNames = useSettings.iconSetNames();
     const fetchedIconCollections = useAppSelector(state => state.iconCollection.collections);
     // const fetchedIconCollections = useAppSelector(state => Object.entries(state.iconCollection.collections).map(entry => entry[1]));
 
     // const [iconCollections, setIconCollections] = useState<IconCollectionT[]>([]);
     // const mergedIconCollection = useMemo(() => mergeIconCollections(iconCollections), [iconCollections]);
+
+    useEffect(() => {
+        const settings = fetchedIconCollections[requestedIconCollectionNames[0]]?.settings;
+
+        if (!settings) {
+            return
+        }
+
+        dispatch(settingsSlice.actions.setIfNotDefault(settings));
+
+    }, [fetchedIconCollections[requestedIconCollectionNames[0]]])
 
     useEffect(() => {
         for (const collectionName of requestedIconCollectionNames) {

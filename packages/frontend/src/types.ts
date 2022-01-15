@@ -74,6 +74,8 @@ export function mergeIconCollections(iconSets: IconCollectionT[]): IconCollectio
     }
 
     return {
+        includes: null,
+        settings: null,
         top: reduce("top"),
         left: reduce("left"),
         right: reduce("right"),

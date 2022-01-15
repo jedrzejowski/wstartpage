@@ -1,6 +1,10 @@
+/.idea
+/.run
+/.vscode
 /packages/backend/.idea
 /packages/backend/target
 /packages/frontend/.idea
 /packages/frontend/dist
 /packages/frontend/node_modules
 /volume
+*.tar.*

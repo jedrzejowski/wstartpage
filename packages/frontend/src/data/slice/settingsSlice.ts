@@ -76,6 +76,14 @@ export const settingsSlice = createSlice({
     name: "settings",
     initialState: default_value,
     reducers: {
+        setIfNotDefault(state, action: PayloadAction<Partial<SettingsState>>) {
+            for (const key of Object.keys(action.payload) as (keyof SettingsState)[]) {
+                if (action.payload[key] !== null && state[key] === default_settings_state[key]) {
+                    // @ts-ignore
+                    state[key] = action.payload[key];
+                }
+            }
+        },
         setIconSetName(state, action: PayloadAction<string[]>) {
             state.iconSetNames = action.payload;
         },

@@ -1,6 +1,8 @@
 
-PKG_VERSION=0.0.13
+PKG_VERSION=0.0.14
 DOCKER_TAG?=ajedrzejowski/wstartpage
+
+docker: docker-build docker-push
 
 docker-build:
 	docker build . --pull \
