@@ -25,13 +25,11 @@ export const IconWidgetForm: FC<{
         return null;
     }
 
-    const isTextIcon = typeof widget.icon === "object";
-
     return <Root>
         <TextInput label="Tytuł" value={widget.title} onChange={handleChangeFactory("title")}/>
         <TextInput label="URL" value={widget.url} onChange={handleChangeFactory("url")}/>
-        <CheckBoxInput label="Ikona tekstowa" value={isTextIcon} onChange={handleIconTypeChange}/>
-        {typeof widget.icon === "object" ? (<>
+        <CheckBoxInput label="Ikona tekstowa" value={isTextIconT(widget.icon)} onChange={handleIconTypeChange}/>
+        {isTextIconT(widget.icon) ? (<>
             <TextInput label="Test" value={widget.icon.text ?? ""}
                        onChange={handleIconChangeFactory("text")}/>
             <ColorInput label="Kolor" value={widget.icon.bgColor}

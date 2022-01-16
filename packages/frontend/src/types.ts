@@ -4,7 +4,7 @@ export const isProduction = process.env.NODE_ENV === 'production';
 
 export type UrlIconT = string;
 
-export function isUrlIconT(icon: AnyIconT | undefined): icon is UrlIconT {
+export function isUrlIconT(icon: AnyIconT | null): icon is UrlIconT {
     return typeof icon === "string";
 }
 
@@ -14,7 +14,7 @@ export type TextIconT = {
     fontSize: string;
 };
 
-export function isTextIconT(icon: AnyIconT | undefined): icon is TextIconT {
+export function isTextIconT(icon: AnyIconT | null): icon is TextIconT {
     return typeof icon === "object";
 }
 
@@ -23,16 +23,16 @@ export type AnyIconT = UrlIconT | TextIconT;
 
 export type IconWidgetT = {
     title: string;
-    icon?: AnyIconT;
+    icon: AnyIconT | null;
     url: string;
-    order?: number;
+    order: number | null;
 }
 
 export type IconSectionT = {
     title: string;
-    width?: number;
+    width: number | null;
     widgets: IconWidgetT[];
-    order?: number;
+    order: number | null;
 }
 
 export type NormalizedIconSectionT = Normalize<IconSectionT, "widgets">;

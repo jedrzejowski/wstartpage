@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct TextIcon {
     text: String,
     #[serde(rename = "bgColor")]
@@ -9,21 +9,21 @@ pub struct TextIcon {
     font_size: i32,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 #[serde(untagged)]
 pub enum Icon {
     ImageIcon(String),
     TextIcon(TextIcon),
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct IconWidget {
     title: Option<String>,
     icon: Option<Icon>,
     url: String,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct IconSection {
     title: String,
     width: Option<i32>,
@@ -31,7 +31,7 @@ pub struct IconSection {
     order: Option<i32>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct IconCollection {
     includes: Option<Vec<String>>,
     settings: Option<IconCollectionSettings>,
@@ -43,7 +43,7 @@ pub struct IconCollection {
     bottom: Option<Vec<IconSection>>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct IconCollectionSettings {
     #[serde(rename = "logoUrl", alias = "logo-url", alias = "logo_url")]
     logo_url: Option<String>,

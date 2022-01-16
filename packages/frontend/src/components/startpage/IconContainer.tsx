@@ -1,17 +1,17 @@
 import React, {FC} from "react";
 import {IconContainersT} from "../../types";
-import IconSection from "./IconSection";
+import IconSection, {AddIconSectionButton} from "./IconSection";
 import styled from "styled-components";
 import TextSection from "./TextSection";
 import {useIsEditor} from "../../data/slice/editorSlice";
-import {AddSectionButton} from "../editor/AddButton";
 import {FlexExpand, HFlexContainer} from "../UtilityElements";
 
 const IconContainer: FC<{
+    iconCollectionName: string;
     textOnly?: boolean;
     sections: number[];
     containerName: IconContainersT;
-}> = React.memo(({sections, textOnly = false, containerName}) => {
+}> = React.memo(({iconCollectionName, sections, textOnly = false, containerName}) => {
     const isEditor = useIsEditor();
 
 
@@ -25,6 +25,8 @@ const IconContainer: FC<{
             }
         })}
 
+        {isEditor ? <AddIconSectionButton iconCollectionName={iconCollectionName} containerName={containerName}/> : null}
+
     </ContainerRoot>;
 
     if (isEditor) {
@@ -32,7 +34,6 @@ const IconContainer: FC<{
             <HFlexContainer>
                 <EditorTitle>{containerName}</EditorTitle>
                 <FlexExpand style={{minWidth: 120}}/>
-                <AddSectionButton containerName={containerName}/>
             </HFlexContainer>
             {base}
         </EditorRoot>;
@@ -40,6 +41,7 @@ const IconContainer: FC<{
         return base;
     }
 });
+
 
 const ContainerRoot = styled.div`
     display: flex;

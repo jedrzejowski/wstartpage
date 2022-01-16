@@ -89,6 +89,7 @@ export const iconCollectionSlice = createSlice({
             state.widgets[widgetId] = {
                 title: "Example",
                 url: "https://example.com",
+                order: null,
                 icon: {
                     text: "Example",
                     bgColor: "#FF000",
@@ -96,6 +97,25 @@ export const iconCollectionSlice = createSlice({
                 }
             }
             state.sections[sectionId]?.widgets.push(widgetId);
+        })
+        .addCase(actions.addIconSection, (state, action) => {
+            const {iconCollectionName, containerName, sectionId} = action.payload;
+
+            const collection = state.collections[iconCollectionName];
+
+            if (!collection) {
+                throw new Error(`iconCollectionName=${iconCollectionName} not found`);
+            }
+
+            const container = collection[containerName] ?? (collection[containerName] = []);
+            container.push(sectionId);
+
+            state.sections[sectionId] = {
+                title: "Nowa sekcja",
+                widgets: [],
+                order: null,
+                width: null,
+            }
         })
 });
 

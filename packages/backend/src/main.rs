@@ -15,7 +15,7 @@ async fn main() -> std::io::Result<()> {
         .service(redirect::tilda)
         .service(redirect::monkey)
         .service(web::scope("/api").configure(api::service))
-        .service(ActixFiles::new("/img", config::image_files_root.as_str()))
-        .service(ActixFiles::new("/", config::static_files_root.as_str()).index_file("index.html"))
-    ).bind(config::app_bind.as_str())?.run().await
+        .service(ActixFiles::new("/img", &config::cfg.image_root))
+        .service(ActixFiles::new("/", &config::cfg.static_root).index_file("index.html"))
+    ).bind(config::cfg.app_bind())?.run().await
 }

@@ -6,6 +6,9 @@ import {useSettings} from "../../data/slice/settingsSlice";
 import {editorSlice, useIsEditor} from "../../data/slice/editorSlice";
 import {useAppDispatch} from "../../data/hooks";
 import {useIconWidget} from "../../data/slice/iconCollectionSlice";
+import {InlineButton} from "../input/Button";
+import actions from "../../data/actions";
+import genId from "../../data/genId";
 
 export const IconWidget: FC<{
     widgetId: number;
@@ -64,6 +67,21 @@ export const IconWidget: FC<{
     }
 };
 
+export const AddIconWidgetButton: FC<{
+    sectionId: number;
+}> = React.memo(({sectionId}) => {
+    const dispatch = useAppDispatch();
+
+    return <AddButtonRoot onClick={handleClick}>
+        <div>Dodaj ikonę</div>
+    </AddButtonRoot>;
+
+    function handleClick() {
+        dispatch(actions.addWidgetIcon({sectionId, widgetId: genId()}));
+    }
+});
+
+
 const Root = styled.a`
     display: block;
     cursor: pointer;
@@ -92,6 +110,20 @@ const TitleRoot = styled.div`
     overflow: hidden;
     opacity: 0.5;
     font-size: 0.8em;
+`;
+
+const AddButtonRoot = styled.div`
+    display: block;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    cursor: pointer;
+    margin-left: ${props => props.theme.spacing(1.5)};
+    font-size: 0.8em;
+
+    > div {
+        opacity: 0.5;
+        text-align: center;
+    }
 `;
 
 export default IconWidget;

@@ -6,6 +6,10 @@
 		"esModuleInterop": true,
 		"jsx": "react",
 		"moduleResolution": "node",
-		"strictNullChecks": true
+		"strict": true,
+		"strictNullChecks": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
+		"strictPropertyInitialization": true
 	}
 }

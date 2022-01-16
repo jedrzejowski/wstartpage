@@ -1,36 +1,43 @@
 use once_cell::sync::Lazy;
+use serde::Deserialize;
 
 fn make_absolute(path: &mut String) -> String {
     let q = std::path::Path::new(path);
     return std::fs::canonicalize(q).unwrap().to_str().unwrap().parse().unwrap();
 }
 
-fn get_path_from_env(env_name: &str) -> String {
-    let mut path = String::from("./");
-    let result = std::env::var(env_name);
+fn default_host() -> String {
+    String::from("0.0.0.0")
+}
 
-    if result.is_ok() {
-        path = result.unwrap();
+fn default_port() -> u16 {
+    8080
+}
+
+#[derive(Deserialize, Debug)]
+pub struct Config {
+    #[serde(default = "default_host")]
+    pub host: String,
+    #[serde(default = "default_port")]
+    pub port: u16,
+    pub static_root: String,
+    pub dashboard_root: String,
+    pub image_root: String,
+}
+
+impl Config {
+    pub fn app_bind(&self) -> String {
+        format!("{}:{}", self.host, self.port)
     }
-
-    make_absolute(&mut path);
-
-    return path;
 }
 
-fn get_app_bind() -> String {
-    String::from("0.0.0.0:8080")
-}
-
-
 #[allow(non_upper_case_globals)]
-pub static static_files_root: Lazy<String> = Lazy::new(|| get_path_from_env("WSTARTPAGE_STATIC_ROOT"));
+pub static cfg: Lazy<Config> = Lazy::new(|| {
+    let mut config = envy::prefixed("WSTARTPAGE_").from_env::<Config>().unwrap();
 
-#[allow(non_upper_case_globals)]
-pub static dashboard_files_root: Lazy<String> = Lazy::new(|| get_path_from_env("WSTARTPAGE_DASHBOARD_ROOT"));
+    make_absolute(&mut config.static_root);
+    make_absolute(&mut config.dashboard_root);
+    make_absolute(&mut config.image_root);
 
-#[allow(non_upper_case_globals)]
-pub static image_files_root: Lazy<String> = Lazy::new(|| get_path_from_env("WSTARTPAGE_IMAGE_ROOT"));
-
-#[allow(non_upper_case_globals)]
-pub static app_bind: Lazy<String> = Lazy::new(|| get_app_bind());
+    return config;
+});

@@ -1,7 +1,6 @@
 import React, {FC, useEffect} from "react";
 import AppLayout from "../AppLayout";
 import IconContainer from "./IconContainer";
-import type {IconCollectionT} from "../../types";
 import SearchView from "./SearchView";
 import {useSettings} from "../../data/slice/settingsSlice";
 import Header from "./Header";
@@ -21,20 +20,50 @@ export const StartPage: FC<({
         return null;
     }
 
+    const firstIconCollectionName = Array.isArray(iconCollectionName) ? iconCollectionName[0] : iconCollectionName;
+
     return (<div>
 
         <AppLayout
             top={<>
                 <Header/>
-                {iconCollection.top ?
-                    <IconContainer containerName="top" textOnly sections={iconCollection.top}/> : null}
+                {iconCollection.top ? (
+                    <IconContainer
+                        iconCollectionName={firstIconCollectionName}
+                        containerName="top"
+                        textOnly
+                        sections={iconCollection.top}
+                    />
+                ) : null}
             </>}
-            left={iconCollection.left ? <IconContainer containerName="left" sections={iconCollection.left}/> : null}
-            middle={iconCollection.middle ?
-                <IconContainer containerName="middle" sections={iconCollection.middle}/> : null}
-            right={iconCollection.right ? <IconContainer containerName="right" sections={iconCollection.right}/> : null}
-            bottom={iconCollection.bottom ?
-                <IconContainer containerName="bottom" textOnly sections={iconCollection.bottom}/> : null}
+            left={iconCollection.left ? (
+                <IconContainer
+                    iconCollectionName={firstIconCollectionName}
+                    containerName="left"
+                    sections={iconCollection.left}
+                />
+            ) : null}
+            middle={iconCollection.middle ? (
+                <IconContainer
+                    iconCollectionName={firstIconCollectionName}
+                    containerName="middle"
+                    sections={iconCollection.middle}
+                />
+            ) : null}
+            right={iconCollection.right ? (
+                <IconContainer
+                    iconCollectionName={firstIconCollectionName}
+                    containerName="right"
+                    sections={iconCollection.right}
+                />
+            ) : null}
+            bottom={iconCollection.bottom ? (
+                <IconContainer
+                    iconCollectionName={firstIconCollectionName}
+                    containerName="bottom"
+                    textOnly sections={iconCollection.bottom}
+                />
+            ) : null}
         />
 
         <SearchView/>

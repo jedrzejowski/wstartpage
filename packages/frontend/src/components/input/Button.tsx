@@ -40,6 +40,7 @@ const InlineBackground = styled.span`
     background: red;
     margin: ${props => props.theme.spacing(-1)};
     padding: ${props => props.theme.spacing(1)};
+    border-radius: 2px;
 `
 
 const InlineButtonInput = styled.button`
@@ -50,7 +51,7 @@ const InlineButtonInput = styled.button`
     outline: none;
     cursor: pointer;
     margin: 0;
-    padding: 0;
+    padding: ${props => props.theme.spacing(1)};
 
     &:hover > ${InlineBackground} {
         display: inline-block;

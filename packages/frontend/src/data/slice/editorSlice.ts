@@ -46,10 +46,12 @@ export const editorSlice = createSlice({
     },
     extraReducers: (builder) => builder
         .addCase(actions.addWidgetIcon, (state, action) => {
-            const {sectionId, widgetId} = action.payload
-            state.selectedObj = {
-                widgetId: widgetId,
-            };
+            const {widgetId} = action.payload
+            state.selectedObj = {widgetId};
+        })
+        .addCase(actions.addIconSection, (state, action) => {
+            const {sectionId} = action.payload
+            state.selectedObj = {sectionId};
         })
 });
 
