@@ -11,7 +11,7 @@ export const TextWidget:FC<{
         throw new Error(`IconWidget of id '${widgetId}' does not exists`);
     }
 
-    return <Root href={widget.url}>
+    return <Root href={widget.url} target="_parent">
         {widget.title}
     </Root>
 });
