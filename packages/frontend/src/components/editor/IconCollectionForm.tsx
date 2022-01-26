@@ -6,7 +6,7 @@ export const IconCollectionForm: FC<{
 
 
     return <>
-        Sekcja
+        Kolekcja
         hej akup se kleja
     </>;
 });

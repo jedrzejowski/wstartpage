@@ -27,7 +27,7 @@ const MyIcon: FC<{
                 height={theme.iconSize} width={theme.iconSize}
                 text={icon.text}
                 backgroundColor={icon.bgColor}
-                fontSize={Number.parseFloat(icon.fontSize) * zoom_ratio}
+                fontSize={icon.fontSize * zoom_ratio}
                 fontFamily="'Yanone Kaffeesatz', sans-serif"
             />
         );

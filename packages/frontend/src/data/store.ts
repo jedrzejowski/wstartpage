@@ -9,7 +9,7 @@ import {isProduction} from "../types";
 
 const middleware: Middleware[] = []
 
-if (isProduction) {
+if (!isProduction) {
     const logger = createLogger({});
     middleware.push(logger);
 }

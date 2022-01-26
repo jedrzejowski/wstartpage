@@ -1,6 +1,7 @@
 import {createGlobalStyle, DefaultTheme, ThemeProvider as LibThemeProvider} from "styled-components";
 import React, {FC, useEffect, useState} from "react";
 import {useSettings} from "./data/slice/settingsSlice";
+import {joinUrls} from "@reduxjs/toolkit/dist/query/utils";
 
 declare module 'styled-components' {
     interface DefaultTheme {
@@ -13,6 +14,8 @@ declare module 'styled-components' {
         spacing4(top: number, right: number, bottom: number, left: number): string;
 
         spacingNum(num?: number): number;
+
+        selectedOutline(): string;
 
         iconSize: number;
         buttonHoverBg: string;
@@ -41,6 +44,12 @@ export const default_theme: DefaultTheme = {
             this.spacing(bottom),
             this.spacing(left),
         ].join(' ');
+    },
+    selectedOutline() {
+        return [
+            `outline: 1px solid rgb(0 102 255 / 55%);`,
+            `outline-offset: 6px`,
+        ].join('')
     },
     iconSize: 64,
     buttonHoverBg: "#bbbebf",

@@ -2,13 +2,15 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {useAppSelector} from "../hooks";
 import type {
     IconCollectionT,
-    IconContainerT,
+    IconContainerT, IconSectionT,
     IconWidgetT,
     NormalizedIconCollectionT,
     NormalizedIconSectionT
 } from "../../types";
 import genId from "../genId";
 import actions from "../actions";
+import {onFocus} from "@reduxjs/toolkit/dist/query/core/setupListeners";
+import IconSection from "../../components/startpage/IconSection";
 
 interface IconCollectionData {
     widgets: Partial<Record<string, IconWidgetT>>;
@@ -82,8 +84,12 @@ export const iconCollectionSlice = createSlice({
             const {widgetId, widget} = action.payload;
             state.widgets[widgetId] = widget;
         },
-        moveIconLeft(state, action: PayloadAction<{ widgetId: string, sectionId?: string }>) {
-            let {widgetId, sectionId} = action.payload;
+        updateSection(state, action: PayloadAction<{ sectionId: string, section: NormalizedIconSectionT }>) {
+            const {sectionId, section} = action.payload;
+            state.sections[sectionId] = section;
+        },
+        moveIconWidget(state, action: PayloadAction<{ widgetId: string, sectionId?: string, offset: number }>) {
+            let {widgetId, sectionId, offset} = action.payload;
 
             if (sectionId === undefined) {
                 sectionId = Object.keys(state.sections).find(key => {
@@ -95,7 +101,23 @@ export const iconCollectionSlice = createSlice({
                 }
             }
 
-            state.sections.
+            const section = state.sections[sectionId];
+
+            if (!section) {
+                throw new Error("no section with such id");
+            }
+
+            const currentIndex = section.widgets.indexOf(widgetId);
+            const newIndex = currentIndex + offset;
+
+            if (newIndex < 0 || section.widgets.length <= newIndex) {
+                return;
+            }
+
+            section.widgets[currentIndex] = section.widgets[newIndex];
+            section.widgets[newIndex] = widgetId;
+        },
+        moveIconSection(state, action: PayloadAction<{ sectionId: string, offset: number }>) {
 
         },
     },
@@ -109,7 +131,7 @@ export const iconCollectionSlice = createSlice({
                 icon: {
                     text: "Example",
                     bgColor: "#FF000",
-                    fontSize: "30"
+                    fontSize: 30
                 }
             }
             state.sections[sectionId]?.widgets.push(widgetId);
@@ -129,7 +151,7 @@ export const iconCollectionSlice = createSlice({
             state.sections[sectionId] = {
                 title: "Nowa sekcja",
                 widgets: [],
-                order: null,
+                order: 1000,
                 width: null,
             }
         })

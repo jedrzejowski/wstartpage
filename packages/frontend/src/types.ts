@@ -11,7 +11,7 @@ export function isUrlIconT(icon: AnyIconT | null): icon is UrlIconT {
 export type TextIconT = {
     text: string;
     bgColor: string;
-    fontSize: string;
+    fontSize: number;
 };
 
 export function isTextIconT(icon: AnyIconT | null): icon is TextIconT {
@@ -32,7 +32,7 @@ export type IconSectionT = {
     title: string;
     width: number | null;
     widgets: IconWidgetT[];
-    order: number | null;
+    order: number;
 }
 
 export type NormalizedIconSectionT = Normalize<IconSectionT, "widgets">;
@@ -100,5 +100,6 @@ export function textIconFromStr(iconText: string): TextIconT {
 }
 
 export function textIconToStr(iconText: TextIconT): string {
+    // @ts-ignore
     return "!" + new URLSearchParams(iconText).toString();
 }

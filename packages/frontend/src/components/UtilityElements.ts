@@ -29,3 +29,12 @@ export const SmallButton = styled.button`
     background: ${props => props.theme.buttonHoverBg};
   }
 `;
+
+export const PaddedRoot = styled.div`
+    box-sizing: border-box;
+    padding: ${props => props.theme.spacing(2)};
+
+    > * + * {
+        margin-top: ${props => props.theme.spacing(2)};
+    }
+`;

@@ -9,12 +9,15 @@ import genId from "../../data/genId";
 
 let i = 0;
 
-export const TextInput: FC<{
+export type TextInputProps = {
     id?: string;
     label: ReactNode;
     value: string;
+    pattern?: string;
     onChange: (newValue: string) => void;
-}> = React.memo(props => {
+}
+
+export const TextInput: FC<TextInputProps> = React.memo(props => {
     const {label} = props;
 
     const ref = useRef<HTMLInputElement>(null);
@@ -22,10 +25,15 @@ export const TextInput: FC<{
 
     return <Root>
         <Label htmlFor={id}>{label}</Label>
-        <Input ref={ref} id={id} value={props.value} onChange={e => {
-            console.log("HERE")
-            props.onChange(e.target.value)
-        }}/>
+        <Input
+            ref={ref}
+            id={id}
+            value={props.value}
+            pattern={props.pattern}
+            onChange={e => {
+                props.onChange(e.target.value)
+            }}
+        />
     </Root>
 });
 

@@ -28,7 +28,12 @@ pub struct IconSection {
     title: String,
     width: Option<i32>,
     widgets: Vec<IconWidget>,
-    order: Option<i32>,
+    #[serde(default = "default_icon_section_order")]
+    order: i32,
+}
+
+fn default_icon_section_order() -> i32 {
+    return 1000;
 }
 
 #[derive(Deserialize, Serialize, Debug)]

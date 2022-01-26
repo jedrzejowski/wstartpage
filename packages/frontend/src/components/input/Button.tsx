@@ -9,7 +9,7 @@ interface ButtonProps {
 export const Button: FC<ButtonProps> = React.memo(props => {
 
     return <InputRoot>
-        <ButtonInput>{props.children}</ButtonInput>
+        <ButtonInput onClick={props.onClick}>{props.children}</ButtonInput>
     </InputRoot>;
 });
 

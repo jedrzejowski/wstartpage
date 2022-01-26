@@ -3,12 +3,12 @@ import MyIcon from "../MyIcon";
 import styled from "styled-components";
 import {searchEngine, useSearchQuery} from "../../data/slice/searchSlice";
 import {useSettings} from "../../data/slice/settingsSlice";
-import {editorSlice, useIsEditor} from "../../data/slice/editorSlice";
-import {useAppDispatch} from "../../data/hooks";
+import {editorSlice, useIsEditor, useIsSelected} from "../../data/slice/editorSlice";
+import {useAppDispatch, useAppSelector} from "../../data/hooks";
 import {useIconWidget} from "../../data/slice/iconCollectionSlice";
-import {InlineButton} from "../input/Button";
 import actions from "../../data/actions";
 import genId from "../../data/genId";
+import clsx from "clsx";
 
 export const IconWidget: FC<{
     widgetId: string;
@@ -17,6 +17,7 @@ export const IconWidget: FC<{
     const [visible, setVisible] = useState(true);
     const displayTitles = useSettings.displayTitles();
     const widget = useIconWidget(widgetId);
+    const isSelected = useIsSelected("widget", widgetId);
     const isEditor = useIsEditor();
     const dispatch = useAppDispatch();
 
@@ -42,6 +43,9 @@ export const IconWidget: FC<{
             style={{
                 display: visible ? undefined : "none",
             }}
+            className={clsx({
+                "selected": isSelected,
+            })}
             onClick={handleClick}
         >
             <IconRoot>
@@ -92,7 +96,12 @@ const Root = styled.a`
     margin-left: ${props => props.theme.spacing(1.5)};
     margin-right: ${props => props.theme.spacing(1.5)};
     margin-bottom: ${props => props.theme.spacing(0.5)};
-`
+
+    &.selected {
+        outline: 1px solid rgb(0 102 255 / 55%);
+        outline-offset: ${props => props.theme.spacing()}
+    }
+`;
 
 const IconRoot = styled.div`
     margin-bottom: ${props => props.theme.spacing(1)};

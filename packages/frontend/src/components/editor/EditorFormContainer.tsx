@@ -2,6 +2,7 @@ import React, {FC} from "react";
 import IconWidgetForm from "./IconWidgetForm";
 import {useAppSelector} from "../../data/hooks";
 import IconCollectionForm from "./IconCollectionForm";
+import IconSectionForm from "./IconSectionForm";
 
 export const EditorFormContainer: FC = React.memo(props => {
     const selectedObj = useAppSelector(state => state.editor.selectedObj);
@@ -18,6 +19,9 @@ export const EditorFormContainer: FC = React.memo(props => {
         return <IconWidgetForm widgetId={selectedObj.widgetId}/>;
     }
 
+    if ('sectionId' in selectedObj) {
+        return <IconSectionForm sectionId={selectedObj.sectionId}/>;
+    }
 
     return null;
 });

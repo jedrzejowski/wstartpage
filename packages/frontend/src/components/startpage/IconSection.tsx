@@ -5,12 +5,13 @@ import {isNumber} from "../../lib/util";
 import {useSettings} from "../../data/slice/settingsSlice";
 import {isMobile} from "react-device-detect";
 import {useIconSection} from "../../data/slice/iconCollectionSlice";
-import {useIsEditor} from "../../data/slice/editorSlice";
+import {editorSlice, useIsEditor, useIsSelected} from "../../data/slice/editorSlice";
 import {HFlexContainer} from "../UtilityElements";
 import {IconContainersT} from "../../types";
 import {useAppDispatch} from "../../data/hooks";
 import actions from "../../data/actions";
 import genId from "../../data/genId";
+import clsx from "clsx";
 
 const IconSection: FC<{
     sectionId: string;
@@ -19,16 +20,20 @@ const IconSection: FC<{
     const displayTitles = useSettings.displayTitles();
     const section = useIconSection(sectionId);
     const isEditor = useIsEditor();
+    const isSelected = useIsSelected("section", sectionId);
+    const dispatch = useAppDispatch();
 
     if (!section) {
         return null;
     }
 
     const title = (
-        <Title style={{
-            display: displayTitles ? undefined : "none"
-        }}>
-            {section.title}
+        <Title
+            style={{
+                display: displayTitles ? undefined : "none"
+            }}
+        >
+            {section.title ? section.title : '\u00A0'}
         </Title>
     );
 
@@ -43,8 +48,12 @@ const IconSection: FC<{
         </>
     } else {
         return (
-            <SectionRoot>
-                <Header>
+            <SectionRoot
+                className={clsx({
+                    "selected": isSelected,
+                })}
+            >
+                <Header onClick={handleHeaderClick}>
                     {title}
                 </Header>
 
@@ -56,6 +65,13 @@ const IconSection: FC<{
                 </WidgetsContainer>
             </SectionRoot>
         );
+    }
+
+    function handleHeaderClick(e: React.MouseEvent) {
+        if (isEditor) {
+            e.preventDefault();
+            dispatch(editorSlice.actions.setSelectedObj({sectionId}));
+        }
     }
 };
 
@@ -89,6 +105,10 @@ const SectionRoot = styled.div`
     margin: ${props => props.theme.spacing()};
     padding: ${props => props.theme.spacing()} ${props => props.theme.spacing(2)};
     border: 1px solid ${props => props.theme.color.border};
+
+    &.selected {
+        outline: 2px solid rgb(0 102 255 / 55%);
+    }
 `;
 
 const Header = styled(HFlexContainer)`
@@ -106,6 +126,7 @@ const Title = isMobile ? styled.div`
 ` : styled.div`
     opacity: 0.5;
     text-transform: uppercase;
+    user-select: none;
 `;
 
 const WidgetsContainer = styled.div`

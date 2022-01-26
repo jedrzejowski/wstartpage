@@ -36,7 +36,7 @@ export const editorSlice = createSlice({
         setSelectedObj(state, action: PayloadAction<EditorData["selectedObj"]>) {
             state.selectedObj = action.payload;
         },
-        makeCurrentCollectionAsEdited(state, action: PayloadAction) {
+        markCurrentCollectionAsEdited(state, action: PayloadAction) {
             if (state.selectedIconCollectionName) {
                 state.editedIconCollections.push(state.selectedIconCollectionName);
             }
@@ -54,6 +54,22 @@ export const editorSlice = createSlice({
 });
 
 export const useIsEditor = () => useAppSelector(state => state.editor.isOn);
+export const useIsSelected = (type: "section" | "widget", id: string): boolean => useAppSelector(state => {
+    const selectedObj = state.editor.selectedObj;
+
+    if (selectedObj === null) {
+        return false;
+    }
+
+    switch (type) {
+        case "widget":
+            return 'widgetId' in selectedObj && selectedObj.widgetId === id;
+        case "section":
+            return 'sectionId' in selectedObj && selectedObj.sectionId === id;
+        default:
+            return false;
+    }
+})
 
 export default editorSlice;
 

@@ -8,11 +8,12 @@ import {isTextIconT, isUrlIconT} from "../../types";
 import styled from "styled-components";
 import editorSlice from "../../data/slice/editorSlice";
 import ColorInput from "../input/ColorInput";
-import {FlexExpand, HFlexContainer} from "../UtilityElements";
+import {FlexExpand, HFlexContainer, PaddedRoot} from "../UtilityElements";
 import Button from "../input/Button";
 import ArrowLeftIcon from "mdi-react/ArrowLeftIcon";
 import ArrowRightIcon from "mdi-react/ArrowRightIcon";
 import DeleteIcon from "mdi-react/DeleteIcon";
+import NumberInput from "../input/NumberInput";
 
 const ICON_RESTORE_CACHE: Partial<Record<string, {
     urlIcon?: UrlIconT;
@@ -29,7 +30,7 @@ export const IconWidgetForm: FC<{
         return null;
     }
 
-    return <Root>
+    return <PaddedRoot>
 
         <HFlexContainer>
             <Button onClick={handleMoveToLeftClick}>
@@ -53,12 +54,12 @@ export const IconWidgetForm: FC<{
                        onChange={handleIconChangeFactory("text")}/>
             <ColorInput label="Kolor" value={widget.icon.bgColor}
                         onChange={handleIconChangeFactory("bgColor")}/>
-            <TextInput label="Wielkość czcionki" value={(widget.icon.fontSize ?? "").toString()}
+            <NumberInput label="Wielkość czcionki" value={widget.icon.fontSize}
                        onChange={handleIconChangeFactory("fontSize")}/>
         </>) : (
             <TextInput label="Ikona" value={widget.icon ?? ""} onChange={handleChangeFactory("icon")}/>
         )}
-    </Root>;
+    </PaddedRoot>;
 
     function handleChangeFactory(field: keyof IconWidgetT) {
         return (newValue: string) => {
@@ -72,7 +73,7 @@ export const IconWidgetForm: FC<{
             };
 
             dispatch(iconCollectionSlice.actions.updateWidget({widgetId, widget: newWidget}));
-            dispatch(editorSlice.actions.makeCurrentCollectionAsEdited());
+            dispatch(editorSlice.actions.markCurrentCollectionAsEdited());
         }
     }
 
@@ -86,8 +87,10 @@ export const IconWidgetForm: FC<{
                 return;
             }
 
-            if (field === "bgColor") {
-                newValue = newValue.hex;
+            switch (field) {
+                case "bgColor":
+                    newValue = newValue.hex;
+                    break;
             }
 
             const newWidget: IconWidgetT = {
@@ -99,7 +102,7 @@ export const IconWidgetForm: FC<{
             };
 
             dispatch(iconCollectionSlice.actions.updateWidget({widgetId, widget: newWidget}));
-            dispatch(editorSlice.actions.makeCurrentCollectionAsEdited());
+            dispatch(editorSlice.actions.markCurrentCollectionAsEdited());
         }
     }
 
@@ -119,7 +122,7 @@ export const IconWidgetForm: FC<{
                     icon: current_cache.textIcon ?? {
                         text: widget.title.substring(0, 3),
                         bgColor: "#FF0000",
-                        fontSize: "30",
+                        fontSize: 30,
                     },
                 }
             }));
@@ -136,7 +139,7 @@ export const IconWidgetForm: FC<{
 
         }
 
-        dispatch(editorSlice.actions.makeCurrentCollectionAsEdited());
+        dispatch(editorSlice.actions.markCurrentCollectionAsEdited());
 
         if (isUrlIconT(widget.icon))
             current_cache.urlIcon = widget.icon;
@@ -145,7 +148,7 @@ export const IconWidgetForm: FC<{
     }
 
     function handleMoveToLeftClick(e: React.MouseEvent) {
-// dispatch(iconCollectionSlice.actions.)
+        dispatch(iconCollectionSlice.actions.moveIconWidget({widgetId, offset: -1}));
     }
 
     function handleDeleteClick(e: React.MouseEvent) {
@@ -153,18 +156,9 @@ export const IconWidgetForm: FC<{
     }
 
     function handleMoveToRightClick(e: React.MouseEvent) {
-
+        dispatch(iconCollectionSlice.actions.moveIconWidget({widgetId, offset: 1}));
     }
 });
-
-const Root = styled.div`
-    box-sizing: border-box;
-    padding: ${props => props.theme.spacing(2)};
-
-    > * + * {
-        margin-top: ${props => props.theme.spacing(2)};
-    }
-`
 
 
 export default IconWidgetForm;
