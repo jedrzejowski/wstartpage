@@ -6,9 +6,13 @@ import {useAppDispatch, useAppSelector} from "../../data/hooks";
 import CheckBoxInput from "../input/CheckBoxInput";
 import {isTextIconT, isUrlIconT} from "../../types";
 import styled from "styled-components";
-import {SketchPicker} from "react-color";
 import editorSlice from "../../data/slice/editorSlice";
 import ColorInput from "../input/ColorInput";
+import {FlexExpand, HFlexContainer} from "../UtilityElements";
+import Button from "../input/Button";
+import ArrowLeftIcon from "mdi-react/ArrowLeftIcon";
+import ArrowRightIcon from "mdi-react/ArrowRightIcon";
+import DeleteIcon from "mdi-react/DeleteIcon";
 
 const ICON_RESTORE_CACHE: Partial<Record<string, {
     urlIcon?: UrlIconT;
@@ -16,7 +20,7 @@ const ICON_RESTORE_CACHE: Partial<Record<string, {
 }>> = {};
 
 export const IconWidgetForm: FC<{
-    widgetId: number;
+    widgetId: string;
 }> = React.memo(({widgetId}) => {
     const widget = useIconWidget(widgetId);
     const dispatch = useAppDispatch();
@@ -26,6 +30,21 @@ export const IconWidgetForm: FC<{
     }
 
     return <Root>
+
+        <HFlexContainer>
+            <Button onClick={handleMoveToLeftClick}>
+                <ArrowLeftIcon/>
+            </Button>
+            <FlexExpand/>
+            <Button onClick={handleDeleteClick}>
+                <DeleteIcon color="red"/>
+            </Button>
+            <FlexExpand/>
+            <Button onClick={handleMoveToRightClick}>
+                <ArrowRightIcon/>
+            </Button>
+        </HFlexContainer>
+
         <TextInput label="Tytuł" value={widget.title} onChange={handleChangeFactory("title")}/>
         <TextInput label="URL" value={widget.url} onChange={handleChangeFactory("url")}/>
         <CheckBoxInput label="Ikona tekstowa" value={isTextIconT(widget.icon)} onChange={handleIconTypeChange}/>
@@ -124,11 +143,24 @@ export const IconWidgetForm: FC<{
         if (isTextIconT(widget.icon))
             current_cache.textIcon = widget.icon;
     }
+
+    function handleMoveToLeftClick(e: React.MouseEvent) {
+// dispatch(iconCollectionSlice.actions.)
+    }
+
+    function handleDeleteClick(e: React.MouseEvent) {
+
+    }
+
+    function handleMoveToRightClick(e: React.MouseEvent) {
+
+    }
 });
 
 const Root = styled.div`
     box-sizing: border-box;
     padding: ${props => props.theme.spacing(2)};
+
     > * + * {
         margin-top: ${props => props.theme.spacing(2)};
     }

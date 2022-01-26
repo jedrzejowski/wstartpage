@@ -7,10 +7,10 @@ import {useIsEditor} from "../../data/slice/editorSlice";
 import {FlexExpand, HFlexContainer} from "../UtilityElements";
 
 const IconContainer: FC<{
-    iconCollectionName: string;
-    textOnly?: boolean;
-    sections: number[];
-    containerName: IconContainersT;
+    iconCollectionName: string,
+    textOnly?: boolean,
+    sections: string[],
+    containerName: IconContainersT,
 }> = React.memo(({iconCollectionName, sections, textOnly = false, containerName}) => {
     const isEditor = useIsEditor();
 

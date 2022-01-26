@@ -1,4 +1,4 @@
-type Normalize<T, K extends keyof T> = Omit<T, K> & { [k in K]: number[] };
+type Normalize<T, K extends keyof T> = Omit<T, K> & { [k in K]: string[] };
 
 export const isProduction = process.env.NODE_ENV === 'production';
 

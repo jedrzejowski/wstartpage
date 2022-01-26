@@ -6,14 +6,14 @@ import {useSettings} from "../../data/slice/settingsSlice";
 import {isMobile} from "react-device-detect";
 import {useIconSection} from "../../data/slice/iconCollectionSlice";
 import {useIsEditor} from "../../data/slice/editorSlice";
-import {FlexExpand, HFlexContainer} from "../UtilityElements";
+import {HFlexContainer} from "../UtilityElements";
 import {IconContainersT} from "../../types";
 import {useAppDispatch} from "../../data/hooks";
 import actions from "../../data/actions";
 import genId from "../../data/genId";
 
 const IconSection: FC<{
-    sectionId: number;
+    sectionId: string;
 }> = ({sectionId}) => {
     const theme = useTheme();
     const displayTitles = useSettings.displayTitles();

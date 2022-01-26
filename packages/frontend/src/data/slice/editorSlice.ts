@@ -5,13 +5,11 @@ import actions from "../actions";
 interface EditorData {
     isOn: boolean;
     selectedIconCollectionName: string | null;
-    selectedObj: {
-        iconCollectionName: string;
-    } | {
-        sectionId: number;
-    } | {
-        widgetId: number;
-    } | null;
+    selectedObj:
+        | { iconCollectionName: string; }
+        | { sectionId: string; }
+        | { widgetId: string; }
+        | null;
     editedIconCollections: string[];
 }
 

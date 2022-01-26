@@ -14,7 +14,7 @@ const Background = styled.div`
     background-size: 100%;
 `;
 
-const Icon: FC<{
+const MyIcon: FC<{
     icon: string | TextIconT;
 }> = React.memo(({icon}) => {
     const theme = useTheme();
@@ -36,4 +36,4 @@ const Icon: FC<{
     }
 });
 
-export default Icon;
+export default MyIcon;

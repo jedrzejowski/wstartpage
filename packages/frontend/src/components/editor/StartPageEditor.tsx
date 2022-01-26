@@ -17,6 +17,7 @@ const StartPageEditor: FC = props => {
 
     return <Root>
         <AppLayout
+            fixed
             top={<HPanel border="bottom"><EditorTopBar/></HPanel>}
             middle={<StartPagePreview/>}
             left={<VPanel border="right"><EditorIconCollectionList/></VPanel>}

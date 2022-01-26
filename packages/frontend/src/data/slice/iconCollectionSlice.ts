@@ -11,8 +11,8 @@ import genId from "../genId";
 import actions from "../actions";
 
 interface IconCollectionData {
-    widgets: Partial<Record<number, IconWidgetT>>;
-    sections: Partial<Record<number, NormalizedIconSectionT>>;
+    widgets: Partial<Record<string, IconWidgetT>>;
+    sections: Partial<Record<string, NormalizedIconSectionT>>;
     collections: Partial<Record<string, NormalizedIconCollectionT>>;
     requests: string[]
 }
@@ -40,7 +40,7 @@ export const iconCollectionSlice = createSlice({
         },
         addCollection(state, action: PayloadAction<{ name: string, collection: IconCollectionT }>) {
 
-            function normalizeContainer(iconContainer: IconContainerT | null | undefined): number[] {
+            function normalizeContainer(iconContainer: IconContainerT | null | undefined): string[] {
                 iconContainer = iconContainer ?? [];
                 return iconContainer.map(iconSection => {
                     const id = genId();
@@ -54,7 +54,7 @@ export const iconCollectionSlice = createSlice({
                 })
             }
 
-            function normalizeWidgets(iconWidgets: IconWidgetT[]): number[] {
+            function normalizeWidgets(iconWidgets: IconWidgetT[]): string[] {
                 return iconWidgets.map(iconWidget => {
                     const id = genId();
 
@@ -78,9 +78,25 @@ export const iconCollectionSlice = createSlice({
                 state.requests.splice(rI, 1);
             }
         },
-        updateWidget(state, action: PayloadAction<{ widgetId: number, widget: IconWidgetT }>) {
+        updateWidget(state, action: PayloadAction<{ widgetId: string, widget: IconWidgetT }>) {
             const {widgetId, widget} = action.payload;
             state.widgets[widgetId] = widget;
+        },
+        moveIconLeft(state, action: PayloadAction<{ widgetId: string, sectionId?: string }>) {
+            let {widgetId, sectionId} = action.payload;
+
+            if (sectionId === undefined) {
+                sectionId = Object.keys(state.sections).find(key => {
+                    return state.sections[key]?.widgets.includes(widgetId);
+                });
+
+                if (sectionId === undefined) {
+                    throw new Error("section with widgetId was not found")
+                }
+            }
+
+            state.sections.
+
         },
     },
     extraReducers: (builder) => builder
@@ -139,8 +155,8 @@ export const useIconCollection = (name: string | string[]) => {
         return useAppSelector(state => state.iconCollection.collections[name] ?? null);
     }
 }
-export const useIconSection = (id: number) => useAppSelector(state => state.iconCollection.sections[id] ?? null);
-export const useIconWidget = (id: number) => useAppSelector(state => state.iconCollection.widgets[id] ?? null);
+export const useIconSection = (id: string) => useAppSelector(state => state.iconCollection.sections[id] ?? null);
+export const useIconWidget = (id: string) => useAppSelector(state => state.iconCollection.widgets[id] ?? null);
 
 export default iconCollectionSlice;
 

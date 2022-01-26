@@ -1,5 +1,5 @@
 import React, {FC, MouseEvent, MouseEventHandler, useEffect, useState} from "react";
-import Icon from "../Icon";
+import MyIcon from "../MyIcon";
 import styled from "styled-components";
 import {searchEngine, useSearchQuery} from "../../data/slice/searchSlice";
 import {useSettings} from "../../data/slice/settingsSlice";
@@ -11,7 +11,7 @@ import actions from "../../data/actions";
 import genId from "../../data/genId";
 
 export const IconWidget: FC<{
-    widgetId: number;
+    widgetId: string;
 }> = ({widgetId}) => {
     const searchQuery = useSearchQuery();
     const [visible, setVisible] = useState(true);
@@ -45,7 +45,7 @@ export const IconWidget: FC<{
             onClick={handleClick}
         >
             <IconRoot>
-                <Icon icon={widget.icon ?? '!text=: (&bgColor=#0079d9&fontSize=32'}/>
+                <MyIcon icon={widget.icon ?? '!text=: (&bgColor=#0079d9&fontSize=32'}/>
             </IconRoot>
 
             <TitleRoot
@@ -68,7 +68,7 @@ export const IconWidget: FC<{
 };
 
 export const AddIconWidgetButton: FC<{
-    sectionId: number;
+    sectionId: string,
 }> = React.memo(({sectionId}) => {
     const dispatch = useAppDispatch();
 

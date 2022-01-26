@@ -3,7 +3,7 @@ import React, {FC} from "react";
 import {useIconWidget} from "../../data/slice/iconCollectionSlice";
 
 export const TextWidget:FC<{
-    widgetId: number;
+    widgetId: string,
 }> = React.memo(({widgetId}) => {
     const widget = useIconWidget(widgetId);
 

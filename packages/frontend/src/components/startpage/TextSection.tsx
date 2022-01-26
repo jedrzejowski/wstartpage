@@ -4,7 +4,7 @@ import {useIconSection} from "../../data/slice/iconCollectionSlice";
 import TextWidget from "./TextWidget";
 
 export const TextSection: FC<{
-    sectionId: number;
+    sectionId: string,
 }> = React.memo(({sectionId}) => {
     const section = useIconSection(sectionId);
 

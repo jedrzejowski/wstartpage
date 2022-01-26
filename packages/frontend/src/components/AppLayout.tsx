@@ -2,45 +2,47 @@ import React, {FC} from "react";
 import styled from "styled-components";
 
 const Root = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
 `;
 
 const Top = styled.div`
-  flex-shrink: 0;
-  box-sizing: border-box;
+    flex-shrink: 0;
+    box-sizing: border-box;
 `;
 
 const Bottom = styled.div`
-  flex-shrink: 0;
-  box-sizing: border-box;
+    flex-shrink: 0;
+    box-sizing: border-box;
 `;
 
 const Center = styled.div`
-  display: flex;
-  flex-grow: 1;
-  flex-direction: row;
-  box-sizing: border-box;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
 `;
 
 const Left = styled.div`
-  min-height: 100%;
-  flex-grow: 0;
-  box-sizing: border-box;
+    min-height: 100%;
+    flex-grow: 0;
+    box-sizing: border-box;
 `;
 
 const Right = styled.div`
-  min-height: 100%;
-  flex-grow: 0;
-  box-sizing: border-box;
+    min-height: 100%;
+    flex-grow: 0;
+    box-sizing: border-box;
 `;
 
 const Middle = styled.div`
-  height: 100%;
-  flex-grow: 1;
-  box-sizing: border-box;
+    height: 100%;
+    flex-grow: 1;
+    box-sizing: border-box;
 `;
 
 export interface AppLayoutI {
@@ -49,10 +51,12 @@ export interface AppLayoutI {
     middle?: any,
     right?: any,
     bottom?: any,
-    spread?: boolean
+    fixed?: boolean,
 }
 
 const AppLayout: FC<AppLayoutI> = React.memo(props => {
+    const {fixed = false} = props;
+
 
     return <Root>
 
@@ -60,7 +64,9 @@ const AppLayout: FC<AppLayoutI> = React.memo(props => {
 
         <Center>
             <Left>{props.left}</Left>
-            <Middle>{props.middle}</Middle>
+            <Middle style={{
+                overflow: fixed ? "scroll" : "inherit"
+            }}>{props.middle}</Middle>
             <Right>{props.right}</Right>
         </Center>
 

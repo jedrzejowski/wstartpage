@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {InputRoot} from "./styled";
 
 interface ButtonProps {
-    onClick: MouseEventHandler;
+    onClick?: MouseEventHandler;
 }
 
 export const Button: FC<ButtonProps> = React.memo(props => {
@@ -14,6 +14,7 @@ export const Button: FC<ButtonProps> = React.memo(props => {
 });
 
 const ButtonInput = styled.button`
+    display: flex;
     background: none;
     border: none;
     outline: none;
