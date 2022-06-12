@@ -88,7 +88,7 @@ export function textIconFromStr(iconText: string): TextIconT {
     const data: any = {};
     iconText = iconText.substring(1);
     const params = new URLSearchParams(iconText);
-    for (let [key, value] of params) {
+    for (let [key, value] of params.entries()) {
         data[key] = value;
     }
 

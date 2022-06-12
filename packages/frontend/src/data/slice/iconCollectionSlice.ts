@@ -27,7 +27,7 @@ const initialState: IconCollectionData = {
 };
 
 export const iconCollectionSlice = createSlice({
-    name: "editor",
+    name: "collections",
     initialState,
     reducers: {
         requestCollectionLoad(state, action: PayloadAction<{ collectionName: string, hard?: boolean }>) {
