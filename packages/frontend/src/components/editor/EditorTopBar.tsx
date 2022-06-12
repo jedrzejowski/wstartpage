@@ -1,24 +1,18 @@
 import React, {FC} from "react";
 import styled from "styled-components";
-import Button from "../input/Button";
+import {FlexExpand, FlexToolbar} from "../UtilityElements";
+import SaveButton from "./SaveButton";
 
 export const EditorTopBar: FC = React.memo(props => {
-    return <Root>
+    return <FlexToolbar style={{height: "100%"}}>
         <Title>WStartpage</Title>
-        <Spacer/>
-        <Button onClick={() => null}>Zapisz</Button>
-    </Root>
+        <FlexExpand/>
+
+        <SaveButton/>
+
+    </FlexToolbar>;
+
 });
-
-const Root = styled.div`
-    display: flex;
-    align-items: center;
-    height: 100%;
-`;
-
-const Spacer = styled.div`
-    flex: 1;
-`;
 
 const Title = styled.h1`
     display: inline-block;

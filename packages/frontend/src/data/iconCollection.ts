@@ -37,6 +37,22 @@ export async function fetchIconCollection(id: string): Promise<IconCollectionT> 
     return await response.json();
 }
 
+export async function fetchIconCollectionUpdate(id: string, iconCollection: IconCollectionT): Promise<IconCollectionT> {
+    const response = await fetch(`/api/icon-collections/${id}`, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(iconCollection),
+    });
+
+    if (!response.ok) {
+        throw new Error("cant fetch update");
+    }
+
+    return await response.json();
+}
+
 export async function fetchIconCollectionList(): Promise<string[]> {
     const response = await fetch(`/api/icon-collections`, {
         headers: {

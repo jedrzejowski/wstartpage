@@ -2,15 +2,13 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {useAppSelector} from "../hooks";
 import type {
     IconCollectionT,
-    IconContainerT, IconSectionT,
+    IconContainerT,
     IconWidgetT,
     NormalizedIconCollectionT,
     NormalizedIconSectionT
 } from "../../types";
 import genId from "../genId";
 import actions from "../actions";
-import {onFocus} from "@reduxjs/toolkit/dist/query/core/setupListeners";
-import IconSection from "../../components/startpage/IconSection";
 
 interface IconCollectionData {
     widgets: Partial<Record<string, IconWidgetT>>;

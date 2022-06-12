@@ -1,25 +1,36 @@
-import React, {FC, MouseEventHandler} from "react";
+import React, {ComponentType, FC, MouseEventHandler} from "react";
 import styled from "styled-components";
 import {InputRoot} from "./styled";
 
 interface ButtonProps {
-    onClick?: MouseEventHandler;
+    icon?: ComponentType,
+    disabled?: boolean,
+    onClick?: MouseEventHandler,
 }
 
 export const Button: FC<ButtonProps> = React.memo(props => {
 
     return <InputRoot>
-        <ButtonInput onClick={props.onClick}>{props.children}</ButtonInput>
+        <ButtonInput onClick={props.onClick}>
+            {props.icon ? React.createElement(props.icon) : null}
+            {props.children}
+        </ButtonInput>
     </InputRoot>;
 });
 
 const ButtonInput = styled.button`
     display: flex;
+    align-items: center;
     background: none;
     border: none;
     outline: none;
     padding: ${props => props.theme.spacing4(1, 2, 1, 2)};
     cursor: pointer;
+    //font-size: 1.05em;
+
+    & > svg:first-child {
+            //margin-right: ${props => props.theme.spacing(1.5)};
+    }
 `;
 
 export default Button;
