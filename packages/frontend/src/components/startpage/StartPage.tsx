@@ -1,73 +1,71 @@
-import React, {FC, useEffect} from "react";
-import AppLayout from "../AppLayout";
-import IconContainer from "./IconContainer";
-import SearchView from "./SearchView";
-import {useSettings} from "../../data/slice/settingsSlice";
-import Header from "./Header";
-import {useIconCollection} from "../../data/slice/iconCollectionSlice";
+import React, {FC, useEffect} from 'react';
+import AppLayout from '../AppLayout';
+import TileContainer from './TileContainer';
+import SearchView from './SearchView';
+import StartPageHeader from './StartPageHeader';
+import {useNormalizedIconCollection} from '../../data/slice/normalizedIconCollections';
+import {useAppSelector} from '../../data/hooks';
 
-export const StartPage: FC<({
-    iconCollectionName: string | string[];
+const StartPage: FC<({
+  iconCollectionName: string;
 })> = React.memo(({iconCollectionName}) => {
-    const backgroundUrl = useSettings.backgroundUrl();
-    const iconCollection = useIconCollection(iconCollectionName);
+  const backgroundUrl = useAppSelector(state => state.pageSettings.backgroundUrl);
+  const iconCollection = useNormalizedIconCollection(iconCollectionName);
 
-    useEffect(() => {
-        document.body.style.backgroundImage = backgroundUrl ? `url(${backgroundUrl})` : '';
-    }, [backgroundUrl]);
+  useEffect(() => {
+    document.body.style.backgroundImage = backgroundUrl ? `url(${backgroundUrl})` : '';
+  }, [backgroundUrl]);
 
-    if (!iconCollection) {
-        return null;
-    }
+  if (!iconCollection) {
+    return null;
+  }
 
-    const firstIconCollectionName = Array.isArray(iconCollectionName) ? iconCollectionName[0] : iconCollectionName;
+  return (<div>
 
-    return (<div>
-
-        <AppLayout
-            top={<>
-                <Header/>
-                {iconCollection.top ? (
-                    <IconContainer
-                        iconCollectionName={firstIconCollectionName}
-                        containerName="top"
-                        textOnly
-                        sections={iconCollection.top}
-                    />
-                ) : null}
-            </>}
-            left={iconCollection.left ? (
-                <IconContainer
-                    iconCollectionName={firstIconCollectionName}
-                    containerName="left"
-                    sections={iconCollection.left}
-                />
-            ) : null}
-            middle={iconCollection.middle ? (
-                <IconContainer
-                    iconCollectionName={firstIconCollectionName}
-                    containerName="middle"
-                    sections={iconCollection.middle}
-                />
-            ) : null}
-            right={iconCollection.right ? (
-                <IconContainer
-                    iconCollectionName={firstIconCollectionName}
-                    containerName="right"
-                    sections={iconCollection.right}
-                />
-            ) : null}
-            bottom={iconCollection.bottom ? (
-                <IconContainer
-                    iconCollectionName={firstIconCollectionName}
-                    containerName="bottom"
-                    textOnly sections={iconCollection.bottom}
-                />
-            ) : null}
+    <AppLayout
+      top={<>
+        <StartPageHeader/>
+        {iconCollection.top ? (
+          <TileContainer
+            iconCollectionName={iconCollectionName}
+            containerName="top"
+            textOnly
+            sections={iconCollection.top}
+          />
+        ) : null}
+      </>}
+      left={iconCollection.left ? (
+        <TileContainer
+          iconCollectionName={iconCollectionName}
+          containerName="left"
+          sections={iconCollection.left}
         />
+      ) : null}
+      middle={iconCollection.middle ? (
+        <TileContainer
+          iconCollectionName={iconCollectionName}
+          containerName="middle"
+          sections={iconCollection.middle}
+        />
+      ) : null}
+      right={iconCollection.right ? (
+        <TileContainer
+          iconCollectionName={iconCollectionName}
+          containerName="right"
+          sections={iconCollection.right}
+        />
+      ) : null}
+      bottom={iconCollection.bottom ? (
+        <TileContainer
+          iconCollectionName={iconCollectionName}
+          containerName="bottom"
+          textOnly sections={iconCollection.bottom}
+        />
+      ) : null}
+    />
 
-        <SearchView/>
-    </div>);
+    <SearchView/>
+  </div>);
 });
 
 export default StartPage;

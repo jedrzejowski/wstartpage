@@ -1,36 +1,42 @@
-import {FC} from "react";
-import {useKeyboardEventEmitter} from "../KeyboardEventEmitter";
-import settingsSlice, {useSettings} from "../../data/slice/settingsSlice";
-import {useAppDispatch} from "../../data/hooks";
+import type {FC} from 'react';
+import {
+  selectPageSettingsZoomLevel,
+  setDarkModeAction,
+  setShowDisplayTitlesAction,
+  setZoomLevelAction,
+} from '../../data/slice/pageSettings';
+import {useAppDispatch, useAppSelector} from '../../data/hooks';
+import {useEventListener} from 'usehooks-ts';
 
 export const StartPageShortcuts: FC = props => {
-    const settings = useSettings()
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const pageSettings = useAppSelector(state => state.pageSettings);
+  const zoomLevel = useAppSelector(selectPageSettingsZoomLevel);
 
-    useKeyboardEventEmitter(event => {
+  useEventListener('keydown', event => {
 
-        if (event.shiftKey && event.key === "T") {
-            dispatch(settingsSlice.actions.setDisplayTitles(!settings.displayTitles));
-            return;
-        }
+    if (event.shiftKey && event.key === 'T') {
+      dispatch(setShowDisplayTitlesAction(!pageSettings.showTitles));
+      return;
+    }
 
-        if (event.shiftKey && event.key === "D") {
-            dispatch(settingsSlice.actions.setDarkMode(!settings.darkMode));
-            return;
-        }
+    if (event.shiftKey && event.key === 'D') {
+      dispatch(setDarkModeAction(!pageSettings.darkMode));
+      return;
+    }
 
-        if (event.key === "+") {
-            dispatch(settingsSlice.actions.setZoomLevel(settings.zoomLevel + 10));
-            return;
-        }
+    if (event.key === '+') {
+      dispatch(setZoomLevelAction(zoomLevel + 10));
+      return;
+    }
 
-        if (event.key === "-") {
-            dispatch(settingsSlice.actions.setZoomLevel(settings.zoomLevel - 10));
-            return;
-        }
-    });
+    if (event.key === '-') {
+      dispatch(setZoomLevelAction(zoomLevel - 10));
+      return;
+    }
+  });
 
-    return null;
-}
+  return null;
+};
 
 export default StartPageShortcuts;

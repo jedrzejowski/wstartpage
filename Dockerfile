@@ -20,8 +20,8 @@ RUN cargo build --release --locked --all-features
 FROM alpine:${ALPINE_VERSION}
 
 COPY --from=rust-builder /app/target/release/wstartpage /usr/local/bin/wstartpage
-COPY --from=node-builder /app/dist /usr/local/lib/wstartpage
+COPY --from=node-builder /app/dist /usr/local/util/wstartpage
 
-ENV WSTARTPAGE_STATIC_ROOT=/usr/local/lib/wstartpage
+ENV WSTARTPAGE_STATIC_ROOT=/usr/local/util/wstartpage
 
 CMD [ "/usr/local/bin/wstartpage" ]

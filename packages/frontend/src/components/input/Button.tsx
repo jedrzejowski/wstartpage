@@ -1,23 +1,32 @@
-import React, {ComponentType, FC, MouseEventHandler, ReactNode} from 'react';
+import React, {ComponentType, FC, MouseEventHandler, ReactElement, ReactFragment, ReactNode} from 'react';
 import styled from 'styled-components';
 import {InputRoot} from './styled';
+import MdiIcon, {MdiIconKey} from '../MdiIcon';
 
 interface ButtonProps {
-  children: ReactNode;
-  icon?: ComponentType;
+  children?: ReactNode;
   disabled?: boolean;
   onClick?: MouseEventHandler;
+  startIcon?: ReactElement | ReactFragment | MdiIconKey | null | undefined;
+  endIcon?: ReactElement | ReactFragment | MdiIconKey | null | undefined;
 }
 
-export const Button: FC<ButtonProps> = React.memo(props => {
+const Button: FC<ButtonProps> = props => {
+  let {onClick, children, startIcon, endIcon} = props;
+
+  if (typeof startIcon === 'string') startIcon = <MdiIcon icon={startIcon as MdiIconKey}/>;
+  if (typeof endIcon === 'string') endIcon = <MdiIcon icon={endIcon as MdiIconKey}/>;
 
   return <InputRoot>
-    <ButtonInput onClick={props.onClick}>
-      {props.icon ? React.createElement(props.icon) : null}
-      {props.children}
+    <ButtonInput onClick={onClick}>
+      {startIcon && <StartIconRoot>{startIcon}</StartIconRoot>}
+      {children && <span>{children}</span>}
+      {endIcon && <EndIconRoot>{endIcon}</EndIconRoot>}
     </ButtonInput>
   </InputRoot>;
-});
+};
+
+export default React.memo(Button);
 
 const ButtonInput = styled.button`
   display: flex;
@@ -27,14 +36,21 @@ const ButtonInput = styled.button`
   outline: none;
   padding: ${props => props.theme.spacing4(1, 2, 1, 2)};
   cursor: pointer;
-  //font-size: 1.05em;
 
-  & > svg:first-child {
-      //margin-right: ${props => props.theme.spacing(1.5)};
+  & > span + span {
+    margin-left: ${props => props.theme.spacing(1.5)};
   }
 `;
 
-export default Button;
+const IconRoot = styled.span`
+  svg {
+    height: 1.55em;
+  }
+`;
+
+const StartIconRoot = styled(IconRoot)`
+`;
+const EndIconRoot = styled(IconRoot)``;
 
 export const InlineButton: FC<ButtonProps> = React.memo(props => {
 

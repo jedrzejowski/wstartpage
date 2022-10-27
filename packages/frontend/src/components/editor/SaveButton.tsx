@@ -1,84 +1,83 @@
-import React, {FC, useState} from "react";
-import Button from "../input/Button";
-import ContentSaveIcon from "mdi-react/ContentSaveIcon";
-import {useAppSelector} from "../../data/hooks";
+import React, {FC, useState} from 'react';
+import Button from '../input/Button';
+import {useAppSelector} from '../../data/hooks';
 import {
-    IconCollectionT,
-    IconSectionT,
-    IconWidgetT,
-    NormalizedIconCollectionT,
-    NormalizedIconSectionT
-} from "../../types";
+  IconCollectionT,
+  TileSectionT,
+  TileT,
+  NormalizedIconCollectionT,
+} from '../../types';
 
-type MyState = "idle" | "fetching";
+type MyState = 'idle' | 'fetching';
 
 export const SaveButton: FC = React.memo(props => {
-    const [myState, setMyState] = useState<MyState>("idle");
-    const selectedIconCollectionName = useAppSelector(state => state.editor.selectedIconCollectionName);
-    const iconCollectionSlice = useAppSelector(state => state.iconCollection)
+  const [myState, setMyState] = useState<MyState>('idle');
+  const selectedIconCollectionName = useAppSelector(state => state.editor.selectedIconCollectionName);
+  const iconCollectionSlice = useAppSelector(state => state.normalizedIconCollection);
 
-    return <Button
-        disabled={myState === "fetching"}
-        icon={ContentSaveIcon}
-        onClick={handleSave}
-    >
-        Zapisz
-    </Button>
+  return <Button
+    disabled={myState === 'fetching'}
+    onClick={handleSave}
+    startIcon="content-save-icon"
+  >
+    Zapisz
+  </Button>;
 
-    function handleSave() {
-        if (!selectedIconCollectionName) {
-            return;
-        }
-
-        function unnormalizaIconCollection(iconCollection: NormalizedIconCollectionT): IconCollectionT {
-            return {
-                includes: iconCollection.includes,
-                settings: iconCollection.settings,
-                top: unnormalizeIconSections(iconCollection.top),
-                left: unnormalizeIconSections(iconCollection.left),
-                right: unnormalizeIconSections(iconCollection.right),
-                middle: unnormalizeIconSections(iconCollection.middle),
-                bottom: unnormalizeIconSections(iconCollection.bottom),
-            }
-        }
-
-        function unnormalizeIconSections(sections: string[]): IconSectionT[] {
-            return sections.map(sectionId => {
-                const section = iconCollectionSlice.sections[sectionId];
-
-                if (!section) {
-                    throw new Error("slice is corrupted");
-                }
-
-                return {
-                    ...section,
-                    widgets: unnormalizeIconWidgets(section.widgets)
-                }
-            })
-        }
-
-        function unnormalizeIconWidgets(widgets: string[]): IconWidgetT[] {
-            return widgets.map(widgetId => {
-                const widget = iconCollectionSlice.widgets[widgetId];
-
-                if (!widget) {
-                    throw new Error("slice is corrupted");
-                }
-
-                return {
-                    ...widget,
-                }
-            })
-        }
-
-        const current = iconCollectionSlice.collections[selectedIconCollectionName];
-        if (!current) {
-            return;
-        }
-        const iconCollection = unnormalizaIconCollection(current);
-
-
+  function handleSave() {
+    if (!selectedIconCollectionName) {
+      return;
     }
+
+    function unnormalizaIconCollection(iconCollection: NormalizedIconCollectionT): IconCollectionT {
+      return {
+        name: iconCollection.name,
+        includes: iconCollection.includes,
+        settings: iconCollection.settings,
+        top: unnormalizeIconSections(iconCollection.top),
+        left: unnormalizeIconSections(iconCollection.left),
+        right: unnormalizeIconSections(iconCollection.right),
+        middle: unnormalizeIconSections(iconCollection.middle),
+        bottom: unnormalizeIconSections(iconCollection.bottom),
+      };
+    }
+
+    function unnormalizeIconSections(sections: string[]): TileSectionT[] {
+      return sections.map(sectionId => {
+        const section = iconCollectionSlice.sections[sectionId];
+
+        if (!section) {
+          throw new Error('slice is corrupted');
+        }
+
+        return {
+          ...section,
+          tiles: unnormalizeTileWidgets(section.tiles)
+        };
+      });
+    }
+
+    function unnormalizeTileWidgets(widgets: string[]): TileT[] {
+      return widgets.map(widgetId => {
+        const widget = iconCollectionSlice.tiles[widgetId];
+
+        if (!widget) {
+          throw new Error('slice is corrupted');
+        }
+
+        return {
+          ...widget,
+        };
+      });
+    }
+
+    const current = iconCollectionSlice.collections[selectedIconCollectionName];
+    if (!current) {
+      return;
+    }
+    const iconCollection = unnormalizaIconCollection(current);
+
+
+  }
 });
 
 

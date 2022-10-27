@@ -1,13 +1,9 @@
-import {createAction} from "@reduxjs/toolkit";
-import type {IconContainersT} from "../types";
+import {createAction} from '@reduxjs/toolkit';
+import type {TileContainersT} from '../types';
 
-export const actions = {
-    addWidgetIcon: createAction<{ sectionId: string, widgetId: string }>("addWidgetIcon"),
-    addIconSection: createAction<{
-        iconCollectionName: string,
-        containerName: IconContainersT,
-        sectionId: string,
-    }>("addIconSection"),
-}
-
-export default actions;
+export const addTileAction = createAction<{ sectionId: string, tileId: string }>('addTile');
+export const addTileSectionAction = createAction<{
+  iconCollectionName: string,
+  containerName: TileContainersT,
+  sectionId: string,
+}>('addTileSection');

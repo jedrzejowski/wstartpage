@@ -1,37 +1,37 @@
-import React, {FC} from "react";
-import styled from "styled-components";
-import searchSlice, {useSearchQuery} from "../../data/slice/searchSlice";
-import {useKeyboardEventEmitter} from "../KeyboardEventEmitter";
-import {useAppDispatch} from "../../data/hooks";
+import React, {FC} from 'react';
+import styled from 'styled-components';
+import searchSlice, {useSearchQuery} from '../../data/slice/searchSlice';
+import {useAppDispatch} from '../../data/hooks';
+import {useEventListener} from 'usehooks-ts';
 
-export const SearchView: FC = props => {
-    const searchQuery = useSearchQuery()
-    const dispatch = useAppDispatch();
+const SearchView: FC = props => {
+  const searchQuery = useSearchQuery();
+  const dispatch = useAppDispatch();
 
-    useKeyboardEventEmitter(event => {
+  useEventListener('keydown', event => {
 
-        if (event.shiftKey || event.altKey || event.ctrlKey) {
-            return;
-        }
+    if (event.shiftKey || event.altKey || event.ctrlKey) {
+      return;
+    }
 
-        if (event.code.match(/^Key[A-Z]$/)) {
-            dispatch(searchSlice.actions.append(event.key));
-        }
+    if (event.code.match(/^Key[A-Z]$/)) {
+      dispatch(searchSlice.actions.append(event.key));
+    }
 
-        if (event.code === "Backspace") {
-            dispatch(searchSlice.actions.backspace());
-        }
+    if (event.code === 'Backspace') {
+      dispatch(searchSlice.actions.backspace());
+    }
 
-        if (event.code === "Escape") {
-            dispatch(searchSlice.actions.clear());
-        }
-    });
+    if (event.code === 'Escape') {
+      dispatch(searchSlice.actions.clear());
+    }
+  });
 
-    return (
-        <Root>
-            {searchQuery}
-        </Root>
-    )
+  return (
+    <Root>
+      {searchQuery}
+    </Root>
+  );
 };
 
 const Root = styled.div`
@@ -43,6 +43,6 @@ const Root = styled.div`
   text-shadow: 0 0 20px black;
   color: white;
   text-align: center;
-`
+`;
 
 export default SearchView;

@@ -1,7 +1,7 @@
 import React, {FC, ReactNode, useMemo} from "react";
 import {SketchPicker, Color, ColorChangeHandler} from "react-color";
 import styled from "styled-components";
-import genId from "../../data/genId";
+import {makeUniqueId} from "../../data/uniqueId";
 
 export const ColorInput: FC<{
     id?: string;
@@ -10,7 +10,7 @@ export const ColorInput: FC<{
     onChange: ColorChangeHandler;
 }> = React.memo(props => {
 
-    const id = useMemo(() => props.id ?? genId("color-input-"), [props.id]);
+    const id = useMemo(() => props.id ?? makeUniqueId("color-input-"), [props.id]);
 
     return <Root>
         <Label htmlFor={id}>{props.label}</Label>

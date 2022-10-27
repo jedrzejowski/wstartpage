@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import useFontFaceObserver from '../lib/useFontFaceObserver';
+import useFontFaceObserver from '../util/useFontFaceObserver';
 
 interface Options {
   width?: number

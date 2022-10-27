@@ -1,105 +1,86 @@
-type Normalize<T, K extends keyof T> = Omit<T, K> & { [k in K]: string[] };
+export type Normalize<T, K extends keyof T> = Omit<T, K> & { [k in K]: string[] };
+export type Nullable<T> = {
+  [P in keyof T]: T[P] | null;
+};
+
 
 export const isProduction = process.env.NODE_ENV === 'production';
 
 export type UrlIconT = string;
 
 export function isUrlIconT(icon: AnyIconT | null): icon is UrlIconT {
-    return typeof icon === "string";
+  return typeof icon === 'string';
 }
 
 export type TextIconT = {
-    text: string;
-    bgColor: string;
-    fontSize: number;
+  text: string;
+  bgColor: string;
+  fontSize: number;
 };
 
 export function isTextIconT(icon: AnyIconT | null): icon is TextIconT {
-    return typeof icon === "object";
+  return icon !== null && typeof icon === 'object';
 }
-
 
 export type AnyIconT = UrlIconT | TextIconT;
 
-export type IconWidgetT = {
-    title: string;
-    icon: AnyIconT | null;
-    url: string;
-    order: number | null;
+export type TileT = {
+  title: string;
+  icon: AnyIconT | null;
+  url: string;
+  order: number | null;
 }
 
-export type IconSectionT = {
-    title: string;
-    width: number | null;
-    widgets: IconWidgetT[];
-    order: number;
+export type TileSectionT = {
+  title: string;
+  width: number | null;
+  tiles: TileT[];
+  order: number;
 }
 
-export type NormalizedIconSectionT = Normalize<IconSectionT, "widgets">;
+export type NormalizedTileSectionT = Normalize<TileSectionT, 'tiles'>;
 
-export type IconContainerT = IconSectionT[];
+export type TileContainerT = TileSectionT[];
 
-export type IconContainersT =
-    | "top"
-    | "middle"
-    | "left"
-    | "right"
-    | "bottom";
+export type TileContainersT =
+  | 'top'
+  | 'middle'
+  | 'left'
+  | 'right'
+  | 'bottom';
 
 export  type IconCollectionT = {
-    includes: string[] | null;
-    settings: IconCollectionSettingsT | null,
-} & Record<IconContainersT, IconContainerT | null>;
+  readonly name: string;
+  includes: string[] | null;
+  settings: Partial<IconCollectionSettingsT>;
+} & Record<TileContainersT, TileContainerT | null>;
 
 export interface IconCollectionSettingsT {
-    logoUrl: string | null;
-    backgroundUrl: string | null;
-    darkMode: boolean;
-    displayTitles: boolean;
-    zoomLevel: number;
+  logoUrl: string;
+  backgroundUrl: string;
+  darkMode: boolean;
+  showTitles: boolean;
+  zoomLevel: number;
 }
 
-
-export type NormalizedIconCollectionT = Normalize<IconCollectionT, IconContainersT>;
-
-export function mergeIconCollections(iconSets: IconCollectionT[]): IconCollectionT {
-
-    function reduce(name: IconContainersT): IconSectionT[] {
-        return iconSets.reduce((sum, cur) => {
-            // @ts-ignore
-            return (cur[name] ? [...sum, ...cur[name]] : sum);
-        }, [] as IconSectionT[]).sort((a, b) => {
-            return (a.order ?? 1000) - (b.order ?? 1000);
-        });
-    }
-
-    return {
-        includes: null,
-        settings: null,
-        top: reduce("top"),
-        left: reduce("left"),
-        right: reduce("right"),
-        bottom: reduce("bottom"),
-        middle: reduce("middle"),
-    }
-}
+export type NormalizedIconCollectionT = Normalize<IconCollectionT, TileContainersT>;
 
 export function textIconFromStr(iconText: string): TextIconT {
-    const data: any = {};
-    iconText = iconText.substring(1);
-    const params = new URLSearchParams(iconText);
-    for (let [key, value] of params.entries()) {
-        data[key] = value;
-    }
+  const data: any = {};
+  iconText = iconText.substring(1);
+  const params = new URLSearchParams(iconText);
+  for (let [key, value] of params.entries()) {
+    data[key] = value;
+  }
 
-    return {
-        text: data.text ?? "",
-        bgColor: data.bgColor ?? "",
-        fontSize: data.fontSize ?? "",
-    };
+  return {
+    text: data.text ?? '',
+    bgColor: data.bgColor ?? '',
+    fontSize: data.fontSize ?? '',
+  };
 }
 
 export function textIconToStr(iconText: TextIconT): string {
-    // @ts-ignore
-    return "!" + new URLSearchParams(iconText).toString();
+  // @ts-ignore
+  return '!' + new URLSearchParams(iconText).toString();
 }

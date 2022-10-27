@@ -1,20 +1,14 @@
 import React, {FunctionComponentElement} from 'react';
 import {createRoot} from 'react-dom/client';
 import EnsureFontLoaded from './components/EnsureFontLoaded';
-import Modal from 'react-modal';
 import {ThemeProvider} from './theme';
 import {Provider as ReduxProvider} from 'react-redux';
 import {reduxStore} from './data/redux';
-import {QueryClient, QueryClientProvider} from 'react-query';
-import IconCollectionLoader from './components/IconCollectionLoader';
 import reportWebVitals from './reportWebVitals';
 
 
-export function app_render(app: FunctionComponentElement<any>) {
+export function appRender(app: FunctionComponentElement<any>) {
   const root = document.getElementById('root')!;
-  const queryClient = new QueryClient();
-
-  Modal.setAppElement(root);
 
   const container = createRoot(root);
 
@@ -30,17 +24,11 @@ export function app_render(app: FunctionComponentElement<any>) {
         fontFamily="Material Icons"
         href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 
-      <QueryClientProvider client={queryClient}>
-        <ReduxProvider store={reduxStore}>
-          <IconCollectionLoader/>
-
-          <ThemeProvider>
-
-            {app}
-
-          </ThemeProvider>
-        </ReduxProvider>
-      </QueryClientProvider>
+      <ReduxProvider store={reduxStore}>
+        <ThemeProvider>
+          {app}
+        </ThemeProvider>
+      </ReduxProvider>
 
     </>
   );
@@ -50,4 +38,4 @@ export function app_render(app: FunctionComponentElement<any>) {
   return root;
 }
 
-export default app_render;
+export default appRender;

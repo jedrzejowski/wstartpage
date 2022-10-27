@@ -1,12 +1,9 @@
 import React from 'react';
-import StartPage from './components/startpage/StartPage';
-import StartPageShortcuts from './components/startpage/StartPageShortcuts';
-import {SettingsSaver} from './data/slice/settingsSlice';
-import app_render from './app_render';
+import appRender from './appRender';
 import StartPageEditor from './components/editor/StartPageEditor';
 
 export default () => {
-  app_render(<>
+  appRender(<>
     <StartPageEditor/>
   </>);
 }

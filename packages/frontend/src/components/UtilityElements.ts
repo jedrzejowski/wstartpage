@@ -1,45 +1,45 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Square = styled.div`
-    width: 100%;
+  width: 100%;
 
-    &:after {
-        content: "";
-        display: block;
-        padding-bottom: 100%;
-    }
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
 `;
 export const FlexToolbar = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const HFlexContainer = styled.div`
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 `;
 
 export const FlexExpand = styled.div`
-    flex-grow: 999999;
+  flex-grow: 999999;
 `;
 
 export const SmallButton = styled.button`
-    padding: ${props => props.theme.spacing(1)};
-    border: none;
-    background: transparent;
-    cursor: pointer;
+  padding: ${props => props.theme.spacing(1)};
+  border: none;
+  background: transparent;
+  cursor: pointer;
 
-    &:hover {
-        background: ${props => props.theme.buttonHoverBg};
-    }
+  &:hover {
+    background: ${props => props.theme.buttonHoverBg};
+  }
 `;
 
 export const PaddedRoot = styled.div`
-    box-sizing: border-box;
-    padding: ${props => props.theme.spacing(2)};
+  box-sizing: border-box;
+  padding: ${props => props.theme.spacing(2)};
 
-    > * + * {
-        margin-top: ${props => props.theme.spacing(2)};
-    }
+  > * + * {
+    margin-top: ${props => props.theme.spacing(2)};
+  }
 `;

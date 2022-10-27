@@ -1,7 +1,7 @@
-import {createGlobalStyle, DefaultTheme, ThemeProvider as LibThemeProvider} from 'styled-components';
 import React, {FC, ReactNode, useEffect, useState} from 'react';
-import {useSettings} from './data/slice/settingsSlice';
-import {joinUrls} from '@reduxjs/toolkit/dist/query/utils';
+import {DefaultTheme, ThemeProvider as LibThemeProvider} from 'styled-components';
+import {selectPageSettingsZoomLevel} from './data/slice/pageSettings';
+import {useAppSelector} from './data/hooks';
 
 declare module 'styled-components' {
   interface DefaultTheme {
@@ -22,12 +22,14 @@ declare module 'styled-components' {
     zoomFactor: number;
 
     color: {
+      background0: string;
+      background1: string;
       border: string;
     },
   }
 }
 
-export const default_theme: DefaultTheme = {
+export const defaultTheme: DefaultTheme = {
   baseSpacing: 6,
   baseFontSize: 16,
 
@@ -56,6 +58,8 @@ export const default_theme: DefaultTheme = {
   zoomFactor: 1,
 
   color: {
+    background0: '#fcfcfc',
+    background1: 'white',
     border: '#bbbebf'
   },
 };
@@ -63,22 +67,22 @@ export const default_theme: DefaultTheme = {
 export const ThemeProvider: FC<{
   children: ReactNode;
 }> = (props) => {
-  const [theme, setTheme] = useState(default_theme);
+  const [theme, setTheme] = useState(defaultTheme);
 
-  const zoom_level = useSettings.zoomLevel();
+  const zoomLevel = useAppSelector(selectPageSettingsZoomLevel);
 
   useEffect(() => {
-    const zoomFactor = zoom_level / 100;
+    const zoomFactor = zoomLevel  / 100;
 
     setTheme({
       ...theme,
-      baseSpacing: default_theme.baseSpacing * zoomFactor,
-      iconSize: default_theme.iconSize * zoomFactor,
-      baseFontSize: default_theme.baseFontSize * zoomFactor,
+      baseSpacing: defaultTheme.baseSpacing * zoomFactor,
+      iconSize: defaultTheme.iconSize * zoomFactor,
+      baseFontSize: defaultTheme.baseFontSize * zoomFactor,
       zoomFactor: zoomFactor,
     });
 
-  }, [zoom_level]);
+  }, [zoomLevel]);
 
   useEffect(() => {
     document.body.style.fontSize = theme.baseFontSize + 'px';
