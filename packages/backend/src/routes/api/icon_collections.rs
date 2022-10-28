@@ -25,7 +25,7 @@ pub async fn select(params: web::Path<String>, query: web::Query<GetIconCollecti
   if let Some(true) = query.recursive_merge {
 
     let icon_collection = icon_collection.resolve_recursive()
-      .map_err(|err| AppError::internal("error while resolve recursive"))?;
+      .map_err(|_err| AppError::internal("error while resolve recursive"))?;
 
     return Ok(HttpResponse::Ok().json(icon_collection));
   }

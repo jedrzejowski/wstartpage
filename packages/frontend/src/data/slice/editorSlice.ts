@@ -1,9 +1,13 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, Draft, PayloadAction} from '@reduxjs/toolkit';
 import {useAppSelector} from '../hooks';
-import {addTileSectionAction, addTileAction} from '../actions';
+import {
+  addTileAction,
+  addTileSectionAction,
+  updateTileAction,
+  updateTileSectionAction
+} from './normalizedIconCollections';
 
-interface EditorData {
-  isOn: boolean;
+interface EditorStateT {
   selectedIconCollectionName: string | null;
   selectedObj:
     | { iconCollectionName: string; }
@@ -15,8 +19,7 @@ interface EditorData {
 
 let i = 0;
 
-const initialState: EditorData = {
-  isOn: false,
+const initialState: EditorStateT = {
   selectedIconCollectionName: null,
   selectedObj: null,
   editedIconCollections: [],
@@ -26,40 +29,40 @@ export const editorSlice = createSlice({
   name: 'editor',
   initialState,
   reducers: {
-    setSelectedIconCollectionNameAction(state, action: PayloadAction<string>) {
+    setEditorSelectedIconCollectionNameAction(state, action: PayloadAction<string>) {
       state.selectedIconCollectionName = action.payload;
       state.selectedObj = {iconCollectionName: action.payload};
     },
-    setIsOn(state, action: PayloadAction<boolean>) {
-      state.isOn = action.payload;
-    },
-    setEditorSelectedObjAction(state, action: PayloadAction<EditorData['selectedObj']>) {
+    setEditorSelectedObjAction(state, action: PayloadAction<EditorStateT['selectedObj']>) {
       state.selectedObj = action.payload;
     },
-    markCurrentCollectionAsEditedAction(state, action: PayloadAction) {
-      if (state.selectedIconCollectionName) {
-        state.editedIconCollections.push(state.selectedIconCollectionName);
-      }
-    }
   },
   extraReducers: (builder) => builder
     .addCase(addTileAction, (state, action) => {
       const {tileId} = action.payload;
       state.selectedObj = {tileId};
+      markCurrentCollectionAsEdited(state);
     })
     .addCase(addTileSectionAction, (state, action) => {
       const {sectionId} = action.payload;
       state.selectedObj = {sectionId};
+      markCurrentCollectionAsEdited(state);
     })
+    .addCase(updateTileAction, markCurrentCollectionAsEdited)
+    .addCase(updateTileSectionAction, markCurrentCollectionAsEdited)
 });
 
 export const {
-  setSelectedIconCollectionNameAction,
+  setEditorSelectedIconCollectionNameAction,
   setEditorSelectedObjAction,
-  markCurrentCollectionAsEditedAction,
 } = editorSlice.actions;
 
-export const useIsEditor = () => useAppSelector(state => state.editor.isOn);
+function markCurrentCollectionAsEdited(state: Draft<EditorStateT>) {
+  if (state.selectedIconCollectionName) {
+    state.editedIconCollections.push(state.selectedIconCollectionName);
+  }
+}
+
 export const useIsSelected = (type: 'section' | 'tile', id: string): boolean => useAppSelector(state => {
   const selectedObj = state.editor.selectedObj;
 

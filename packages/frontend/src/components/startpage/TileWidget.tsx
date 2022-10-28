@@ -2,14 +2,14 @@ import React, {FC, MouseEvent, useEffect, useState} from 'react';
 import MyIcon from '../MyIcon';
 import styled from 'styled-components';
 import {searchEngine, useSearchQuery} from '../../data/slice/searchSlice';
-import {setEditorSelectedObjAction, useIsEditor, useIsSelected} from '../../data/slice/editorSlice';
+import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editorSlice';
+import {useIsEditor} from '../editor/EditorContext';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
-import {useNormalizedTile} from '../../data/slice/normalizedIconCollections';
+import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedIconCollections';
 import clsx from 'clsx';
 import {makeUniqueId} from '../../data/uniqueId';
-import {addTileAction} from '../../data/actions';
 
-export const TileWidget: FC<{
+const TileWidget: FC<{
   tileId: string;
 }> = ({tileId}) => {
   const searchQuery = useSearchQuery();

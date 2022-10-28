@@ -8,45 +8,33 @@ import type {
   NormalizedTileSectionT
 } from '../../types';
 import {makeUniqueId} from '../uniqueId';
-import {iconCollectionsApi} from '../api/iconCollections';
-import {addTileAction, addTileSectionAction} from '../actions';
+import {iconCollectionsApi} from '../api/apiBackend';
+import {AppSelector} from '../redux';
+import {TileContainersT} from '../../types';
 
-interface NormalizedIconCollectionStateT {
+interface NormalizedTileCollectionStateT {
   tiles: Partial<Record<string, TileT>>;
   sections: Partial<Record<string, NormalizedTileSectionT>>;
   collections: Partial<Record<string, NormalizedIconCollectionT>>;
-  requests: string[];
 }
 
 let i = 0;
 
-const initialState: NormalizedIconCollectionStateT = {
+const initialState: NormalizedTileCollectionStateT = {
   tiles: {},
   sections: {},
   collections: {},
-  requests: [],
 };
 
 export const normalizedIconCollectionSlice = createSlice({
   name: 'normalizedIconCollection',
   initialState,
   reducers: {
-    requestCollectionLoadAction(state, action: PayloadAction<{ collectionName: string, hard?: boolean }>) {
-      const {collectionName, hard = false} = action.payload;
-      if (collectionName in state.collections && !hard) {
-        return;
-      }
-
-      state.requests.push(collectionName);
-    },
-    addCollectionAction(state, action: PayloadAction<IconCollectionT>) {
-      addCollectionToState(state, action.payload);
-    },
     updateTileAction(state, action: PayloadAction<{ tileId: string, tile: TileT }>) {
       const {tileId, tile} = action.payload;
       state.tiles[tileId] = tile;
     },
-    updateSectionAction(state, action: PayloadAction<{ sectionId: string, section: NormalizedTileSectionT }>) {
+    updateTileSectionAction(state, action: PayloadAction<{ sectionId: string, section: NormalizedTileSectionT }>) {
       const {sectionId, section} = action.payload;
       state.sections[sectionId] = section;
     },
@@ -82,9 +70,7 @@ export const normalizedIconCollectionSlice = createSlice({
     moveIconSection(state, action: PayloadAction<{ sectionId: string, offset: number }>) {
 
     },
-  },
-  extraReducers: (builder) => builder
-    .addCase(addTileAction, (state, action) => {
+    addTileAction(state, action: PayloadAction<{ sectionId: string, tileId: string }>) {
       const {sectionId, tileId} = action.payload;
       state.tiles[tileId] = {
         title: 'Example',
@@ -97,8 +83,12 @@ export const normalizedIconCollectionSlice = createSlice({
         }
       };
       state.sections[sectionId]?.tiles.push(tileId);
-    })
-    .addCase(addTileSectionAction, (state, action) => {
+    },
+    addTileSectionAction(state, action: PayloadAction<{
+      iconCollectionName: string,
+      containerName: TileContainersT,
+      sectionId: string,
+    }>) {
       const {iconCollectionName, containerName, sectionId} = action.payload;
 
       const collection = state.collections[iconCollectionName];
@@ -116,26 +106,33 @@ export const normalizedIconCollectionSlice = createSlice({
         order: 1000,
         width: null,
       };
+    }
+
+  },
+  extraReducers: (builder) => builder
+    .addMatcher(iconCollectionsApi.endpoints.getIconCollection.matchFulfilled, (state, action) => {
+      addCollectionToState(state, action.payload);
     })
-    .addMatcher(iconCollectionsApi.endpoints.getViewerIconCollection.matchFulfilled, (state, action) => {
+    .addMatcher(iconCollectionsApi.endpoints.getMergedIconCollection.matchFulfilled, (state, action) => {
       addCollectionToState(state, action.payload);
     })
 });
 
 export const {
-  requestCollectionLoadAction,
-  addCollectionAction,
+  addTileAction,
   updateTileAction,
-  updateSectionAction,
+  addTileSectionAction,
+  updateTileSectionAction,
   moveTileAction,
 } = normalizedIconCollectionSlice.actions;
 
+export const selectEditorSelectedIconCollectionName: AppSelector<string | null> = state => state.editor.selectedIconCollectionName;
 export const useNormalizedIconCollection = (name: string) => useAppSelector(state => state.normalizedIconCollection.collections[name] ?? null);
 export const useNormalizedTileSection = (id: string) => useAppSelector(state => state.normalizedIconCollection.sections[id] ?? null);
 export const useNormalizedTile = (id: string) => useAppSelector(state => state.normalizedIconCollection.tiles[id] ?? null);
 
 
-function addCollectionToState(state: NormalizedIconCollectionStateT, collection: IconCollectionT) {
+function addCollectionToState(state: NormalizedTileCollectionStateT, collection: IconCollectionT) {
 
   function normalizeContainer(iconContainer: TileContainerT | null | undefined): string[] {
     iconContainer = iconContainer ?? [];
@@ -169,9 +166,4 @@ function addCollectionToState(state: NormalizedIconCollectionStateT, collection:
     left: normalizeContainer(collection.left),
     middle: normalizeContainer(collection.middle),
   };
-
-  const rI = state.requests.indexOf(collection.name);
-  if (rI !== -1) {
-    state.requests.splice(rI, 1);
-  }
 }

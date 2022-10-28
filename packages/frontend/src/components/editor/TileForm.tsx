@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import TextInput from '../input/TextInput';
 import {
   moveTileAction,
-  normalizedIconCollectionSlice,
   updateTileAction,
   useNormalizedTile
 } from '../../data/slice/normalizedIconCollections';
@@ -10,7 +9,6 @@ import type {TileT, TextIconT, UrlIconT} from '../../types';
 import {useAppDispatch} from '../../data/hooks';
 import CheckBoxInput from '../input/CheckBoxInput';
 import {isTextIconT, isUrlIconT} from '../../types';
-import editorSlice, {markCurrentCollectionAsEditedAction} from '../../data/slice/editorSlice';
 import ColorInput from '../input/ColorInput';
 import {FlexExpand, HFlexContainer, PaddedRoot} from '../UtilityElements';
 import Button from '../input/Button';
@@ -82,7 +80,6 @@ export const TileForm: FC<{
       };
 
       dispatch(updateTileAction({tileId, tile: newTile}));
-      dispatch(markCurrentCollectionAsEditedAction());
     };
   }
 
@@ -111,7 +108,6 @@ export const TileForm: FC<{
       };
 
       dispatch(updateTileAction({tileId, tile: newTile}));
-      dispatch(markCurrentCollectionAsEditedAction());
     };
   }
 
@@ -147,8 +143,6 @@ export const TileForm: FC<{
       }));
 
     }
-
-    dispatch(markCurrentCollectionAsEditedAction());
 
     if (isUrlIconT(tile.icon))
       current_cache.urlIcon = tile.icon;

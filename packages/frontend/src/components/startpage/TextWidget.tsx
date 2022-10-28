@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import React, {FC, MouseEvent} from 'react';
-import {useNormalizedTile} from '../../data/slice/normalizedIconCollections';
-import {setEditorSelectedObjAction, useIsEditor, useIsSelected} from '../../data/slice/editorSlice';
+import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedIconCollections';
+import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editorSlice';
+import {useIsEditor} from '../editor/EditorContext';
 import clsx from 'clsx';
 import {useAppDispatch} from '../../data/hooks';
 import {makeUniqueId} from '../../data/uniqueId';
-import {addTileAction} from '../../data/actions';
 
 export const TextWidget: FC<{
   tileId: string,

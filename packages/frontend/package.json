@@ -6,12 +6,15 @@
     "type": "git",
     "url": "git+https://github.com/jedrzejowski/wdataloader.git"
   },
-  "author": "Adam Jędrzejowski <`adam@jedrzejowski.pl>",
+  "author": "Adam Jędrzejowski <adam@jedrzejowski.pl>",
   "scripts": {
-    "build": "react-scripts build",
+    "start-viewer": "REACT_APP_ENTRY=viewer rnpm run start",
+    "build-viewer": "REACT_APP_ENTRY=viewer npm run build",
+    "start-editor": "REACT_APP_ENTRY=editor npm run start",
+    "build-editor": "REACT_APP_ENTRY=editor npm run build",
+    "start": "react-scripts start",
+    "build": "BUILD_PATH=build-${REACT_APP_ENTRY} GENERATE_SOURCEMAP=false PUBLIC_URL=. react-scripts build",
     "eject": "react-scripts eject",
-    "start-viewer": "REACT_APP_ENTRY=viewer react-scripts start",
-    "start-editor": "REACT_APP_ENTRY=editor react-scripts start",
     "test": "react-scripts test"
   },
   "dependencies": {

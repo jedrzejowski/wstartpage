@@ -5,7 +5,7 @@ import editorSlice from './slice/editorSlice';
 import {normalizedIconCollectionSlice} from './slice/normalizedIconCollections';
 import {createLogger} from 'redux-logger';
 import {isProduction} from '../types';
-import {iconCollectionsApi} from './api/iconCollections';
+import {iconCollectionsApi} from './api/apiBackend';
 
 export const reduxStore = configureStore({
   reducer: {

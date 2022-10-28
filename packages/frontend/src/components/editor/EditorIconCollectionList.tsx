@@ -1,22 +1,22 @@
 import React, {FC} from 'react';
-import {useIconCollectionList} from '../../data/iconCollection';
 import styled from 'styled-components';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
-import {normalizedIconCollectionSlice} from '../../data/slice/normalizedIconCollections';
-import {setSelectedIconCollectionNameAction} from '../../data/slice/editorSlice';
+import {useGetIconCollectionListQuery} from '../../data/api/apiBackend';
+import {selectEditorSelectedIconCollectionName} from '../../data/slice/normalizedIconCollections';
+import {setEditorSelectedIconCollectionNameAction} from '../../data/slice/editorSlice';
 
 export const EditorIconCollectionList: FC = React.memo(props => {
-  const collectionList = useIconCollectionList();
-  const selectedIconCollectionName = useAppSelector(state => state.editor.selectedIconCollectionName);
+  const collectionListQuery = useGetIconCollectionListQuery(undefined);
+  const selectedIconCollectionName = useAppSelector(selectEditorSelectedIconCollectionName);
   const editedIconCollections = useAppSelector(state => state.editor.editedIconCollections);
   const dispatch = useAppDispatch();
 
-  if (!collectionList.data) {
+  if (!collectionListQuery.data) {
     return null;
   }
 
   return <>
-    {collectionList.data.map(iconCollectionName => {
+    {collectionListQuery.data.map(iconCollectionName => {
 
       const Root = iconCollectionName === selectedIconCollectionName ? SelectedItem : Item;
 
@@ -33,7 +33,7 @@ export const EditorIconCollectionList: FC = React.memo(props => {
   function handleClickFactory(iconCollectionName: string) {
     return () => {
       // dispatch(normalizedIconCollectionSlice.actions.requestCollectionLoad({collectionName: iconCollectionName}));
-      dispatch(setSelectedIconCollectionNameAction(iconCollectionName));
+      dispatch(setEditorSelectedIconCollectionNameAction(iconCollectionName));
     };
   }
 });

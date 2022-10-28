@@ -3,14 +3,14 @@ import TileWidget, {AddTileButton} from './TileWidget';
 import styled, {useTheme} from 'styled-components';
 import {isNumber} from '../../util/util';
 import {isMobile} from 'react-device-detect';
-import {useNormalizedTileSection} from '../../data/slice/normalizedIconCollections';
-import {setEditorSelectedObjAction, useIsEditor, useIsSelected} from '../../data/slice/editorSlice';
+import {addTileSectionAction, useNormalizedTileSection} from '../../data/slice/normalizedIconCollections';
+import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editorSlice';
 import {HFlexContainer} from '../UtilityElements';
 import {TileContainersT} from '../../types';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
 import {makeUniqueId} from '../../data/uniqueId';
 import clsx from 'clsx';
-import {addTileSectionAction} from '../../data/actions';
+import {useIsEditor} from '../editor/EditorContext';
 
 const TileSection: FC<{
   sectionId: string;

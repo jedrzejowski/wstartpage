@@ -3,18 +3,26 @@ import {TileContainersT} from '../../types';
 import TileSection, {AddTileSectionButton} from './TileSection';
 import styled from 'styled-components';
 import TextSection from './TextSection';
-import {useIsEditor} from '../../data/slice/editorSlice';
+import {useIsEditor} from '../editor/EditorContext';
 import {FlexExpand, HFlexContainer} from '../UtilityElements';
 
 const TileContainer: FC<{
-  iconCollectionName: string,
-  textOnly?: boolean,
-  sections: string[],
-  containerName: TileContainersT,
-}> = React.memo(({iconCollectionName, sections, textOnly = false, containerName}) => {
+  iconCollectionName: string;
+  textOnly?: boolean;
+  direction?: 'column' | 'row'
+  sections: string[];
+  containerName: TileContainersT;
+}> = props => {
+  const {
+    iconCollectionName,
+    sections,
+    textOnly = false,
+    containerName,
+    direction = 'row',
+  } = props;
   const isEditor = useIsEditor();
 
-  const base = <ContainerRoot>
+  const base = <ContainerRoot direction={direction}>
 
     {sections.map(sectionId => {
       if (textOnly) {
@@ -39,13 +47,15 @@ const TileContainer: FC<{
   } else {
     return base;
   }
-});
+};
 
 
-const ContainerRoot = styled.div`
+const ContainerRoot = styled.div<{ direction: 'column' | 'row' }>`
   display: flex;
   flex-wrap: wrap;
+  flex-direction: ${props => props.direction};
 `;
+
 const EditorRoot = styled.div`
   margin: ${props => props.theme.spacing(1)};
   padding: ${props => props.theme.spacing4(1, 1, 0, 1)};
@@ -61,4 +71,4 @@ const EditorTitle = styled.h3`
 `;
 
 
-export default TileContainer;
+export default React.memo(TileContainer);

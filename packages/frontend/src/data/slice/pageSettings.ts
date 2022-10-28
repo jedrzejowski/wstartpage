@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {IconCollectionSettingsT, Nullable} from '../../types';
-import {iconCollectionsApi} from '../api/iconCollections';
+import {iconCollectionsApi} from '../api/apiBackend';
 import {AppSelector} from '../redux';
 
 type PageSettingsT = Nullable<IconCollectionSettingsT> & {
@@ -40,7 +40,7 @@ export const settingsSlice = createSlice({
     },
   },
   extraReducers: builder => builder
-    .addMatcher(iconCollectionsApi.endpoints.getViewerIconCollection.matchFulfilled, (state, action) => {
+    .addMatcher(iconCollectionsApi.endpoints.getMergedIconCollection.matchFulfilled, (state, action) => {
       Object.assign(state, action.payload.settings);
     })
 });

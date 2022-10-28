@@ -1,29 +1,25 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import AppLayout from '../AppLayout';
 import EditorTopBar from './EditorTopBar';
 import styled from 'styled-components';
 import EditorIconCollectionList from './EditorIconCollectionList';
-import {useAppDispatch, useAppSelector} from '../../data/hooks';
+import {useAppSelector} from '../../data/hooks';
 import StartPage from '../startpage/StartPage';
 import EditorFormContainer from './EditorFormContainer';
-import editorSlice from '../../data/slice/editorSlice';
+import {EditorContextProvider} from './EditorContext';
 
-const StartPageEditor: FC = props => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(editorSlice.actions.setIsOn(true));
-  }, []);
-
-  return <Root>
-    <AppLayout
-      fixed
-      top={<HPanel border="bottom"><EditorTopBar/></HPanel>}
-      middle={<StartPagePreview/>}
-      left={<VPanel border="right"><EditorIconCollectionList/></VPanel>}
-      right={<VPanel border="left"><EditorFormContainer/></VPanel>}
-    />
-  </Root>;
+const StartPageEditor: FC = () => {
+  return <EditorContextProvider>
+    <Root>
+      <AppLayout
+        fixed
+        top={<HPanel border="bottom"><EditorTopBar/></HPanel>}
+        middle={<StartPagePreview/>}
+        left={<VPanel border="right"><EditorIconCollectionList/></VPanel>}
+        right={<VPanel border="left"><EditorFormContainer/></VPanel>}
+      />
+    </Root>
+  </EditorContextProvider>;
 };
 
 const Root = styled.div`

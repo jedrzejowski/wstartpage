@@ -2,7 +2,7 @@ const fetch = window.fetch;
 
 type SmartUrl = string | string[];
 
-export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL ?? '';
+export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL ?? '/';
 
 export default function imgUrl(url: SmartUrl): string {
   url = normalizeUrl(url);

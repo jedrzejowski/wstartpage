@@ -39,6 +39,7 @@ const StartPage: FC<({
           iconCollectionName={iconCollectionName}
           containerName="left"
           sections={iconCollection.left}
+          direction="column"
         />
       ) : null}
       middle={iconCollection.middle ? (
@@ -53,6 +54,7 @@ const StartPage: FC<({
           iconCollectionName={iconCollectionName}
           containerName="right"
           sections={iconCollection.right}
+          direction="column"
         />
       ) : null}
       bottom={iconCollection.bottom ? (

@@ -2,7 +2,8 @@ import React, {FC} from 'react';
 import styled from 'styled-components';
 import {useNormalizedTileSection} from '../../data/slice/normalizedIconCollections';
 import TextWidget, {AddTextWidgetButton} from './TextWidget';
-import {setEditorSelectedObjAction, useIsEditor, useIsSelected} from '../../data/slice/editorSlice';
+import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editorSlice';
+import {useIsEditor} from '../editor/EditorContext';
 import {useAppDispatch} from '../../data/hooks';
 import clsx from 'clsx';
 

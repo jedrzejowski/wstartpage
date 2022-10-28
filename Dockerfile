@@ -6,7 +6,8 @@ WORKDIR /app
 COPY packages/frontend /app
 
 RUN npm ci --no-optional
-RUN npm run build
+RUN npm run build-viewer
+RUN npm run build-editor
 
 FROM rust:alpine${ALPINE_VERSION} as rust-builder
 
@@ -15,13 +16,16 @@ COPY packages/backend /app
 
 ENV RUSTUP_TOOLCHAIN=stable
 RUN apk add build-base --no-cache
+RUN cargo fetch
 RUN cargo build --release --locked --all-features
 
 FROM alpine:${ALPINE_VERSION}
 
-COPY --from=rust-builder /app/target/release/wstartpage /usr/local/bin/wstartpage
-COPY --from=node-builder /app/dist /usr/local/util/wstartpage
+ENV WSTARTPAGE_STATIC_ROOT=/usr/local/share/wstartpage
 
-ENV WSTARTPAGE_STATIC_ROOT=/usr/local/util/wstartpage
+COPY --from=rust-builder /app/target/release/wstartpage /usr/local/bin/wstartpage
+COPY --from=node-builder /app/build-viewer ${WSTARTPAGE_STATIC_ROOT}
+COPY --from=node-builder /app/build-editor ${WSTARTPAGE_STATIC_ROOT}/editor2
+
 
 CMD [ "/usr/local/bin/wstartpage" ]

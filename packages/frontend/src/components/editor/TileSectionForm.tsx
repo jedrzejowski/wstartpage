@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import {
-  normalizedIconCollectionSlice,
-  updateSectionAction,
+  normalizedIconCollectionSlice, updateTileSectionAction,
   useNormalizedTileSection
 } from '../../data/slice/normalizedIconCollections';
 import {useAppDispatch} from '../../data/hooks';
@@ -9,7 +8,6 @@ import {FlexExpand, HFlexContainer, PaddedRoot} from '../UtilityElements';
 import Button from '../input/Button';
 import TextInput from '../input/TextInput';
 import type {NormalizedTileSectionT} from '../../types';
-import {markCurrentCollectionAsEditedAction} from '../../data/slice/editorSlice';
 import NumberInput from '../input/NumberInput';
 import MdiIcon from '../MdiIcon';
 
@@ -54,8 +52,7 @@ const TileSectionForm: FC<{
         [field]: newValue,
       };
 
-      dispatch(updateSectionAction({sectionId, section: newSection}));
-      dispatch(markCurrentCollectionAsEditedAction());
+      dispatch(updateTileSectionAction({sectionId, section: newSection}));
     };
   }
 
