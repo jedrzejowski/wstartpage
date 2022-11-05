@@ -10,13 +10,13 @@ export const iconCollectionsApi = createApi({
   }),
   endpoints: (builder) => ({
     getIconCollection: builder.query<IconCollectionT, string>({
-      query: (name) => `/icon-collections/${name}`,
+      query: (name) => `/icon-tiles/${name}`,
     }),
     getMergedIconCollection: builder.query<IconCollectionT, string>({
-      query: (name) => `/icon-collections/${name}?${qs.stringify({recursiveMerge: true})}`,
+      query: (name) => `/icon-tiles/${name}?${qs.stringify({recursiveMerge: true})}`,
     }),
     getIconCollectionList: builder.query<string[], undefined>({
-      query: () => `/icon-collections`,
+      query: () => `/icon-tiles`,
     }),
   }),
 });

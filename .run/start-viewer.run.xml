@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="start-viewer" type="js.build_tools.npm" nameIsGenerated="true">
-    <package-json value="$PROJECT_DIR$/packages/frontend/package.json" />
+    <package-json value="$PROJECT_DIR$/frontend/package.json" />
     <command value="run" />
     <scripts>
       <script value="start-viewer" />

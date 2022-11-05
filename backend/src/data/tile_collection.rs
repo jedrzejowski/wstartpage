@@ -1,6 +1,6 @@
 use std::collections::{HashSet, VecDeque};
 use serde::{Deserialize, Serialize};
-use crate::config;
+use crate::app_config;
 use anyhow::{anyhow, Result};
 use serde_yaml::Value;
 
@@ -147,7 +147,7 @@ fn merge_many_icon_collections(name: String, tile_collections: &[TileCollection]
 
 impl TileCollection {
   pub fn get_by_name<T: AsRef<str>>(name: T) -> Result<Option<TileCollection>> {
-    let mut yaml_path = std::path::PathBuf::from(config::cfg.dashboard_root.as_str());
+    let mut yaml_path = std::path::PathBuf::from(app_config::app_config.dashboard_root.as_str());
     yaml_path.push(name.as_ref());
     yaml_path.set_extension("yml");
 

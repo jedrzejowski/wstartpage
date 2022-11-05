@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="watch-backend" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
     <option name="command" value="watch -x run" />
-    <option name="workingDirectory" value="file://$PROJECT_DIR$/packages/backend" />
+    <option name="workingDirectory" value="file://$PROJECT_DIR$/backend" />
     <option name="channel" value="DEFAULT" />
     <option name="requiredFeatures" value="true" />
     <option name="allFeatures" value="false" />
@@ -10,8 +10,8 @@
     <option name="backtrace" value="SHORT" />
     <envs>
       <env name="WSTARTPAGE_STATIC_ROOT" value="../frontend/dist" />
-      <env name="WSTARTPAGE_DASHBOARD_ROOT" value="../../volume/dashboards" />
-      <env name="WSTARTPAGE_IMAGE_ROOT" value="../../volume/images" />
+      <env name="WSTARTPAGE_DASHBOARD_ROOT" value="../volume/dashboards" />
+      <env name="WSTARTPAGE_IMAGE_ROOT" value="../volume/images" />
     </envs>
     <option name="isRedirectInput" value="false" />
     <option name="redirectInputPath" value="" />

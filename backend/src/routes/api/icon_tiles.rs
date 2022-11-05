@@ -1,9 +1,9 @@
 use actix_web::{Error, web, HttpResponse, get, put};
-use crate::http::app_result::AppResult;
+use crate::util::app_result::AppResult;
 use serde::Deserialize;
-use crate::config;
+use crate::app_config;
 use std::vec::Vec;
-use crate::http::app_error::AppError;
+use crate::util::app_error::AppError;
 use crate::data::tile_collection::TileCollection;
 
 
@@ -14,7 +14,7 @@ pub struct GetIconCollectionQuery {
 }
 
 
-#[get("/icon-collections/{name}")]
+#[get("/icon-tiles/{name}")]
 pub async fn select(params: web::Path<String>, query: web::Query<GetIconCollectionQuery>) -> AppResult {
   let name = params.into_inner();
 
@@ -34,7 +34,7 @@ pub async fn select(params: web::Path<String>, query: web::Query<GetIconCollecti
 }
 
 
-#[put("/icon-collections/{id}")]
+#[put("/icon-tiles/{id}")]
 pub async fn update(
   params: web::Path<String>,
   icon_collection: web::Json<TileCollection>,
@@ -47,9 +47,9 @@ pub async fn update(
 }
 
 
-#[get("/icon-collections")]
+#[get("/icon-tiles")]
 pub async fn search() -> Result<HttpResponse, Error> {
-  let paths = std::fs::read_dir(config::cfg.dashboard_root.as_str())?;
+  let paths = std::fs::read_dir(app_config::app_config.dashboard_root.as_str())?;
 
   let names: Vec<String> = paths.flatten().filter(|dir_entry| {
     dir_entry.file_type().unwrap().is_file()
