@@ -6,7 +6,8 @@ mod routes;
 mod data;
 
 use actix_files::Files as ActixFiles;
-use actix_web::{App, HttpServer, middleware::Logger, web};
+use actix_session::{Session, SessionMiddleware, storage::CookieSessionStore};
+use actix_web::{App, HttpServer, middleware::Logger, web, cookie::Key};
 use crate::app_config::app_config;
 
 #[actix_web::main]
@@ -16,6 +17,15 @@ async fn main() -> std::io::Result<()> {
   let mut http_server = HttpServer::new(|| App::new()
     .wrap(Logger::new("%r %a %{User-Agent}i"))
     .wrap(crate::util::cors::default_config())
+    .wrap(
+      SessionMiddleware::builder(
+        CookieSessionStore::default(),
+        Key::from("łysolłysolłysolłysolłysolłysolłysolłysolłysolłysolłysol".as_ref())
+      )
+        .cookie_secure(true)
+        .cookie_same_site(actix_web::cookie::SameSite::Strict)
+        .build()
+    )
     .service(crate::routes::redirect::tilda)
     .service(crate::routes::redirect::monkey)
     .service(web::scope("/api").configure(crate::routes::api::service))

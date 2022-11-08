@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {TileContainersT} from '../../types';
+import {TileContainersT} from '../../data/tileCollection';
 import TileSection, {AddTileSectionButton} from './TileSection';
 import styled from 'styled-components';
 import TextSection from './TextSection';

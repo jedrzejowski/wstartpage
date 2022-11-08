@@ -9,11 +9,6 @@ export const Square = styled.div`
     padding-bottom: 100%;
   }
 `;
-export const FlexToolbar = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
 
 export const HFlexContainer = styled.div`
   display: flex;

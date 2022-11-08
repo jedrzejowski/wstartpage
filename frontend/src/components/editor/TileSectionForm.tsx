@@ -7,7 +7,7 @@ import {useAppDispatch} from '../../data/hooks';
 import {FlexExpand, HFlexContainer, PaddedRoot} from '../UtilityElements';
 import Button from '../input/Button';
 import TextInput from '../input/TextInput';
-import type {NormalizedTileSectionT} from '../../types';
+import type {NormalizedTileSectionT} from '../../data/tileCollection';
 import NumberInput from '../input/NumberInput';
 import MdiIcon from '../MdiIcon';
 

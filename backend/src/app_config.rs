@@ -2,11 +2,14 @@ use anyhow::anyhow;
 use once_cell::sync::Lazy;
 use serde::Deserialize;
 
-fn make_absolute(path: &mut String) -> String {
-  let q = std::path::Path::new(path);
-  return std::fs::canonicalize(q)
+fn make_absolute(path: &mut String) {
+  let os_path = std::path::Path::new(path);
+
+  let full_path = std::fs::canonicalize(os_path)
     .map_err(|err| anyhow!("directory '{}' not found", path))
-    .unwrap().to_str().unwrap().parse().unwrap();
+    .unwrap().into_os_string().into_string().unwrap();
+
+  path.replace_range(.., &full_path);
 }
 
 fn default_host() -> String {

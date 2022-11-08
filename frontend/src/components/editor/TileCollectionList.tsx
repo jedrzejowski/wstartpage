@@ -1,12 +1,12 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
-import {useGetIconCollectionListQuery} from '../../data/api/apiBackend';
+import {useGetTileCollectionListQuery} from '../../data/api/apiBackend';
 import {selectEditorSelectedIconCollectionName} from '../../data/slice/normalizedIconCollections';
-import {setEditorSelectedIconCollectionNameAction} from '../../data/slice/editorSlice';
+import {setEditorSelectedTileCollectionNameAction} from '../../data/slice/editor';
 
-export const EditorIconCollectionList: FC = React.memo(props => {
-  const collectionListQuery = useGetIconCollectionListQuery(undefined);
+export const TileCollectionList: FC = React.memo(props => {
+  const collectionListQuery = useGetTileCollectionListQuery(undefined);
   const selectedIconCollectionName = useAppSelector(selectEditorSelectedIconCollectionName);
   const editedIconCollections = useAppSelector(state => state.editor.editedIconCollections);
   const dispatch = useAppDispatch();
@@ -33,7 +33,7 @@ export const EditorIconCollectionList: FC = React.memo(props => {
   function handleClickFactory(iconCollectionName: string) {
     return () => {
       // dispatch(normalizedIconCollectionSlice.actions.requestCollectionLoad({collectionName: iconCollectionName}));
-      dispatch(setEditorSelectedIconCollectionNameAction(iconCollectionName));
+      dispatch(setEditorSelectedTileCollectionNameAction(iconCollectionName));
     };
   }
 });
@@ -56,4 +56,4 @@ const SelectedItem = styled(Item)`
   background-color: ${props => props.theme.color.border};
 `;
 
-export default EditorIconCollectionList;
+export default TileCollectionList;

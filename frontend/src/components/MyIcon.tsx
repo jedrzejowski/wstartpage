@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import CenterJS from './CenterJS';
 import styled from 'styled-components';
 import {useTheme} from 'styled-components';
-import type {TextIconT} from '../types';
+import type {TextIconT} from '../data/tileCollection';
 import imgUrl from '../data/fetch';
 import {useAppSelector} from '../data/hooks';
 import {selectPageSettingsZoomRatio} from '../data/slice/pageSettings';

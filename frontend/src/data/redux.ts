@@ -1,11 +1,11 @@
 import {configureStore, MiddlewareArray} from '@reduxjs/toolkit';
 import searchSlice from './slice/searchSlice';
 import {settingsSlice} from './slice/pageSettings';
-import editorSlice from './slice/editorSlice';
+import editorSlice from './slice/editor';
 import {normalizedIconCollectionSlice} from './slice/normalizedIconCollections';
 import {createLogger} from 'redux-logger';
-import {isProduction} from '../types';
-import {iconCollectionsApi} from './api/apiBackend';
+import {isProduction} from './tileCollection';
+import {apiBackend} from './api/apiBackend';
 
 export const reduxStore = configureStore({
   reducer: {
@@ -13,7 +13,7 @@ export const reduxStore = configureStore({
     [settingsSlice.name]: settingsSlice.reducer,
     [editorSlice.name]: editorSlice.reducer,
     [normalizedIconCollectionSlice.name]: normalizedIconCollectionSlice.reducer,
-    [iconCollectionsApi.reducerPath]: iconCollectionsApi.reducer
+    [apiBackend.reducerPath]: apiBackend.reducer
   },
   middleware: getDefaultMiddleware => {
     let builder: MiddlewareArray<any> = getDefaultMiddleware();
@@ -22,7 +22,7 @@ export const reduxStore = configureStore({
       builder = builder.concat(createLogger({}));
     }
 
-    builder = builder.concat(iconCollectionsApi.middleware);
+    builder = builder.concat(apiBackend.middleware);
 
     return builder;
   },

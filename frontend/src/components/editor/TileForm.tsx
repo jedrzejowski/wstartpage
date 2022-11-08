@@ -5,10 +5,10 @@ import {
   updateTileAction,
   useNormalizedTile
 } from '../../data/slice/normalizedIconCollections';
-import type {TileT, TextIconT, UrlIconT} from '../../types';
+import type {TileT, TextIconT, UrlIconT} from '../../data/tileCollection';
 import {useAppDispatch} from '../../data/hooks';
 import CheckBoxInput from '../input/CheckBoxInput';
-import {isTextIconT, isUrlIconT} from '../../types';
+import {isTextIconT, isUrlIconT} from '../../data/tileCollection';
 import ColorInput from '../input/ColorInput';
 import {FlexExpand, HFlexContainer, PaddedRoot} from '../UtilityElements';
 import Button from '../input/Button';

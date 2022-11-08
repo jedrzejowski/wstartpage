@@ -17,22 +17,22 @@ const Button: FC<ButtonProps> = props => {
   if (typeof startIcon === 'string') startIcon = <MdiIcon icon={startIcon as MdiIconKey}/>;
   if (typeof endIcon === 'string') endIcon = <MdiIcon icon={endIcon as MdiIconKey}/>;
 
-  return <InputRoot>
-    <ButtonInput onClick={onClick}>
-      {startIcon && <StartIconRoot>{startIcon}</StartIconRoot>}
-      {children && <span>{children}</span>}
-      {endIcon && <EndIconRoot>{endIcon}</EndIconRoot>}
-    </ButtonInput>
-  </InputRoot>;
+  return <ButtonInput onClick={onClick}>
+    {startIcon && <StartIconRoot>{startIcon}</StartIconRoot>}
+    {children && <span>{children}</span>}
+    {endIcon && <EndIconRoot>{endIcon}</EndIconRoot>}
+  </ButtonInput>;
 };
 
 export default React.memo(Button);
 
 const ButtonInput = styled.button`
   display: flex;
+  box-sizing: border-box;
+  background: white;
+  border: 1px solid ${props => props.theme.color.border};
   align-items: center;
   background: none;
-  border: none;
   outline: none;
   padding: ${props => props.theme.spacing4(1, 2, 1, 2)};
   cursor: pointer;

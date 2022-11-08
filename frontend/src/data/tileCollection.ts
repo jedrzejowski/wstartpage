@@ -49,13 +49,13 @@ export type TileContainersT =
   | 'right'
   | 'bottom';
 
-export  type IconCollectionT = {
+export type TileCollectionT = {
   readonly name: string;
   includes: string[] | null;
-  settings: Partial<IconCollectionSettingsT>;
+  settings: Partial<TileCollectionSettingsT>;
 } & Record<TileContainersT, TileContainerT | null>;
 
-export interface IconCollectionSettingsT {
+export interface TileCollectionSettingsT {
   logoUrl: string;
   backgroundUrl: string;
   darkMode: boolean;
@@ -63,7 +63,7 @@ export interface IconCollectionSettingsT {
   zoomLevel: number;
 }
 
-export type NormalizedIconCollectionT = Normalize<IconCollectionT, TileContainersT>;
+export type NormalizedTileCollectionT = Normalize<TileCollectionT, TileContainersT>;
 
 export function textIconFromStr(iconText: string): TextIconT {
   const data: any = {};

@@ -8,7 +8,7 @@
   },
   "author": "Adam Jędrzejowski <adam@jedrzejowski.pl>",
   "scripts": {
-    "start-viewer": "REACT_APP_ENTRY=viewer rnpm run start",
+    "start-viewer": "REACT_APP_ENTRY=viewer npm run start",
     "build-viewer": "REACT_APP_ENTRY=viewer npm run build",
     "start-editor": "REACT_APP_ENTRY=editor npm run start",
     "build-editor": "REACT_APP_ENTRY=editor npm run build",

@@ -2,21 +2,29 @@ import React, {FC} from 'react';
 import AppLayout from '../AppLayout';
 import EditorTopBar from './EditorTopBar';
 import styled from 'styled-components';
-import EditorIconCollectionList from './EditorIconCollectionList';
+import TileCollectionList from './TileCollectionList';
 import {useAppSelector} from '../../data/hooks';
 import StartPage from '../startpage/StartPage';
-import EditorFormContainer from './EditorFormContainer';
-import {EditorContextProvider} from './EditorContext';
+import FormContainer from './FormContainer';
+import {EditorContextProvider, EditorQGuard} from './EditorContext';
+import EditorLoginPage from './EditorLoginPage';
+import {useAuth} from '../../data/auth';
 
 const StartPageEditor: FC = () => {
+  const auth = useAuth();
+
+  if (!auth) {
+    return <EditorLoginPage/>;
+  }
+
   return <EditorContextProvider>
     <Root>
       <AppLayout
         fixed
         top={<HPanel border="bottom"><EditorTopBar/></HPanel>}
         middle={<StartPagePreview/>}
-        left={<VPanel border="right"><EditorIconCollectionList/></VPanel>}
-        right={<VPanel border="left"><EditorFormContainer/></VPanel>}
+        left={<VPanel border="right"><TileCollectionList/></VPanel>}
+        right={<VPanel border="left"><EditorQGuard><FormContainer/></EditorQGuard></VPanel>}
       />
     </Root>
   </EditorContextProvider>;
@@ -27,13 +35,13 @@ const Root = styled.div`
 `;
 
 const StartPagePreview = React.memo(props => {
-  const selectedIconCollectionName = useAppSelector(state => state.editor.selectedIconCollectionName);
+  const selectedIconCollectionName = useAppSelector(state => state.editor.currentCollectionName);
 
   if (!selectedIconCollectionName) {
     return null;
   }
 
-  return <StartPage iconCollectionName={selectedIconCollectionName}/>;
+  return <EditorQGuard><StartPage tileCollectionName={selectedIconCollectionName}/></EditorQGuard>;
 });
 
 const HPanel = styled.div<{ border: 'top' | 'bottom' }>`

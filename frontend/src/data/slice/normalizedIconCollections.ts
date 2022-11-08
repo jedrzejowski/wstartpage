@@ -1,21 +1,22 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {useAppSelector} from '../hooks';
 import type {
-  IconCollectionT,
+  TileCollectionT,
   TileContainerT,
   TileT,
-  NormalizedIconCollectionT,
+  NormalizedTileCollectionT,
   NormalizedTileSectionT
-} from '../../types';
+} from '../tileCollection';
 import {makeUniqueId} from '../uniqueId';
-import {iconCollectionsApi} from '../api/apiBackend';
+import {apiBackend} from '../api/apiBackend';
 import {AppSelector} from '../redux';
-import {TileContainersT} from '../../types';
+import {TileContainersT, TileSectionT} from '../tileCollection';
+import {throwExpression} from '../../util/function';
 
 interface NormalizedTileCollectionStateT {
   tiles: Partial<Record<string, TileT>>;
   sections: Partial<Record<string, NormalizedTileSectionT>>;
-  collections: Partial<Record<string, NormalizedIconCollectionT>>;
+  collections: Partial<Record<string, NormalizedTileCollectionT>>;
 }
 
 let i = 0;
@@ -110,10 +111,10 @@ export const normalizedIconCollectionSlice = createSlice({
 
   },
   extraReducers: (builder) => builder
-    .addMatcher(iconCollectionsApi.endpoints.getIconCollection.matchFulfilled, (state, action) => {
+    .addMatcher(apiBackend.endpoints.getTileCollection.matchFulfilled, (state, action) => {
       addCollectionToState(state, action.payload);
     })
-    .addMatcher(iconCollectionsApi.endpoints.getMergedIconCollection.matchFulfilled, (state, action) => {
+    .addMatcher(apiBackend.endpoints.getMergedTileCollection.matchFulfilled, (state, action) => {
       addCollectionToState(state, action.payload);
     })
 });
@@ -126,13 +127,19 @@ export const {
   moveTileAction,
 } = normalizedIconCollectionSlice.actions;
 
-export const selectEditorSelectedIconCollectionName: AppSelector<string | null> = state => state.editor.selectedIconCollectionName;
-export const useNormalizedIconCollection = (name: string) => useAppSelector(state => state.normalizedIconCollection.collections[name] ?? null);
-export const useNormalizedTileSection = (id: string) => useAppSelector(state => state.normalizedIconCollection.sections[id] ?? null);
-export const useNormalizedTile = (id: string) => useAppSelector(state => state.normalizedIconCollection.tiles[id] ?? null);
+export const selectEditorSelectedIconCollectionName: AppSelector<string | null> = state => state.editor.currentCollectionName;
+export const useNormalizedTileCollection = (name: string) => useAppSelector(
+  state => state.normalizedIconCollection.collections[name]
+    ?? throwExpression(`tile collection with name=${name} not found`));
+export const useNormalizedTileSection = (id: string) => useAppSelector(
+  state => state.normalizedIconCollection.sections[id]
+    ?? throwExpression(`tile section with id=${id} not found`));
+export const useNormalizedTile = (id: string) => useAppSelector(
+  state => state.normalizedIconCollection.tiles[id]
+    ?? throwExpression(`tile with id=${id} not found`));
 
 
-function addCollectionToState(state: NormalizedTileCollectionStateT, collection: IconCollectionT) {
+function addCollectionToState(state: NormalizedTileCollectionStateT, collection: TileCollectionT) {
 
   function normalizeContainer(iconContainer: TileContainerT | null | undefined): string[] {
     iconContainer = iconContainer ?? [];
@@ -166,4 +173,57 @@ function addCollectionToState(state: NormalizedTileCollectionStateT, collection:
     left: normalizeContainer(collection.left),
     middle: normalizeContainer(collection.middle),
   };
+}
+
+export function getTileCollectionFromState(state: NormalizedTileCollectionStateT, name: string): TileCollectionT {
+
+  function unnormalizaTileCollection(iconCollection: NormalizedTileCollectionT): TileCollectionT {
+    return {
+      name: iconCollection.name,
+      includes: iconCollection.includes,
+      settings: iconCollection.settings,
+      top: unnormalizeIconSections(iconCollection.top),
+      left: unnormalizeIconSections(iconCollection.left),
+      right: unnormalizeIconSections(iconCollection.right),
+      middle: unnormalizeIconSections(iconCollection.middle),
+      bottom: unnormalizeIconSections(iconCollection.bottom),
+    };
+  }
+
+  function unnormalizeIconSections(sections: string[]): TileSectionT[] {
+    return sections.map(sectionId => {
+      const section = state.sections[sectionId];
+
+      if (!section) {
+        throw new Error('slice is corrupted');
+      }
+
+      return {
+        ...section,
+        tiles: unnormalizeTileWidgets(section.tiles)
+      };
+    });
+  }
+
+  function unnormalizeTileWidgets(widgets: string[]): TileT[] {
+    return widgets.map(widgetId => {
+      const widget = state.tiles[widgetId];
+
+      if (!widget) {
+        throw new Error('slice is corrupted');
+      }
+
+      return {
+        ...widget,
+      };
+    });
+  }
+
+  const collection = state.collections[name];
+
+  if (!collection) {
+    throw new Error('collection not found');
+  }
+
+  return unnormalizaTileCollection(collection);
 }

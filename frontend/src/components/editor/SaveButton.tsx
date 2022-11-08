@@ -1,19 +1,16 @@
 import React, {FC, useState} from 'react';
 import Button from '../input/Button';
-import {useAppSelector} from '../../data/hooks';
-import {
-  IconCollectionT,
-  TileSectionT,
-  TileT,
-  NormalizedIconCollectionT,
-} from '../../types';
+import {useAppSelector, useAppStore} from '../../data/hooks';
+import {getTileCollectionFromState} from '../../data/slice/normalizedIconCollections';
+import {useUpdateTileCollectionMutation} from '../../data/api/apiBackend';
 
 type MyState = 'idle' | 'fetching';
 
 export const SaveButton: FC = React.memo(props => {
   const [myState, setMyState] = useState<MyState>('idle');
-  const selectedIconCollectionName = useAppSelector(state => state.editor.selectedIconCollectionName);
-  const iconCollectionSlice = useAppSelector(state => state.normalizedIconCollection);
+  const store = useAppStore();
+  const selectedIconCollectionName = useAppSelector(state => state.editor.currentCollectionName);
+  const [saveCollection, result] = useUpdateTileCollectionMutation();
 
   return <Button
     disabled={myState === 'fetching'}
@@ -28,54 +25,10 @@ export const SaveButton: FC = React.memo(props => {
       return;
     }
 
-    function unnormalizaIconCollection(iconCollection: NormalizedIconCollectionT): IconCollectionT {
-      return {
-        name: iconCollection.name,
-        includes: iconCollection.includes,
-        settings: iconCollection.settings,
-        top: unnormalizeIconSections(iconCollection.top),
-        left: unnormalizeIconSections(iconCollection.left),
-        right: unnormalizeIconSections(iconCollection.right),
-        middle: unnormalizeIconSections(iconCollection.middle),
-        bottom: unnormalizeIconSections(iconCollection.bottom),
-      };
-    }
+    const tileCollection = getTileCollectionFromState(store.getState().normalizedIconCollection, selectedIconCollectionName);
 
-    function unnormalizeIconSections(sections: string[]): TileSectionT[] {
-      return sections.map(sectionId => {
-        const section = iconCollectionSlice.sections[sectionId];
-
-        if (!section) {
-          throw new Error('slice is corrupted');
-        }
-
-        return {
-          ...section,
-          tiles: unnormalizeTileWidgets(section.tiles)
-        };
-      });
-    }
-
-    function unnormalizeTileWidgets(widgets: string[]): TileT[] {
-      return widgets.map(widgetId => {
-        const widget = iconCollectionSlice.tiles[widgetId];
-
-        if (!widget) {
-          throw new Error('slice is corrupted');
-        }
-
-        return {
-          ...widget,
-        };
-      });
-    }
-
-    const current = iconCollectionSlice.collections[selectedIconCollectionName];
-    if (!current) {
-      return;
-    }
-    const iconCollection = unnormalizaIconCollection(current);
-
+    console.log('HER', tileCollection);
+    saveCollection(tileCollection);
 
   }
 });

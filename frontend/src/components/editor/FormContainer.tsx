@@ -1,18 +1,18 @@
 import React, {FC} from 'react';
 import TileForm from './TileForm';
 import {useAppSelector} from '../../data/hooks';
-import IconCollectionForm from './IconCollectionForm';
+import IconCollectionForm from './TileCollectionForm';
 import TileSectionForm from './TileSectionForm';
 
-export const EditorFormContainer: FC = React.memo(props => {
+export const FormContainer: FC = React.memo(props => {
   const selectedObj = useAppSelector(state => state.editor.selectedObj);
 
   if (!selectedObj) {
     return null;
   }
 
-  if ('iconCollectionName' in selectedObj) {
-    return <IconCollectionForm iconCollectionName={selectedObj.iconCollectionName}/>;
+  if ('tileCollectionName' in selectedObj) {
+    return <IconCollectionForm tileCollectionName={selectedObj.tileCollectionName}/>;
   }
 
   if ('sectionId' in selectedObj) {
@@ -26,4 +26,4 @@ export const EditorFormContainer: FC = React.memo(props => {
   return null;
 });
 
-export default EditorFormContainer;
+export default FormContainer;

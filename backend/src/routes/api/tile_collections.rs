@@ -1,9 +1,10 @@
 use actix_web::{Error, web, HttpResponse, get, put};
-use crate::util::app_result::AppResult;
+use crate::util::http::AppHttpResult;
 use serde::Deserialize;
 use crate::app_config;
 use std::vec::Vec;
-use crate::util::app_error::AppError;
+use crate::data::auth::AppUser;
+use crate::util::http::AppHttpError;
 use crate::data::tile_collection::TileCollection;
 
 
@@ -13,19 +14,17 @@ pub struct GetIconCollectionQuery {
   recursive_merge: Option<bool>,
 }
 
-
-#[get("/icon-tiles/{name}")]
-pub async fn select(params: web::Path<String>, query: web::Query<GetIconCollectionQuery>) -> AppResult {
+pub async fn select(params: web::Path<String>, query: web::Query<GetIconCollectionQuery>) -> AppHttpResult {
   let name = params.into_inner();
 
   let icon_collection = TileCollection::get_by_name(&name)
-    .map_err(|err| AppError::internal(err.to_string()))?
-    .ok_or(AppError::not_found("not found"))?;
+    .map_err(|err| AppHttpError::internal(err.to_string()))?
+    .ok_or(AppHttpError::not_found("not found"))?;
 
   if let Some(true) = query.recursive_merge {
 
     let icon_collection = icon_collection.resolve_recursive()
-      .map_err(|_err| AppError::internal("error while resolve recursive"))?;
+      .map_err(|_err| AppHttpError::internal("error while resolve recursive"))?;
 
     return Ok(HttpResponse::Ok().json(icon_collection));
   }
@@ -33,9 +32,8 @@ pub async fn select(params: web::Path<String>, query: web::Query<GetIconCollecti
   return Ok(HttpResponse::Ok().json(icon_collection));
 }
 
-
-#[put("/icon-tiles/{id}")]
 pub async fn update(
+  auth_user: AppUser,
   params: web::Path<String>,
   icon_collection: web::Json<TileCollection>,
 ) -> Result<HttpResponse, Error> {
@@ -47,7 +45,6 @@ pub async fn update(
 }
 
 
-#[get("/icon-tiles")]
 pub async fn search() -> Result<HttpResponse, Error> {
   let paths = std::fs::read_dir(app_config::app_config.dashboard_root.as_str())?;
 

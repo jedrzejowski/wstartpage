@@ -4,9 +4,9 @@ import styled, {useTheme} from 'styled-components';
 import {isNumber} from '../../util/util';
 import {isMobile} from 'react-device-detect';
 import {addTileSectionAction, useNormalizedTileSection} from '../../data/slice/normalizedIconCollections';
-import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editorSlice';
+import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
 import {HFlexContainer} from '../UtilityElements';
-import {TileContainersT} from '../../types';
+import {TileContainersT} from '../../data/tileCollection';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
 import {makeUniqueId} from '../../data/uniqueId';
 import clsx from 'clsx';
@@ -100,7 +100,6 @@ const SectionRoot = styled.div`
   flex-direction: column;
   background-color: white;
 
-    //margin: ${props => props.theme.spacing()} ${props => ((props.theme.iconSize - props.theme.spacingNum() - 2) / 2)}px;
   margin: ${props => props.theme.spacing()};
   padding: ${props => props.theme.spacing()} ${props => props.theme.spacing(2)};
   border: 1px solid ${props => props.theme.color.border};

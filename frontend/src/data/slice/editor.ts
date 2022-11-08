@@ -8,9 +8,9 @@ import {
 } from './normalizedIconCollections';
 
 interface EditorStateT {
-  selectedIconCollectionName: string | null;
+  currentCollectionName: string | null;
   selectedObj:
-    | { iconCollectionName: string; }
+    | { tileCollectionName: string; }
     | { sectionId: string; }
     | { tileId: string; }
     | null;
@@ -20,7 +20,7 @@ interface EditorStateT {
 let i = 0;
 
 const initialState: EditorStateT = {
-  selectedIconCollectionName: null,
+  currentCollectionName: null,
   selectedObj: null,
   editedIconCollections: [],
 };
@@ -29,9 +29,9 @@ export const editorSlice = createSlice({
   name: 'editor',
   initialState,
   reducers: {
-    setEditorSelectedIconCollectionNameAction(state, action: PayloadAction<string>) {
-      state.selectedIconCollectionName = action.payload;
-      state.selectedObj = {iconCollectionName: action.payload};
+    setEditorSelectedTileCollectionNameAction(state, action: PayloadAction<string>) {
+      state.currentCollectionName = action.payload;
+      state.selectedObj = {tileCollectionName: action.payload};
     },
     setEditorSelectedObjAction(state, action: PayloadAction<EditorStateT['selectedObj']>) {
       state.selectedObj = action.payload;
@@ -53,13 +53,13 @@ export const editorSlice = createSlice({
 });
 
 export const {
-  setEditorSelectedIconCollectionNameAction,
+  setEditorSelectedTileCollectionNameAction,
   setEditorSelectedObjAction,
 } = editorSlice.actions;
 
 function markCurrentCollectionAsEdited(state: Draft<EditorStateT>) {
-  if (state.selectedIconCollectionName) {
-    state.editedIconCollections.push(state.selectedIconCollectionName);
+  if (state.currentCollectionName) {
+    state.editedIconCollections.push(state.currentCollectionName);
   }
 }
 

@@ -2,7 +2,7 @@ import React, {FC, MouseEvent, useEffect, useState} from 'react';
 import MyIcon from '../MyIcon';
 import styled from 'styled-components';
 import {searchEngine, useSearchQuery} from '../../data/slice/searchSlice';
-import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editorSlice';
+import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
 import {useIsEditor} from '../editor/EditorContext';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
 import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedIconCollections';
