@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import {
-  normalizedIconCollectionSlice, updateTileSectionAction,
+  normalizedTileCollectionSlice, updateTileSectionAction,
   useNormalizedTileSection
-} from '../../data/slice/normalizedIconCollections';
+} from '../../data/slice/normalizedTileCollections';
 import {useAppDispatch} from '../../data/hooks';
 import {FlexExpand, HFlexContainer, PaddedRoot} from '../UtilityElements';
 import Button from '../input/Button';
@@ -57,7 +57,7 @@ const TileSectionForm: FC<{
   }
 
   function handleMoveToLeftClick(e: React.MouseEvent) {
-    dispatch(normalizedIconCollectionSlice.actions.moveIconSection({sectionId, offset: -1}));
+    dispatch(normalizedTileCollectionSlice.actions.moveIconSection({sectionId, offset: -1}));
   }
 
   function handleDeleteClick(e: React.MouseEvent) {
@@ -65,7 +65,7 @@ const TileSectionForm: FC<{
   }
 
   function handleMoveToRightClick(e: React.MouseEvent) {
-    dispatch(normalizedIconCollectionSlice.actions.moveIconSection({sectionId, offset: 1}));
+    dispatch(normalizedTileCollectionSlice.actions.moveIconSection({sectionId, offset: 1}));
   }
 };
 

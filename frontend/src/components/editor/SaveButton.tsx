@@ -1,7 +1,7 @@
 import React, {FC, useState} from 'react';
 import Button from '../input/Button';
 import {useAppSelector, useAppStore} from '../../data/hooks';
-import {getTileCollectionFromState} from '../../data/slice/normalizedIconCollections';
+import {getTileCollectionFromState} from '../../data/slice/normalizedTileCollections';
 import {useUpdateTileCollectionMutation} from '../../data/api/apiBackend';
 
 type MyState = 'idle' | 'fetching';
@@ -25,7 +25,7 @@ export const SaveButton: FC = React.memo(props => {
       return;
     }
 
-    const tileCollection = getTileCollectionFromState(store.getState().normalizedIconCollection, selectedIconCollectionName);
+    const tileCollection = getTileCollectionFromState(store.getState().normalizedTileCollection, selectedIconCollectionName);
 
     console.log('HER', tileCollection);
     saveCollection(tileCollection);

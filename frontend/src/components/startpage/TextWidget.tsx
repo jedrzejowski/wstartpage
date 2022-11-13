@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React, {FC, MouseEvent} from 'react';
-import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedIconCollections';
+import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedTileCollections';
 import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
 import {useIsEditor} from '../editor/EditorContext';
 import clsx from 'clsx';

@@ -1,6 +1,6 @@
 import {createContext, FC, ReactNode, useContext} from 'react';
 import {useAppSelector} from '../../data/hooks';
-import {selectEditorSelectedIconCollectionName} from '../../data/slice/normalizedIconCollections';
+import {selectEditorSelectedIconCollectionName} from '../../data/slice/normalizedTileCollections';
 import {useGetTileCollectionQuery} from '../../data/api/apiBackend';
 import RtkQueryGuard from '../RtkQueryGuard';
 

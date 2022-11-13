@@ -1,36 +1,26 @@
-import {CSSProperties, FC, RefObject} from 'react';
+import type {FC} from 'react';
 import Icon from '@mdi/react';
-import {mdiArrowLeft, mdiArrowRight, mdiContentSave, mdiDelete} from '@mdi/js';
-import {HTMLProps} from '@mdi/react/dist/IconProps';
+import type {IconProps} from '@mdi/react/dist/IconProps';
 
 // skopiowane z biblioteki
-interface IconProps extends HTMLProps {
-  id?: string;
+type MdiIconProps = Omit<IconProps, 'path'> & {
   icon: keyof typeof icons;
-  ref?: RefObject<SVGSVGElement>;
-  title?: string | null;
-  description?: string | null;
-  size?: number | string | null;
-  color?: string | null;
-  horizontal?: boolean;
-  vertical?: boolean;
-  rotate?: number;
-  spin?: boolean | number;
-  style?: CSSProperties;
-  inStack?: boolean;
 }
 
-const MdiIcon: FC<IconProps> = props => {
+const MdiIcon: FC<MdiIconProps> = props => {
   const {icon, ...rest} = props;
 
-  return <Icon path={icons[icon]} {...rest}/>;
+  return <Icon style={{height: '1.15em'}} path={icons[icon]} {...rest}/>;
 };
 
 const icons = {
-  'content-save-icon': mdiContentSave,
-  'arrow-left': mdiArrowLeft,
-  'arrow-right': mdiArrowRight,
-  'delete': mdiDelete,
+  'content-save-icon': require('@mdi/js').mdiContentSave,
+  'arrow-left': require('@mdi/js').mdiArrowLeft,
+  'arrow-right': require('@mdi/js').mdiArrowRight,
+  'arrow-down': require('@mdi/js').mdiArrowDown,
+  'arrow-up': require('@mdi/js').mdiArrowUp,
+  'delete': require('@mdi/js').mdiDelete,
+  'plus': require('@mdi/js').mdiPlus,
 };
 
 export type MdiIconKey = keyof typeof icons;

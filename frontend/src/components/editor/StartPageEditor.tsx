@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import AppLayout from '../AppLayout';
 import EditorTopBar from './EditorTopBar';
 import styled from 'styled-components';
-import TileCollectionList from './TileCollectionList';
+import EditorCollectionList from './EditorCollectionList';
 import {useAppSelector} from '../../data/hooks';
 import StartPage from '../startpage/StartPage';
 import FormContainer from './FormContainer';
@@ -23,7 +23,7 @@ const StartPageEditor: FC = () => {
         fixed
         top={<HPanel border="bottom"><EditorTopBar/></HPanel>}
         middle={<StartPagePreview/>}
-        left={<VPanel border="right"><TileCollectionList/></VPanel>}
+        left={<VPanel border="right"><EditorCollectionList/></VPanel>}
         right={<VPanel border="left"><EditorQGuard><FormContainer/></EditorQGuard></VPanel>}
       />
     </Root>

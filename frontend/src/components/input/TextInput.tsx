@@ -35,7 +35,7 @@ const Root = styled.div`
 const Label = styled.label`
   display: block;
   box-sizing: border-box;
-  padding: ${props => props.theme.spacing4(1, 1, 0, 1)};
+  padding: ${props => props.theme.spacing(1, 1, 0, 1)};
   font-size: ${props => 0.8 * props.theme.zoomFactor}em;
 `;
 

@@ -3,7 +3,7 @@ import AppLayout from '../AppLayout';
 import TileContainer from './TileContainer';
 import SearchView from './SearchView';
 import StartPageHeader from './StartPageHeader';
-import {useNormalizedTileCollection} from '../../data/slice/normalizedIconCollections';
+import {useNormalizedTileCollection} from '../../data/slice/normalizedTileCollections';
 import {useAppSelector} from '../../data/hooks';
 
 const StartPage: FC<({

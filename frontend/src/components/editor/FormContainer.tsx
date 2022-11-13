@@ -11,8 +11,8 @@ export const FormContainer: FC = React.memo(props => {
     return null;
   }
 
-  if ('tileCollectionName' in selectedObj) {
-    return <IconCollectionForm tileCollectionName={selectedObj.tileCollectionName}/>;
+  if ('collectionName' in selectedObj) {
+    return <IconCollectionForm tileCollectionName={selectedObj.collectionName}/>;
   }
 
   if ('sectionId' in selectedObj) {

@@ -11,7 +11,11 @@ declare module 'styled-components' {
 
     spacing(num?: number): string;
 
-    spacing4(top: number, right: number, bottom: number, left: number): string;
+    spacing(vertical: number, horizontal: number): string;
+
+    spacing(top: number, side: number, bottom: number): string;
+
+    spacing(top: number, right: number, bottom: number, left: number): string;
 
     spacingNum(num?: number): number;
 
@@ -25,6 +29,8 @@ declare module 'styled-components' {
       background0: string;
       background1: string;
       border: string;
+      hover: string;
+      selected: string;
     },
   }
 }
@@ -36,16 +42,25 @@ export const defaultTheme: DefaultTheme = {
   spacingNum(num = 1) {
     return num * this.baseSpacing;
   },
-  spacing(num = 1) {
-    return this.spacingNum(num) + 'px';
-  },
-  spacing4(top, right, bottom, left) {
-    return [
-      this.spacing(top),
-      this.spacing(right),
-      this.spacing(bottom),
-      this.spacing(left),
-    ].join(' ');
+  spacing(num1?: number, num2?: number, num3?: number, num4?: number) {
+    if (num1 === undefined) {
+      return this.spacingNum() + 'px';
+    }
+
+    if (num2 === undefined) {
+      return this.spacingNum(num1) + 'px';
+    }
+
+    if (num3 === undefined) {
+      return this.spacingNum(num1) + 'px ' + this.spacingNum(num2) + 'px';
+    }
+
+    if (num4 === undefined) {
+      return this.spacingNum(num1) + 'px ' + this.spacingNum(num2) + 'px ' + this.spacingNum(num3) + 'px';
+    }
+
+    return this.spacingNum(num1) + 'px ' + this.spacingNum(num2) + 'px ' +
+      this.spacingNum(num3) + 'px ' + this.spacingNum(num4) + 'px ';
   },
   selectedOutline() {
     return [
@@ -60,7 +75,9 @@ export const defaultTheme: DefaultTheme = {
   color: {
     background0: '#fcfcfc',
     background1: 'white',
-    border: '#bbbebf'
+    border: '#bbbebf',
+    hover: 'rgb(0,0,0,0.12)',
+    selected: 'rgb(0,0,0,0.25)',
   },
 };
 
@@ -72,7 +89,7 @@ export const ThemeProvider: FC<{
   const zoomLevel = useAppSelector(selectPageSettingsZoomLevel);
 
   useEffect(() => {
-    const zoomFactor = zoomLevel  / 100;
+    const zoomFactor = zoomLevel / 100;
 
     setTheme({
       ...theme,

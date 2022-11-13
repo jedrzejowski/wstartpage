@@ -5,12 +5,12 @@ import {
   addTileSectionAction,
   updateTileAction,
   updateTileSectionAction
-} from './normalizedIconCollections';
+} from './normalizedTileCollections';
 
 interface EditorStateT {
   currentCollectionName: string | null;
   selectedObj:
-    | { tileCollectionName: string; }
+    | { collectionName: string; }
     | { sectionId: string; }
     | { tileId: string; }
     | null;
@@ -31,7 +31,7 @@ export const editorSlice = createSlice({
   reducers: {
     setEditorSelectedTileCollectionNameAction(state, action: PayloadAction<string>) {
       state.currentCollectionName = action.payload;
-      state.selectedObj = {tileCollectionName: action.payload};
+      state.selectedObj = {collectionName: action.payload};
     },
     setEditorSelectedObjAction(state, action: PayloadAction<EditorStateT['selectedObj']>) {
       state.selectedObj = action.payload;

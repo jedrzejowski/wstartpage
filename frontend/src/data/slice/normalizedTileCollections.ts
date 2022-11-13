@@ -27,8 +27,8 @@ const initialState: NormalizedTileCollectionStateT = {
   collections: {},
 };
 
-export const normalizedIconCollectionSlice = createSlice({
-  name: 'normalizedIconCollection',
+export const normalizedTileCollectionSlice = createSlice({
+  name: 'normalizedTileCollection',
   initialState,
   reducers: {
     updateTileAction(state, action: PayloadAction<{ tileId: string, tile: TileT }>) {
@@ -107,8 +107,17 @@ export const normalizedIconCollectionSlice = createSlice({
         order: 1000,
         width: null,
       };
-    }
-
+    },
+    updateTileCollectionAction(state, action: PayloadAction<{ collectionName: string; collection: Partial<NormalizedTileCollectionT> }>) {
+      const {collectionName, collection} = action.payload;
+      const currentState = state.collections[collectionName];
+      if (currentState) {
+        state.collections[collectionName] = {
+          ...currentState,
+          ...collection,
+        };
+      }
+    },
   },
   extraReducers: (builder) => builder
     .addMatcher(apiBackend.endpoints.getTileCollection.matchFulfilled, (state, action) => {
@@ -125,17 +134,18 @@ export const {
   addTileSectionAction,
   updateTileSectionAction,
   moveTileAction,
-} = normalizedIconCollectionSlice.actions;
+  updateTileCollectionAction,
+} = normalizedTileCollectionSlice.actions;
 
 export const selectEditorSelectedIconCollectionName: AppSelector<string | null> = state => state.editor.currentCollectionName;
 export const useNormalizedTileCollection = (name: string) => useAppSelector(
-  state => state.normalizedIconCollection.collections[name]
+  state => state.normalizedTileCollection.collections[name]
     ?? throwExpression(`tile collection with name=${name} not found`));
 export const useNormalizedTileSection = (id: string) => useAppSelector(
-  state => state.normalizedIconCollection.sections[id]
+  state => state.normalizedTileCollection.sections[id]
     ?? throwExpression(`tile section with id=${id} not found`));
 export const useNormalizedTile = (id: string) => useAppSelector(
-  state => state.normalizedIconCollection.tiles[id]
+  state => state.normalizedTileCollection.tiles[id]
     ?? throwExpression(`tile with id=${id} not found`));
 
 

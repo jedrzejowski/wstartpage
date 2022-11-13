@@ -46,7 +46,7 @@ const Container = styled.div`
   width: 360px;
 
   > * + * {
-    margin-top: ${props => props.theme.spacing()};
+    margin-top: ${props => props.theme.spacing(.5)};
   }
 `;
 

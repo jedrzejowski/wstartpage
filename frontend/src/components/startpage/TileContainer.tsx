@@ -58,7 +58,7 @@ const ContainerRoot = styled.div<{ direction: 'column' | 'row' }>`
 
 const EditorRoot = styled.div`
   margin: ${props => props.theme.spacing(1)};
-  padding: ${props => props.theme.spacing4(1, 1, 0, 1)};
+  padding: ${props => props.theme.spacing(1, 1, 0, 1)};
   border: 2px dashed ${props => props.theme.color.border};
 `;
 

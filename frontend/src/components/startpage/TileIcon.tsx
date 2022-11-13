@@ -1,14 +1,14 @@
 import React, {FC} from 'react';
-import CenterJS from './CenterJS';
+import CenterJS from '../CenterJS';
 import styled from 'styled-components';
 import {useTheme} from 'styled-components';
-import type {TextIconT} from '../data/tileCollection';
-import imgUrl from '../data/fetch';
-import {useAppSelector} from '../data/hooks';
-import {selectPageSettingsZoomRatio} from '../data/slice/pageSettings';
+import type {TextIconT} from '../../data/tileCollection';
+import imgUrl from '../../data/fetch';
+import {useAppSelector} from '../../data/hooks';
+import {selectPageSettingsZoomRatio} from '../../data/slice/pageSettings';
 
 
-const MyIcon: FC<{
+const TileIcon: FC<{
   icon: string | TextIconT;
 }> = ({icon}) => {
   const theme = useTheme();
@@ -32,7 +32,7 @@ const MyIcon: FC<{
   }
 };
 
-export default React.memo(MyIcon);
+export default React.memo(TileIcon);
 
 const Background = styled.div`
   width: ${props => props.theme.iconSize}px;

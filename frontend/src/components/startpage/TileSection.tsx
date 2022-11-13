@@ -3,7 +3,7 @@ import TileWidget, {AddTileButton} from './TileWidget';
 import styled, {useTheme} from 'styled-components';
 import {isNumber} from '../../util/util';
 import {isMobile} from 'react-device-detect';
-import {addTileSectionAction, useNormalizedTileSection} from '../../data/slice/normalizedIconCollections';
+import {addTileSectionAction, useNormalizedTileSection} from '../../data/slice/normalizedTileCollections';
 import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
 import {HFlexContainer} from '../UtilityElements';
 import {TileContainersT} from '../../data/tileCollection';

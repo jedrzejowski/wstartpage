@@ -32,9 +32,9 @@ export const SmallButton = styled.button`
 
 export const PaddedRoot = styled.div`
   box-sizing: border-box;
-  padding: ${props => props.theme.spacing(2)};
+  padding: ${props => props.theme.spacing(1)};
 
   > * + * {
-    margin-top: ${props => props.theme.spacing(2)};
+    margin-top: ${props => props.theme.spacing(1)};
   }
 `;

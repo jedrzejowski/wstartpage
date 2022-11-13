@@ -1,11 +1,11 @@
 import React, {FC, MouseEvent, useEffect, useState} from 'react';
-import MyIcon from '../MyIcon';
+import MyIcon from './TileIcon';
 import styled from 'styled-components';
 import {searchEngine, useSearchQuery} from '../../data/slice/searchSlice';
 import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
 import {useIsEditor} from '../editor/EditorContext';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
-import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedIconCollections';
+import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedTileCollections';
 import clsx from 'clsx';
 import {makeUniqueId} from '../../data/uniqueId';
 

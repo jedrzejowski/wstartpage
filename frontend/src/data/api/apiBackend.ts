@@ -46,7 +46,7 @@ export const apiBackend = createApi({
     getMergedTileCollection: builder.query<TileCollectionT, string>({
       query: (name) => `/tile-collections/${name}?${qs.stringify({recursiveMerge: true})}`,
     }),
-    getTileCollectionList: builder.query<string[], undefined>({
+    getTileCollectionList: builder.query<string[], void>({
       query: () => `/tile-collections`,
     }),
     updateTileCollection: builder.mutation<TileCollectionT, TileCollectionT>({

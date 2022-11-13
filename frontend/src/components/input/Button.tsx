@@ -34,7 +34,7 @@ const ButtonInput = styled.button`
   align-items: center;
   background: none;
   outline: none;
-  padding: ${props => props.theme.spacing4(1, 2, 1, 2)};
+  padding: ${props => props.theme.spacing(1, 2, 1, 2)};
   cursor: pointer;
 
   & > span + span {

@@ -4,7 +4,7 @@ import {
   moveTileAction,
   updateTileAction,
   useNormalizedTile
-} from '../../data/slice/normalizedIconCollections';
+} from '../../data/slice/normalizedTileCollections';
 import type {TileT, TextIconT, UrlIconT} from '../../data/tileCollection';
 import {useAppDispatch} from '../../data/hooks';
 import CheckBoxInput from '../input/CheckBoxInput';

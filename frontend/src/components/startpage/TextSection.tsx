@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
-import {useNormalizedTileSection} from '../../data/slice/normalizedIconCollections';
+import {useNormalizedTileSection} from '../../data/slice/normalizedTileCollections';
 import TextWidget, {AddTextWidgetButton} from './TextWidget';
 import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
 import {useIsEditor} from '../editor/EditorContext';
