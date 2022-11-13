@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {ChangeEvent, FC} from 'react';
 import {
   normalizedTileCollectionSlice, updateTileSectionAction,
   useNormalizedTileSection
@@ -37,8 +37,8 @@ const TileSectionForm: FC<{
       </Button>
     </HFlexContainer>
 
-    <TextInput label="Tytuł" value={section.title} onChange={handleChangeFactory('title')}/>
-    <NumberInput label="Kolejność" value={section.order} onChange={handleChangeFactory('order')}/>
+    <TextInput label="Tytuł" value={section.title} onValueChange={handleChangeFactory('title')}/>
+    <NumberInput label="Kolejność" value={section.order} onValueChange={handleChangeFactory('order')}/>
   </PaddedRoot>;
 
   function handleChangeFactory(field: keyof NormalizedTileSectionT) {

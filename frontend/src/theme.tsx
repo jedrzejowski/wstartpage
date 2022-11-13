@@ -32,6 +32,8 @@ declare module 'styled-components' {
       hover: string;
       selected: string;
     },
+
+    shadow(size?: number): string;
   }
 }
 
@@ -79,6 +81,10 @@ export const defaultTheme: DefaultTheme = {
     hover: 'rgb(0,0,0,0.12)',
     selected: 'rgb(0,0,0,0.25)',
   },
+
+  shadow(size?: number): string {
+    return '0px 1px 2px black';
+  }
 };
 
 export const ThemeProvider: FC<{

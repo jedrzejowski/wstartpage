@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React, {FC, MouseEvent} from 'react';
 import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedTileCollections';
-import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
+import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
 import {useIsEditor} from '../editor/EditorContext';
 import clsx from 'clsx';
 import {useAppDispatch} from '../../data/hooks';
@@ -12,7 +12,7 @@ export const TextWidget: FC<{
 }> = React.memo(({tileId}) => {
   const widget = useNormalizedTile(tileId);
   const isEditor = useIsEditor();
-  const isSelected = useIsSelected('tile', tileId);
+  const isSelected = useIsSelectedInEditor('tile', tileId);
   const dispatch = useAppDispatch();
 
   if (!widget) {

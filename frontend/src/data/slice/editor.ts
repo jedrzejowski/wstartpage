@@ -63,7 +63,7 @@ function markCurrentCollectionAsEdited(state: Draft<EditorStateT>) {
   }
 }
 
-export const useIsSelected = (type: 'section' | 'tile', id: string): boolean => useAppSelector(state => {
+export const useIsSelectedInEditor = (type: 'section' | 'tile', id: string): boolean => useAppSelector(state => {
   const selectedObj = state.editor.selectedObj;
 
   if (selectedObj === null) {

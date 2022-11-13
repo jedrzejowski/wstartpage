@@ -1,8 +1,8 @@
-import React, {FC} from 'react';
+import React, {ChangeEvent, FC} from 'react';
 import TextInput from '../input/TextInput';
 import {
   moveTileAction,
-  updateTileAction,
+  updateTileAction, updateTileIconAction,
   useNormalizedTile
 } from '../../data/slice/normalizedTileCollections';
 import type {TileT, TextIconT, UrlIconT} from '../../data/tileCollection';
@@ -15,11 +15,6 @@ import Button from '../input/Button';
 import NumberInput from '../input/NumberInput';
 import MdiIcon from '../MdiIcon';
 import SelectInput from '../input/SelectInput';
-
-const ICON_RESTORE_CACHE: Partial<Record<string, {
-  urlIcon?: UrlIconT;
-  textIcon?: TextIconT;
-}>> = {};
 
 export const TileForm: FC<{
   tileId: string;
@@ -41,113 +36,31 @@ export const TileForm: FC<{
       <Button onClick={handleMoveToRightClick} startIcon="arrow-right"/>
     </HFlexContainer>
 
+    <TextInput label="Tytuł" value={tile.title} onValueChange={handleChangeFactory('title')}/>
+    <TextInput label="URL" value={tile.url} onValueChange={handleChangeFactory('url')}/>
+
     <SelectInput
       label="Typ ikony"
-      value={null}
-      onChange={() => {
-      }}
+      value={isTextIconT(tile.icon) ? 'text' : isUrlIconT(tile.icon) ? 'url' : null}
+      onValueChange={(value: null | 'text' | 'url') => dispatch(updateTileIconAction({tileId, iconType: value}))}
       options={[
         {value: null, label: 'Brak'},
-        {value: 'text', label: 'Tekst'},
-        {value: 'url', label: 'Obraz'},
+        {value: 'text' as const, label: 'Tekst'},
+        {value: 'url' as const, label: 'Obraz'},
       ]}
     />
 
-    <TextInput label="Tytuł" value={tile.title} onChange={handleChangeFactory('title')}/>
-    <TextInput label="URL" value={tile.url} onChange={handleChangeFactory('url')}/>
-    <CheckBoxInput label="Ikona tekstowa" value={isTextIconT(tile.icon)} onChange={handleIconTypeChange}/>
     {isTextIconT(tile.icon) ? (<>
-      <TextInput label="Test" value={tile.icon.text ?? ''}
-                 onChange={handleIconChangeFactory('text')}/>
-      <ColorInput label="Kolor" value={tile.icon.bgColor}
-                  onChange={handleIconChangeFactory('bgColor')}/>
-      <NumberInput label="Wielkość czcionki" value={tile.icon.fontSize}
-                   onChange={handleIconChangeFactory('fontSize')}/>
-    </>) : (
-      <TextInput label="Ikona" value={tile.icon ?? ''} onChange={handleChangeFactory('icon')}/>
-    )}
+      <TextIconEditor value={tile.icon} onValueChange={handleChangeFactory('icon')}/>
+    </>) : isUrlIconT(tile.icon) ? (
+      <TextInput label="Adres ikony" value={tile.icon ?? ''} onValueChange={handleChangeFactory('icon')}/>
+    ) : null}
   </PaddedRoot>;
 
-  function handleChangeFactory(field: keyof TileT) {
-    return (newValue: string) => {
-      if (!tile) {
-        return null;
-      }
-
-      const newTile = {
-        ...tile,
-        [field]: newValue,
-      };
-
-      dispatch(updateTileAction({tileId, tile: newTile}));
+  function handleChangeFactory<K extends keyof TileT>(field: K) {
+    return (newValue: TileT[K]) => {
+      dispatch(updateTileAction({tileId, tile: {[field]: newValue}}));
     };
-  }
-
-  function handleIconChangeFactory(field: keyof TextIconT) {
-    return (newValue: any) => {
-      if (!tile) {
-        return null;
-      }
-
-      if (!isTextIconT(tile.icon)) {
-        return;
-      }
-
-      switch (field) {
-        case 'bgColor':
-          newValue = newValue.hex;
-          break;
-      }
-
-      const newTile: TileT = {
-        ...tile,
-        icon: {
-          ...tile.icon,
-          [field]: newValue
-        }
-      };
-
-      dispatch(updateTileAction({tileId, tile: newTile}));
-    };
-  }
-
-  function handleIconTypeChange(isText: boolean) {
-    if (!tile) {
-      return null;
-    }
-
-    const current_cache = ICON_RESTORE_CACHE[tile.url] ?? (ICON_RESTORE_CACHE[tile.url] = {});
-
-    if (isText) {
-
-      dispatch(updateTileAction({
-        tileId,
-        tile: {
-          ...tile,
-          icon: current_cache.textIcon ?? {
-            text: tile.title.substring(0, 3),
-            bgColor: '#FF0000',
-            fontSize: 30,
-          },
-        }
-      }));
-
-    } else {
-
-      dispatch(updateTileAction({
-        tileId,
-        tile: {
-          ...tile,
-          icon: current_cache.urlIcon ?? '',
-        }
-      }));
-
-    }
-
-    if (isUrlIconT(tile.icon))
-      current_cache.urlIcon = tile.icon;
-    if (isTextIconT(tile.icon))
-      current_cache.textIcon = tile.icon;
   }
 
   function handleMoveToLeftClick(e: React.MouseEvent) {
@@ -165,3 +78,25 @@ export const TileForm: FC<{
 
 
 export default TileForm;
+
+const TextIconEditor: FC<{ value: TextIconT; onValueChange: (value: TextIconT) => void; }> = props => {
+  const {value, onValueChange} = props;
+
+  return <>
+    <TextInput
+      label="Tekst ikony"
+      value={value.text}
+      onValueChange={text => onValueChange({...value, text})}
+    />
+    <ColorInput
+      label="Kolor ikony"
+      value={value.bgColor}
+      onValueChange={bgColor => onValueChange({...value, bgColor: bgColor.hex})}
+    />
+    <NumberInput
+      label="Wielkość czcionki ikonyy"
+      value={value.fontSize}
+      onValueChange={fontSize => onValueChange({...value, fontSize})}
+    />
+  </>;
+};

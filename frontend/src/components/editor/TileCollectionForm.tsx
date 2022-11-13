@@ -16,8 +16,6 @@ export const TileCollectionForm: FC<{
   const collectionIncludes = collection.includes ?? [];
 
   return <PaddedRoot>
-    Kolekcja
-    hej akup se kleja
 
     <Typography variant="h6">Dołączone kolekcje:</Typography>
     <EditableList list={collectionIncludes} onChange={updateCollectionIncludes}/>

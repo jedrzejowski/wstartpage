@@ -7,8 +7,8 @@ interface ButtonProps {
   children?: ReactNode;
   disabled?: boolean;
   onClick?: MouseEventHandler;
-  startIcon?: ReactElement | ReactFragment | MdiIconKey | null | undefined;
-  endIcon?: ReactElement | ReactFragment | MdiIconKey | null | undefined;
+  startIcon?: ReactElement | MdiIconKey | null | undefined;
+  endIcon?: ReactElement | MdiIconKey | null | undefined;
 }
 
 const Button: FC<ButtonProps> = props => {
@@ -17,73 +17,38 @@ const Button: FC<ButtonProps> = props => {
   if (typeof startIcon === 'string') startIcon = <MdiIcon icon={startIcon as MdiIconKey}/>;
   if (typeof endIcon === 'string') endIcon = <MdiIcon icon={endIcon as MdiIconKey}/>;
 
-  return <ButtonInput onClick={onClick}>
-    {startIcon && <StartIconRoot>{startIcon}</StartIconRoot>}
-    {children && <span>{children}</span>}
-    {endIcon && <EndIconRoot>{endIcon}</EndIconRoot>}
-  </ButtonInput>;
+  return <ButtonRoot onClick={onClick}>
+    {startIcon && <IconRoot>{startIcon}</IconRoot>}
+    {children && <ButtonContent>{children}</ButtonContent>}
+    {endIcon && <IconRoot>{endIcon}</IconRoot>}
+  </ButtonRoot>;
 };
 
 export default React.memo(Button);
 
-const ButtonInput = styled.button`
+const ButtonRoot = styled.button`
   display: flex;
   box-sizing: border-box;
-  background: white;
   border: 1px solid ${props => props.theme.color.border};
   align-items: center;
-  background: none;
+  background: white;
   outline: none;
-  padding: ${props => props.theme.spacing(1, 2, 1, 2)};
+  padding: ${props => props.theme.spacing(0.5, 1)};
   cursor: pointer;
 
   & > span + span {
-    margin-left: ${props => props.theme.spacing(1.5)};
+    margin-left: ${props => props.theme.spacing(1)};
+  }
+
+  &:hover {
+    background: ${props => props.theme.color.hover};
   }
 `;
 
 const IconRoot = styled.span`
-  svg {
-    height: 1.55em;
-  }
+  display: inline-flex;
 `;
 
-const StartIconRoot = styled(IconRoot)`
+const ButtonContent = styled.span`
+  display: inline-flex;
 `;
-const EndIconRoot = styled(IconRoot)``;
-
-export const InlineButton: FC<ButtonProps> = React.memo(props => {
-
-  return <InlineButtonInput onClick={props.onClick}>
-    <InlineBackground>
-      {props.children}
-    </InlineBackground>
-    <span>{props.children}</span>
-  </InlineButtonInput>;
-});
-
-const InlineBackground = styled.span`
-  display: none;
-  position: absolute;
-  content: "";
-  background: red;
-  margin: ${props => props.theme.spacing(-1)};
-  padding: ${props => props.theme.spacing(1)};
-  border-radius: 2px;
-`;
-
-const InlineButtonInput = styled.button`
-  display: inline-block;
-  background: none;
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin: 0;
-  padding: ${props => props.theme.spacing(1)};
-
-  &:hover > ${InlineBackground} {
-    display: inline-block;
-  }
-`;
-

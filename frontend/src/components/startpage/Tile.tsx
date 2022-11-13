@@ -1,27 +1,26 @@
 import React, {FC, MouseEvent, useEffect, useState} from 'react';
-import MyIcon from './TileIcon';
+import TileIcon from './TileIcon';
 import styled from 'styled-components';
 import {searchEngine, useSearchQuery} from '../../data/slice/searchSlice';
-import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
+import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
 import {useIsEditor} from '../editor/EditorContext';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
 import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedTileCollections';
-import clsx from 'clsx';
 import {makeUniqueId} from '../../data/uniqueId';
 
-const TileWidget: FC<{
+const Tile: FC<{
   tileId: string;
 }> = ({tileId}) => {
   const searchQuery = useSearchQuery();
   const [visible, setVisible] = useState(true);
-  const showTitles = useAppSelector(state => state.pageSettings.showTitles);
+  const showTitles = useAppSelector(state => state.pageSettings.showTitles) ?? true;
   const widget = useNormalizedTile(tileId);
-  const isSelected = useIsSelected('tile', tileId);
+  const isSelected = useIsSelectedInEditor('tile', tileId);
   const isEditor = useIsEditor();
   const dispatch = useAppDispatch();
 
   if (!widget) {
-    return null;
+    throw new Error();
   }
 
   useEffect(() => {
@@ -42,18 +41,14 @@ const TileWidget: FC<{
       style={{
         display: visible ? undefined : 'none',
       }}
-      className={clsx('selected'&& isSelected)}
+      isSelected={isSelected}
       onClick={handleClick}
     >
       <IconRoot>
-        <MyIcon icon={widget.icon ?? '!text=: (&bgColor=#0079d9&fontSize=32'}/>
+        <TileIcon icon={widget.icon ?? '!text=: (&bgColor=#0079d9&fontSize=32'}/>
       </IconRoot>
 
-      <TitleRoot
-        style={{
-          display: showTitles ? undefined : 'none',
-        }}
-      >
+      <TitleRoot visible={showTitles}>
         {widget.title}
       </TitleRoot>
 
@@ -83,7 +78,7 @@ export const AddTileButton: FC<{
 });
 
 
-const Root = styled.a`
+const Root = styled.a<{ isSelected: boolean }>`
   display: block;
   cursor: pointer;
   width: ${props => props.theme.iconSize}px;
@@ -94,18 +89,18 @@ const Root = styled.a`
   margin-right: ${props => props.theme.spacing(1.5)};
   margin-bottom: ${props => props.theme.spacing(0.5)};
 
-  &.selected {
-    outline: 1px solid rgb(0 102 255 / 55%);
-    outline-offset: ${props => props.theme.spacing()}
-  }
+  ${props => props.isSelected ? `
+    outline: 2px solid rgb(0 102 255 / 55%);
+    outline-offset: ${props.theme.spacing()}
+    ` : ''}
 `;
 
 const IconRoot = styled.div`
   margin-bottom: ${props => props.theme.spacing(1)};
 `;
 
-const TitleRoot = styled.div`
-  display: block;
+const TitleRoot = styled.div<{ visible: boolean }>`
+  display: ${props => props.visible ? 'block' : 'none'};
   width: 100%;
   color: black;
   cursor: pointer;
@@ -132,4 +127,4 @@ const AddButtonRoot = styled.div`
   }
 `;
 
-export default TileWidget;
+export default Tile;

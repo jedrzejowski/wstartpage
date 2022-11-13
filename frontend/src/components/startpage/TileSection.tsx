@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
-import TileWidget, {AddTileButton} from './TileWidget';
+import Tile, {AddTileButton} from './Tile';
 import styled, {useTheme} from 'styled-components';
-import {isNumber} from '../../util/util';
+import {isNumber} from '../../util/typescript';
 import {isMobile} from 'react-device-detect';
 import {addTileSectionAction, useNormalizedTileSection} from '../../data/slice/normalizedTileCollections';
-import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
+import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
 import {HFlexContainer} from '../UtilityElements';
 import {TileContainersT} from '../../data/tileCollection';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
@@ -19,7 +19,7 @@ const TileSection: FC<{
   const showTitles = useAppSelector(state => state.pageSettings.showTitles);
   const section = useNormalizedTileSection(sectionId);
   const isEditor = useIsEditor();
-  const isSelected = useIsSelected('section', sectionId);
+  const isSelected = useIsSelectedInEditor('section', sectionId);
   const dispatch = useAppDispatch();
 
   if (!section) {
@@ -37,7 +37,7 @@ const TileSection: FC<{
   );
 
   const widgets = section.tiles.map(tileId => {
-    return <TileWidget key={tileId} tileId={tileId}/>;
+    return <Tile key={tileId} tileId={tileId}/>;
   });
 
   if (isMobile) {

@@ -15,8 +15,8 @@ const EditorLoginPage: FC = props => {
   return <Root>
     <Container>
 
-      <TextInput label="Użytkownik" value={username} onChange={setUsername}/>
-      <TextInput label="Hasło" value={password} onChange={setPassword} password/>
+      <TextInput label="Użytkownik" value={username} onValueChange={setUsername}/>
+      <TextInput label="Hasło" value={password} onValueChange={setPassword}/>
 
       <Toolbar
         left={<>

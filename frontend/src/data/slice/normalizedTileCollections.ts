@@ -12,6 +12,7 @@ import {apiBackend} from '../api/apiBackend';
 import {AppSelector} from '../redux';
 import {TileContainersT, TileSectionT} from '../tileCollection';
 import {throwExpression} from '../../util/function';
+import {typedObjectAssign} from '../../util/typescript';
 
 interface NormalizedTileCollectionStateT {
   tiles: Partial<Record<string, TileT>>;
@@ -31,13 +32,31 @@ export const normalizedTileCollectionSlice = createSlice({
   name: 'normalizedTileCollection',
   initialState,
   reducers: {
-    updateTileAction(state, action: PayloadAction<{ tileId: string, tile: TileT }>) {
-      const {tileId, tile} = action.payload;
-      state.tiles[tileId] = tile;
+    updateTileAction(state, action: PayloadAction<{ tileId: string, tile: Partial<TileT> }>) {
+      const tile = state.tiles[action.payload.tileId];
+      if (tile) typedObjectAssign(tile, action.payload.tile);
     },
-    updateTileSectionAction(state, action: PayloadAction<{ sectionId: string, section: NormalizedTileSectionT }>) {
-      const {sectionId, section} = action.payload;
-      state.sections[sectionId] = section;
+    updateTileIconAction(state, action: PayloadAction<{ tileId: string, iconType: null | 'text' | 'url' }>) {
+      const tile = state.tiles[action.payload.tileId];
+      if (tile) switch (action.payload.iconType) {
+        case 'text':
+          tile.icon = {
+            text: tile.title.substring(0, 3),
+            bgColor: '#FF0000',
+            fontSize: 30,
+          };
+          break;
+        case 'url':
+          tile.icon = '';
+          break;
+        case null:
+          tile.icon = null;
+          break;
+      }
+    },
+    updateTileSectionAction(state, action: PayloadAction<{ sectionId: string, section: Partial<NormalizedTileSectionT> }>) {
+      const section = state.sections[action.payload.sectionId];
+      if (section) typedObjectAssign(section, action.payload.section);
     },
     moveTileAction(state, action: PayloadAction<{ tileId: string, sectionId?: string, offset: number }>) {
       let {tileId, sectionId, offset} = action.payload;
@@ -131,6 +150,7 @@ export const normalizedTileCollectionSlice = createSlice({
 export const {
   addTileAction,
   updateTileAction,
+  updateTileIconAction,
   addTileSectionAction,
   updateTileSectionAction,
   moveTileAction,

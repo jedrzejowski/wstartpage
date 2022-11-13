@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import styled from 'styled-components';
 import {useNormalizedTileSection} from '../../data/slice/normalizedTileCollections';
 import TextWidget, {AddTextWidgetButton} from './TextWidget';
-import {setEditorSelectedObjAction, useIsSelected} from '../../data/slice/editor';
+import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
 import {useIsEditor} from '../editor/EditorContext';
 import {useAppDispatch} from '../../data/hooks';
 import clsx from 'clsx';
@@ -12,7 +12,7 @@ const TextSection: FC<{
 }> = ({sectionId}) => {
   const section = useNormalizedTileSection(sectionId);
   const isEditor = useIsEditor();
-  const isSelected = useIsSelected('section', sectionId);
+  const isSelected = useIsSelectedInEditor('section', sectionId);
   const dispatch = useAppDispatch();
 
   if (!section) {
