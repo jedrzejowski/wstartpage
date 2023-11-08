@@ -2,11 +2,12 @@ use std::fs::read_dir;
 use std::path::Path;
 use actix_web::{HttpResponse, ResponseError, web};
 use actix_web::http::StatusCode;
-use crate::util::http::{AppHttpError, AppHttpResult};
+use crate::utils::http::{AppHttpError, AppHttpResult};
 use serde::Deserialize;
 use crate::app_config;
+use crate::app_config::AppConfig;
 use crate::data::image_attrs::ImageAttrs;
-use crate::util::security::assert_path_not_backwards;
+use crate::utils::security::assert_path_not_backwards;
 
 
 #[derive(Deserialize)]
@@ -14,7 +15,10 @@ pub struct SearchQuery {
   path: String
 }
 
-pub async fn search(query: web::Query<SearchQuery>) -> AppHttpResult {
+pub async fn search(
+  app_config: web::Data<AppConfig>,
+  query: web::Query<SearchQuery>,
+) -> AppHttpResult {
   assert_path_not_backwards(&query.path)?;
 
   let path = Path::new(&app_config.image_root).join(&query.path);

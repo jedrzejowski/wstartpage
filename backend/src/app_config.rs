@@ -1,5 +1,4 @@
-use anyhow::anyhow;
-use once_cell::sync::Lazy;
+use anyhow::{anyhow, Context, Result};
 use serde::Deserialize;
 
 fn make_absolute(path: &mut String) {
@@ -12,20 +11,11 @@ fn make_absolute(path: &mut String) {
   path.replace_range(.., &full_path);
 }
 
-fn default_host() -> String {
-  String::from("0.0.0.0")
-}
-
-fn default_port() -> u16 {
-  8080
-}
-
 #[derive(Deserialize, Debug)]
 pub struct AppConfig {
-  #[serde(default = "default_host")]
-  pub host: String,
-  #[serde(default = "default_port")]
-  pub port: u16,
+  pub server_host: String,
+  pub server_port: u16,
+
   pub viewer_root: String,
   pub editor_root: String,
   pub dashboard_root: String,
@@ -33,8 +23,8 @@ pub struct AppConfig {
 }
 
 impl AppConfig {
-  pub fn app_bind(&self) -> String {
-    format!("{}:{}", self.host, self.port)
+  pub fn bind(&self) -> impl std::net::ToSocketAddrs {
+    format!("{}:{}", self.server_host, self.server_port)
   }
 
   pub fn init_logger(&self) {
@@ -44,16 +34,21 @@ impl AppConfig {
     builder.filter_level(LevelFilter::Info);
     builder.init();
   }
+
+  pub fn read_from_env() -> Result<Self> {
+    dotenv::dotenv().ok();
+
+    const PREFIX: &str = "WSTARTPAGE_";
+    let mut config: Self = match envy::prefixed("WSTARTPAGE_").from_env() {
+      Err(envy::Error::MissingValue(value)) => return Err(anyhow!("missing var {}{}", PREFIX, value.to_uppercase())),
+      other => other,
+    }?;
+
+    make_absolute(&mut config.viewer_root);
+    make_absolute(&mut config.editor_root);
+    make_absolute(&mut config.dashboard_root);
+    make_absolute(&mut config.image_root);
+
+    Ok(config)
+  }
 }
-
-#[allow(non_upper_case_globals)]
-pub static app_config: Lazy<AppConfig> = Lazy::new(|| {
-  let mut config = envy::prefixed("WSTARTPAGE_").from_env::<AppConfig>().unwrap();
-
-  make_absolute(&mut config.viewer_root);
-  make_absolute(&mut config.editor_root);
-  make_absolute(&mut config.dashboard_root);
-  make_absolute(&mut config.image_root);
-
-  return config;
-});

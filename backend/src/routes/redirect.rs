@@ -4,7 +4,7 @@ use actix_web::{get, web, HttpResponse, http};
 pub async fn tilda(params: web::Path<String>) -> HttpResponse {
   let name = params.into_inner();
 
-  let url = format!("/?iconSets={}", name);
+  let url = format!("/?tile-collection={}", name);
 
   HttpResponse::TemporaryRedirect()
     .append_header((http::header::LOCATION, url))
@@ -14,7 +14,7 @@ pub async fn tilda(params: web::Path<String>) -> HttpResponse {
 #[get("/@{name}")]
 pub async fn monkey(params: web::Path<String>) -> HttpResponse {
   let name = params.into_inner();
-  let url = format!("/?iconSets={}", name);
+  let url = format!("/?tile-collection={}", name);
 
   HttpResponse::TemporaryRedirect()
     .append_header((http::header::LOCATION, url))

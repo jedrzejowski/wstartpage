@@ -1,8 +1,7 @@
 use std::collections::{HashSet, VecDeque};
 use serde::{Deserialize, Serialize};
-use crate::app_config;
 use anyhow::{anyhow, Result};
-use serde_yaml::Value;
+use crate::app_config::AppConfig;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct TextIcon {
@@ -142,12 +141,12 @@ fn merge_many_icon_collections(name: String, tile_collections: &[TileCollection]
       .map(|ic| &ic.bottom)
       .filter(|opt| opt.is_some())
       .flatten().flatten().map(|sec| sec.clone()).collect()),
-  }
+  };
 }
 
 impl TileCollection {
-  pub fn get_by_name<T: AsRef<str>>(name: T) -> Result<Option<TileCollection>> {
-    let mut yaml_path = std::path::PathBuf::from(app_config::app_config.dashboard_root.as_str());
+  pub fn get_by_name(app_config: &AppConfig, name: impl AsRef<str>) -> Result<Option<Self>> {
+    let mut yaml_path = std::path::PathBuf::from(app_config.dashboard_root.as_str());
     yaml_path.push(name.as_ref());
     yaml_path.set_extension("yml");
 
@@ -159,7 +158,7 @@ impl TileCollection {
 
     let mut json: serde_yaml::Mapping = serde_yaml::from_reader(file?)?;
 
-    json.insert(Value::String("name".to_string()), Value::String(name.as_ref().to_string()));
+    json.insert(serde_yaml::Value::String("name".to_string()), serde_yaml::Value::String(name.as_ref().to_string()));
 
     let mut icon_collection = serde_yaml::from_value(serde_yaml::Value::Mapping(json))?;
 
@@ -168,19 +167,19 @@ impl TileCollection {
     return Ok(Some(icon_collection));
   }
 
-  pub fn resolve_recursive(self: &TileCollection) -> Result<TileCollection> {
+  pub fn resolve_recursive(&self, app_config: &AppConfig) -> Result<Self> {
     let mut names_done = HashSet::new();
     let mut names_todo = match &self.includes {
       Some(names) => {
         if names.is_empty() {
-          return Ok(self.clone())
+          return Ok(self.clone());
         }
 
         VecDeque::from(names.to_vec())
-      },
+      }
       None => VecDeque::new(),
     };
-    let mut tile_collections: Vec<TileCollection> = vec![self.clone()];
+    let mut tile_collections: Vec<Self> = vec![self.clone()];
     names_done.insert(self.name.to_string());
 
     while !names_todo.is_empty() {
@@ -190,7 +189,7 @@ impl TileCollection {
         continue;
       }
 
-      let icon_collection = TileCollection::get_by_name(&name)?
+      let icon_collection = Self::get_by_name(&app_config, &name)?
         .ok_or(anyhow!("collection {} not found", &name))?;
 
       if let Some(includes) = &icon_collection.includes {
@@ -202,7 +201,7 @@ impl TileCollection {
 
     return Ok(merge_many_icon_collections(
       format!("{}?recursiveMerged", &self.name),
-      &tile_collections
+      &tile_collections,
     ));
   }
 }
