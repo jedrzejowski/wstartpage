@@ -14,9 +14,9 @@ pub fn service(cfg: &mut web::ServiceConfig) {
     // )
     .service(
       web::scope("/tile-collections")
-        .route("", web::get().to(tile_collections::search))
-        .route("/{name}", web::get().to(tile_collections::select))
-        .route("/{name}", web::put().to(tile_collections::update))
+        .service(tile_collections::search)
+        .service(tile_collections::select)
+        .service(tile_collections::update)
     )
     .service(
       web::scope("/images")

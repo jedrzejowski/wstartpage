@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import AppLayout from '../AppLayout';
-import EditorTopBar from './EditorTopBar';
+import EditorTopBar from './layout/EditorTopBar.tsx';
 import styled from 'styled-components';
 import EditorCollectionList from './EditorCollectionList';
 import {useAppSelector} from '../../data/hooks';

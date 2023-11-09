@@ -54,7 +54,10 @@ export const normalizedTileCollectionSlice = createSlice({
           break;
       }
     },
-    updateTileSectionAction(state, action: PayloadAction<{ sectionId: string, section: Partial<NormalizedTileSectionT> }>) {
+    updateTileSectionAction(state, action: PayloadAction<{
+      sectionId: string,
+      section: Partial<NormalizedTileSectionT>
+    }>) {
       const section = state.sections[action.payload.sectionId];
       if (section) typedObjectAssign(section, action.payload.section);
     },
@@ -127,7 +130,10 @@ export const normalizedTileCollectionSlice = createSlice({
         width: null,
       };
     },
-    updateTileCollectionAction(state, action: PayloadAction<{ collectionName: string; collection: Partial<NormalizedTileCollectionT> }>) {
+    updateTileCollectionAction(state, action: PayloadAction<{
+      collectionName: string;
+      collection: Partial<NormalizedTileCollectionT>
+    }>) {
       const {collectionName, collection} = action.payload;
       const currentState = state.collections[collectionName];
       if (currentState) {
@@ -199,6 +205,7 @@ function addCollectionToState(state: NormalizedTileCollectionStateT, collection:
 
   state.collections[collection.name] = {
     ...collection,
+    includes: collection.includes ?? [],
     top: normalizeContainer(collection.top),
     right: normalizeContainer(collection.right),
     bottom: normalizeContainer(collection.bottom),

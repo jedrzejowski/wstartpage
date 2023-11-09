@@ -1,14 +1,14 @@
-import React, {FC} from 'react';
+import {FC, memo} from 'react';
 import styled from 'styled-components';
-import SaveButton from './SaveButton';
-import Toolbar from '../Toolbar';
+import SaveButton from '../SaveButton.tsx';
+import Toolbar from '../../Toolbar.tsx';
 
-export const EditorTopBar: FC = React.memo(props => {
+export const EditorTopBar: FC = props => {
   return <Toolbar
     left={<Title>WStartpage</Title>}
     right={<SaveButton/>}
   />;
-});
+};
 
 const Title = styled.h1`
   display: inline-block;
@@ -17,4 +17,4 @@ const Title = styled.h1`
 `;
 
 
-export default EditorTopBar;
+export default memo(EditorTopBar);

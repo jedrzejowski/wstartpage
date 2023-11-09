@@ -6,7 +6,7 @@ use crate::utils::http::{AppHttpError, AppHttpResult};
 use serde::Deserialize;
 use crate::app_config;
 use crate::app_config::AppConfig;
-use crate::data::image_attrs::ImageAttrs;
+use crate::model::image_attrs::ImageAttrs;
 use crate::utils::security::assert_path_not_backwards;
 
 

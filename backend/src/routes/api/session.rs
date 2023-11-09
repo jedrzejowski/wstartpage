@@ -2,7 +2,7 @@
 // use actix_web::HttpResponse;
 // use actix_web_httpauth::extractors::basic::BasicAuth;
 // use serde_json::json;
-// use crate::data::auth::AppUser;
+// use crate::model::auth::AppUser;
 // use crate::utils::http::{AppHttpError, AppHttpResult};
 //
 // pub async fn create(basic_auth: BasicAuth, session: Session) -> AppHttpResult {

@@ -15,8 +15,8 @@ export const EditorCollectionList: FC = React.memo(props => {
   const selectedIconCollectionName = useAppSelector(selectEditorSelectedIconCollectionName);
   const includedCollectionsInCurrentlyEditedCollection = useAppSelector(state => {
     if (!state.editor.selectedObj) return null;
-    if ('collectionName' in state.editor.selectedObj) {
-      const collection = state.normalizedTileCollection.collections[state.editor.selectedObj.collectionName];
+    if ('tileCollectionName' in state.editor.selectedObj) {
+      const collection = state.normalizedTileCollection.collections[state.editor.selectedObj.tileCollectionName];
       if (!collection) return null;
       return collection.includes;
     } else return null;

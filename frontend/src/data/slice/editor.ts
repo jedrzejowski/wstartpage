@@ -10,7 +10,7 @@ import {
 interface EditorStateT {
   currentCollectionName: string | null;
   selectedObj:
-    | { collectionName: string; }
+    | { tileCollectionName: string; }
     | { sectionId: string; }
     | { tileId: string; }
     | null;
@@ -31,7 +31,7 @@ export const editorSlice = createSlice({
   reducers: {
     setEditorSelectedTileCollectionNameAction(state, action: PayloadAction<string>) {
       state.currentCollectionName = action.payload;
-      state.selectedObj = {collectionName: action.payload};
+      state.selectedObj = {tileCollectionName: action.payload};
     },
     setEditorSelectedObjAction(state, action: PayloadAction<EditorStateT['selectedObj']>) {
       state.selectedObj = action.payload;

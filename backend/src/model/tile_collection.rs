@@ -2,6 +2,7 @@ use std::collections::{HashSet, VecDeque};
 use serde::{Deserialize, Serialize};
 use anyhow::{anyhow, Result};
 use crate::app_config::AppConfig;
+use crate::data_source::DataSourceService;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct TextIcon {
@@ -106,68 +107,46 @@ fn normalize_container(container: &mut Option<Vec<TileSection>>) {
   }
 }
 
-fn normalize_icon_collection(tile_collection: &mut TileCollection) {
-  normalize_container(&mut tile_collection.top);
-  normalize_container(&mut tile_collection.middle);
-  normalize_container(&mut tile_collection.right);
-  normalize_container(&mut tile_collection.left);
-  normalize_container(&mut tile_collection.bottom);
-}
-
-fn merge_many_icon_collections(name: String, tile_collections: &[TileCollection]) -> TileCollection {
-  let first = &tile_collections[0];
-
-  return TileCollection {
-    name,
-    includes: None,
-    settings: first.settings.clone(),
-    top: Some(tile_collections.into_iter()
-      .map(|ic| &ic.top)
-      .filter(|opt| opt.is_some())
-      .flatten().flatten().map(|sec| sec.clone()).collect()),
-    middle: Some(tile_collections.into_iter()
-      .map(|ic| &ic.middle)
-      .filter(|opt| opt.is_some())
-      .flatten().flatten().map(|sec| sec.clone()).collect()),
-    right: Some(tile_collections.into_iter()
-      .map(|ic| &ic.right)
-      .filter(|opt| opt.is_some())
-      .flatten().flatten().map(|sec| sec.clone()).collect()),
-    left: Some(tile_collections.into_iter()
-      .map(|ic| &ic.left)
-      .filter(|opt| opt.is_some())
-      .flatten().flatten().map(|sec| sec.clone()).collect()),
-    bottom: Some(tile_collections.into_iter()
-      .map(|ic| &ic.bottom)
-      .filter(|opt| opt.is_some())
-      .flatten().flatten().map(|sec| sec.clone()).collect()),
-  };
-}
-
 impl TileCollection {
-  pub fn get_by_name(app_config: &AppConfig, name: impl AsRef<str>) -> Result<Option<Self>> {
-    let mut yaml_path = std::path::PathBuf::from(app_config.dashboard_root.as_str());
-    yaml_path.push(name.as_ref());
-    yaml_path.set_extension("yml");
-
-    let file = std::fs::File::open(yaml_path);
-
-    if file.is_err() {
-      return Ok(None);
-    }
-
-    let mut json: serde_yaml::Mapping = serde_yaml::from_reader(file?)?;
-
-    json.insert(serde_yaml::Value::String("name".to_string()), serde_yaml::Value::String(name.as_ref().to_string()));
-
-    let mut icon_collection = serde_yaml::from_value(serde_yaml::Value::Mapping(json))?;
-
-    normalize_icon_collection(&mut icon_collection);
-
-    return Ok(Some(icon_collection));
+  pub fn normalize(tile_collection: &mut TileCollection) {
+    normalize_container(&mut tile_collection.top);
+    normalize_container(&mut tile_collection.middle);
+    normalize_container(&mut tile_collection.right);
+    normalize_container(&mut tile_collection.left);
+    normalize_container(&mut tile_collection.bottom);
   }
 
-  pub fn resolve_recursive(&self, app_config: &AppConfig) -> Result<Self> {
+  pub fn merge(name: String, tile_collections: &[TileCollection]) -> TileCollection {
+    let first = &tile_collections[0];
+
+    return TileCollection {
+      name,
+      includes: None,
+      settings: first.settings.clone(),
+      top: Some(tile_collections.into_iter()
+        .map(|ic| &ic.top)
+        .filter(|opt| opt.is_some())
+        .flatten().flatten().map(|sec| sec.clone()).collect()),
+      middle: Some(tile_collections.into_iter()
+        .map(|ic| &ic.middle)
+        .filter(|opt| opt.is_some())
+        .flatten().flatten().map(|sec| sec.clone()).collect()),
+      right: Some(tile_collections.into_iter()
+        .map(|ic| &ic.right)
+        .filter(|opt| opt.is_some())
+        .flatten().flatten().map(|sec| sec.clone()).collect()),
+      left: Some(tile_collections.into_iter()
+        .map(|ic| &ic.left)
+        .filter(|opt| opt.is_some())
+        .flatten().flatten().map(|sec| sec.clone()).collect()),
+      bottom: Some(tile_collections.into_iter()
+        .map(|ic| &ic.bottom)
+        .filter(|opt| opt.is_some())
+        .flatten().flatten().map(|sec| sec.clone()).collect()),
+    };
+  }
+
+  pub async fn resolve_recursive(&self, data_source: &DataSourceService) -> Result<Self> {
     let mut names_done = HashSet::new();
     let mut names_todo = match &self.includes {
       Some(names) => {
@@ -189,8 +168,8 @@ impl TileCollection {
         continue;
       }
 
-      let icon_collection = Self::get_by_name(&app_config, &name)?
-        .ok_or(anyhow!("collection {} not found", &name))?;
+      let icon_collection = data_source.get_tile_collection(&name).await
+        .map_err(|_| anyhow!("collection {} not found", &name))?;
 
       if let Some(includes) = &icon_collection.includes {
         for name in includes { names_todo.push_front(name.to_string()) }
@@ -199,7 +178,7 @@ impl TileCollection {
       tile_collections.push(icon_collection)
     }
 
-    return Ok(merge_many_icon_collections(
+    return Ok(Self::merge(
       format!("{}?recursiveMerged", &self.name),
       &tile_collections,
     ));
