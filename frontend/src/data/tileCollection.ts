@@ -4,8 +4,6 @@ export type Nullable<T> = {
 };
 
 
-export const isProduction = process.env.NODE_ENV === 'production';
-
 export type UrlIconT = string;
 
 export function isUrlIconT(icon: AnyIconT | null): icon is UrlIconT {

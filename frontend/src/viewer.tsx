@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import type {FC} from 'react';
 import StartPageShortcuts from './components/startpage/StartPageShortcuts';
 import appRender from './appRender';
 import {useAppSelector} from './data/hooks';
@@ -7,20 +7,17 @@ import StartPage from './components/startpage/StartPage';
 
 const Viewer: FC = () => {
 
-  const tileCollectionName = useAppSelector(state => state.pageSettings.viewerIconCollectionName);
-  useGetMergedTileCollectionQuery(tileCollectionName ?? '', {skip: !tileCollectionName});
+  const tileCollectionName = useAppSelector(state => state.pageSettings.viewerTileCollectionName);
+  const qq = useGetMergedTileCollectionQuery(tileCollectionName ?? '', {skip: !tileCollectionName});
+
 
   return <>
-
-    <StartPage tileCollectionName={tileCollectionName + '?recursiveMerged'}/>
-
+    {qq.isSuccess && <StartPage tileCollectionName={tileCollectionName + '?recursiveMerged'}/>}
   </>;
 };
 
-export default () => {
-  appRender(<>
-    <StartPageShortcuts/>
-    <Viewer/>
-  </>);
-}
+appRender(<>
+  <StartPageShortcuts/>
+  <Viewer/>
+</>);
 

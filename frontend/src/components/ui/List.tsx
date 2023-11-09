@@ -27,6 +27,7 @@ export const ListItemRoot = styled.div<{ selected?: boolean }>`
 
 export const ListItemText = styled.div`
   flex-grow: 1;
+  height:  1.15em;
 `;
 
 export const ListItemActions = styled.div`

@@ -1,6 +1,5 @@
-import React, {ComponentType, FC, MouseEventHandler, ReactElement, ReactFragment, ReactNode} from 'react';
+import {memo, FC, MouseEventHandler, ReactElement, ReactNode} from 'react';
 import styled from 'styled-components';
-import {InputRoot} from './styled';
 import MdiIcon, {MdiIconKey} from '../MdiIcon';
 
 interface ButtonProps {
@@ -24,7 +23,7 @@ const Button: FC<ButtonProps> = props => {
   </ButtonRoot>;
 };
 
-export default React.memo(Button);
+export default memo(Button);
 
 const ButtonRoot = styled.button`
   display: flex;

@@ -4,12 +4,12 @@ import {apiBackend} from '../api/apiBackend';
 import {AppSelector} from '../redux';
 
 type PageSettingsT = Nullable<TileCollectionSettingsT> & {
-  viewerIconCollectionName: string | null;
+  viewerTileCollectionName: string | null;
 };
 
 const queryParams = new URL(location.href).searchParams;
 const initialState: PageSettingsT = {
-  viewerIconCollectionName: queryParams.get('iconSets') ?? null,
+  viewerTileCollectionName: queryParams.get('tile-collection') ?? null,
   backgroundUrl: null,
   zoomLevel: 100,
   darkMode: null,

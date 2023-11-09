@@ -11,7 +11,7 @@ import {makeUniqueId} from '../uniqueId';
 import {apiBackend} from '../api/apiBackend';
 import {AppSelector} from '../redux';
 import {TileContainersT, TileSectionT} from '../tileCollection';
-import {throwExpression} from '../../util/function';
+import {throwErr} from '../../util/function';
 import {typedObjectAssign} from '../../util/typescript';
 
 interface NormalizedTileCollectionStateT {
@@ -158,15 +158,17 @@ export const {
 } = normalizedTileCollectionSlice.actions;
 
 export const selectEditorSelectedIconCollectionName: AppSelector<string | null> = state => state.editor.currentCollectionName;
+
+
 export const useNormalizedTileCollection = (name: string) => useAppSelector(
   state => state.normalizedTileCollection.collections[name]
-    ?? throwExpression(`tile collection with name=${name} not found`));
+    ?? throwErr(`tile collection with name=${name} not found`));
 export const useNormalizedTileSection = (id: string) => useAppSelector(
   state => state.normalizedTileCollection.sections[id]
-    ?? throwExpression(`tile section with id=${id} not found`));
+    ?? throwErr(`tile section with id=${id} not found`));
 export const useNormalizedTile = (id: string) => useAppSelector(
   state => state.normalizedTileCollection.tiles[id]
-    ?? throwExpression(`tile with id=${id} not found`));
+    ?? throwErr(`tile with id=${id} not found`));
 
 
 function addCollectionToState(state: NormalizedTileCollectionStateT, collection: TileCollectionT) {

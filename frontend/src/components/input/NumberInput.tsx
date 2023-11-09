@@ -24,7 +24,15 @@ const NumberInput: FC<NumberInputProps> = props => {
       setStrValue(value.toString());
   }, [value]);
 
-  return <TextInput {...rest} value={strValue} onValueChange={handleOnChange}/>;
+  return <TextInput
+    {...rest}
+    value={strValue}
+    onValueChange={handleOnChange}
+    onKeyUp={(e) => {
+      if (e.key === 'ArrowUp') handleOnChange((value + 1).toString());
+      if (e.key === 'ArrowDown') handleOnChange((value - 1).toString());
+    }}
+  />;
 
   function handleOnChange(newValue: string) {
 

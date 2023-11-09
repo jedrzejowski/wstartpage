@@ -1,5 +1,5 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
-import {DefaultTheme, ThemeProvider as LibThemeProvider} from 'styled-components';
+import {createGlobalStyle, DefaultTheme, ThemeProvider as LibThemeProvider} from 'styled-components';
 import {selectPageSettingsZoomLevel} from './data/slice/pageSettings';
 import {useAppSelector} from './data/hooks';
 
@@ -87,6 +87,22 @@ export const defaultTheme: DefaultTheme = {
   }
 };
 
+const GlobalStyle = createGlobalStyle<{}>`
+  body {
+    margin: 0;
+    color: black;
+    font-family: sans-serif;
+
+    background-attachment: fixed;
+    background-color: #fcfcfc;
+    background-position: 0 0;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 export const ThemeProvider: FC<{
   children: ReactNode;
 }> = (props) => {
@@ -113,6 +129,7 @@ export const ThemeProvider: FC<{
 
   return <>
     <LibThemeProvider theme={theme}>
+      <GlobalStyle/>
       {props.children}
     </LibThemeProvider>
   </>;

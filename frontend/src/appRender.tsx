@@ -1,11 +1,9 @@
-import React, {FunctionComponentElement} from 'react';
+import type {FunctionComponentElement} from 'react';
 import {createRoot} from 'react-dom/client';
 import EnsureFontLoaded from './components/EnsureFontLoaded';
 import {ThemeProvider} from './theme';
 import {Provider as ReduxProvider} from 'react-redux';
 import {reduxStore} from './data/redux';
-import reportWebVitals from './reportWebVitals';
-
 
 export function appRender(app: FunctionComponentElement<any>) {
   const root = document.getElementById('root')!;
@@ -32,8 +30,6 @@ export function appRender(app: FunctionComponentElement<any>) {
 
     </>
   );
-
-  reportWebVitals();
 
   return root;
 }

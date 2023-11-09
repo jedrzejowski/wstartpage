@@ -1,14 +1,21 @@
-import React, {FC} from 'react';
+import React, {DOMAttributes, FC} from 'react';
 import styled from 'styled-components';
 import {useUniqueId} from '../../data/uniqueId';
 import {BaseInputProps} from './BaseInput';
 
-export type TextInputProps = BaseInputProps<string> & {
+export type TextInputProps = DOMAttributes<HTMLInputElement> & BaseInputProps<string> & {
   password?: boolean;
 };
 
 const TextInput: FC<TextInputProps> = (props) => {
-  const {label, inputRef, password, onValueChange} = props;
+  const {
+    value,
+    label,
+    inputRef,
+    password,
+    onValueChange,
+    ...rest
+  } = props;
 
   const myId = useUniqueId('input-');
 
@@ -17,9 +24,10 @@ const TextInput: FC<TextInputProps> = (props) => {
     <Input
       ref={inputRef}
       id={myId}
-      value={props.value}
+      value={value}
       onChange={onValueChange ? (e => onValueChange(e.target.value)) : undefined}
       type={password ? 'password' : undefined}
+      {...rest}
     />
   </Root>;
 };

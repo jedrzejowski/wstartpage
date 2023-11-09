@@ -125,6 +125,7 @@ function centerJS(canvas: HTMLCanvasElement | null, options: Options) {
     ctx.font = fontSize + 'px ' + fontFamily;
     ctx.textBaseline = 'alphabetic';
     ctx.textAlign = 'center';
+    if (text === '') return;
     const offsets = measureOffsets(text, fontFamily, fontSize);
     const x = width / 2 + offsets.horizontal;
     const y = height / 2 + offsets.vertical;

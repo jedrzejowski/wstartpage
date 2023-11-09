@@ -39,14 +39,14 @@ export const TileForm: FC<{
     <TextInput label="Tytuł" value={tile.title} onValueChange={handleChangeFactory('title')}/>
     <TextInput label="URL" value={tile.url} onValueChange={handleChangeFactory('url')}/>
 
-    <SelectInput
+    <SelectInput<null | 'text' | 'url'>
       label="Typ ikony"
       value={isTextIconT(tile.icon) ? 'text' : isUrlIconT(tile.icon) ? 'url' : null}
-      onValueChange={(value: null | 'text' | 'url') => dispatch(updateTileIconAction({tileId, iconType: value}))}
+      onValueChange={(value) => dispatch(updateTileIconAction({tileId, iconType: value}))}
       options={[
         {value: null, label: 'Brak'},
-        {value: 'text' as const, label: 'Tekst'},
-        {value: 'url' as const, label: 'Obraz'},
+        {value: 'text', label: 'Tekst'},
+        {value: 'url', label: 'Obraz'},
       ]}
     />
 

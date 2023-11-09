@@ -1,16 +1,18 @@
-import React, {FC, useEffect} from 'react';
+import {memo, FC, useEffect} from 'react';
 import AppLayout from '../AppLayout';
 import TileContainer from './TileContainer';
 import SearchView from './SearchView';
 import StartPageHeader from './StartPageHeader';
 import {useNormalizedTileCollection} from '../../data/slice/normalizedTileCollections';
 import {useAppSelector} from '../../data/hooks';
+import {useIsEditor} from "../editor/EditorContext.tsx";
 
 const StartPage: FC<({
   tileCollectionName: string;
 })> = ({tileCollectionName}) => {
   const backgroundUrl = useAppSelector(state => state.pageSettings.backgroundUrl);
   const tileCollection = useNormalizedTileCollection(tileCollectionName);
+  const isEditor = useIsEditor();
 
   useEffect(() => {
     document.body.style.backgroundImage = backgroundUrl ? `url(${backgroundUrl})` : '';
@@ -66,8 +68,8 @@ const StartPage: FC<({
       ) : null}
     />
 
-    <SearchView/>
+    {!isEditor && <SearchView/>}
   </div>);
 };
 
-export default React.memo(StartPage);
+export default memo(StartPage);

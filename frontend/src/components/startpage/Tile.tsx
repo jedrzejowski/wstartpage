@@ -41,14 +41,14 @@ const Tile: FC<{
       style={{
         display: visible ? undefined : 'none',
       }}
-      isSelected={isSelected}
+      $isSelected={isSelected}
       onClick={handleClick}
     >
       <IconRoot>
         <TileIcon icon={widget.icon ?? '!text=: (&bgColor=#0079d9&fontSize=32'}/>
       </IconRoot>
 
-      <TitleRoot visible={showTitles}>
+      <TitleRoot $visible={showTitles}>
         {widget.title}
       </TitleRoot>
 
@@ -78,7 +78,7 @@ export const AddTileButton: FC<{
 });
 
 
-const Root = styled.a<{ isSelected: boolean }>`
+const Root = styled.a<{ $isSelected: boolean }>`
   display: block;
   cursor: pointer;
   width: ${props => props.theme.iconSize}px;
@@ -89,7 +89,7 @@ const Root = styled.a<{ isSelected: boolean }>`
   margin-right: ${props => props.theme.spacing(1.5)};
   margin-bottom: ${props => props.theme.spacing(0.5)};
 
-  ${props => props.isSelected ? `
+  ${props => props.$isSelected ? `
     outline: 2px solid rgb(0 102 255 / 55%);
     outline-offset: ${props.theme.spacing()}
     ` : ''}
@@ -99,8 +99,8 @@ const IconRoot = styled.div`
   margin-bottom: ${props => props.theme.spacing(1)};
 `;
 
-const TitleRoot = styled.div<{ visible: boolean }>`
-  display: ${props => props.visible ? 'block' : 'none'};
+const TitleRoot = styled.div<{ $visible: boolean }>`
+  display: ${props => props.$visible ? 'block' : 'none'};
   width: 100%;
   color: black;
   cursor: pointer;

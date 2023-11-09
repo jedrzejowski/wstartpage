@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import TileForm from './TileForm';
 import {useAppSelector} from '../../data/hooks';
-import IconCollectionForm from './TileCollectionForm';
+import TileCollectionForm from './TileCollectionForm';
 import TileSectionForm from './TileSectionForm';
 
 export const FormContainer: FC = React.memo(props => {
@@ -12,7 +12,7 @@ export const FormContainer: FC = React.memo(props => {
   }
 
   if ('collectionName' in selectedObj) {
-    return <IconCollectionForm tileCollectionName={selectedObj.collectionName}/>;
+    return <TileCollectionForm tileCollectionName={selectedObj.collectionName}/>;
   }
 
   if ('sectionId' in selectedObj) {

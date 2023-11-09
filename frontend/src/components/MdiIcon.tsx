@@ -1,6 +1,7 @@
 import type {FC} from 'react';
 import Icon from '@mdi/react';
 import type {IconProps} from '@mdi/react/dist/IconProps';
+import {mdiArrowDown, mdiArrowLeft, mdiArrowRight, mdiArrowUp, mdiContentSave, mdiDelete, mdiPlus} from "@mdi/js";
 
 // skopiowane z biblioteki
 type MdiIconProps = Omit<IconProps, 'path'> & {
@@ -14,13 +15,13 @@ const MdiIcon: FC<MdiIconProps> = props => {
 };
 
 const icons = {
-  'content-save-icon': require('@mdi/js').mdiContentSave,
-  'arrow-left': require('@mdi/js').mdiArrowLeft,
-  'arrow-right': require('@mdi/js').mdiArrowRight,
-  'arrow-down': require('@mdi/js').mdiArrowDown,
-  'arrow-up': require('@mdi/js').mdiArrowUp,
-  'delete': require('@mdi/js').mdiDelete,
-  'plus': require('@mdi/js').mdiPlus,
+  'content-save-icon': mdiContentSave,
+  'arrow-left': mdiArrowLeft,
+  'arrow-right': mdiArrowRight,
+  'arrow-down': mdiArrowDown,
+  'arrow-up': mdiArrowUp,
+  'delete': mdiDelete,
+  'plus': mdiPlus,
 };
 
 export type MdiIconKey = keyof typeof icons;

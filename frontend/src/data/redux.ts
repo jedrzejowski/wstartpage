@@ -4,8 +4,8 @@ import {settingsSlice} from './slice/pageSettings';
 import editorSlice from './slice/editor';
 import {normalizedTileCollectionSlice} from './slice/normalizedTileCollections';
 import {createLogger} from 'redux-logger';
-import {isProduction} from './tileCollection';
 import {apiBackend} from './api/apiBackend';
+import {isProd} from '../const.ts';
 
 export const reduxStore = configureStore({
   reducer: {
@@ -18,7 +18,7 @@ export const reduxStore = configureStore({
   middleware: getDefaultMiddleware => {
     let builder: MiddlewareArray<any> = getDefaultMiddleware();
 
-    if (!isProduction) {
+    if (!isProd) {
       builder = builder.concat(createLogger({}));
     }
 

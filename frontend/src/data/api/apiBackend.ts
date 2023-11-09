@@ -10,6 +10,9 @@ export const apiBackend = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}api`,
     credentials: 'include',
+    prepareHeaders(headers, api){
+      // console.log(api.getState());
+    }
   }),
 
   tagTypes: ['session'],

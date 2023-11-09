@@ -11,11 +11,11 @@ import EditorLoginPage from './EditorLoginPage';
 import {useAuth} from '../../data/auth';
 
 const StartPageEditor: FC = () => {
-  const auth = useAuth();
-
-  if (!auth) {
-    return <EditorLoginPage/>;
-  }
+  // const auth = useAuth();
+  //
+  // if (!auth) {
+  //   return <EditorLoginPage/>;
+  // }
 
   return <EditorContextProvider>
     <Root>
