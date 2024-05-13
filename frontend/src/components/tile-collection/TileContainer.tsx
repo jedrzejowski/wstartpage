@@ -3,7 +3,7 @@ import {TileContainersT} from '../../data/tileCollection';
 import TileSection, {AddTileSectionButton} from './TileSection';
 import styled from 'styled-components';
 import TextSection from './TextSection';
-import {useIsEditor} from '../editor/EditorContext';
+import {useIsEditor} from '../tile-collection-editor/EditorContext';
 import {FlexExpand, HFlexContainer} from '../UtilityElements';
 
 const TileContainer: FC<{

@@ -1,11 +1,12 @@
-import {configureStore, MiddlewareArray} from '@reduxjs/toolkit';
-import searchSlice from './slice/searchSlice';
+import {configureStore} from '@reduxjs/toolkit';
+import searchSlice from './slice/search.ts';
 import {settingsSlice} from './slice/pageSettings';
 import editorSlice from './slice/editor';
 import {normalizedTileCollectionSlice} from './slice/normalizedTileCollections';
 import {createLogger} from 'redux-logger';
-import {apiBackend} from './api/apiBackend';
+import {apiSlice} from './api/apiSlice.ts';
 import {isProd} from '../const.ts';
+import {authSlice} from './slice/auth.ts';
 
 export const reduxStore = configureStore({
   reducer: {
@@ -13,16 +14,17 @@ export const reduxStore = configureStore({
     [settingsSlice.name]: settingsSlice.reducer,
     [editorSlice.name]: editorSlice.reducer,
     [normalizedTileCollectionSlice.name]: normalizedTileCollectionSlice.reducer,
-    [apiBackend.reducerPath]: apiBackend.reducer
+    [authSlice.name]: authSlice.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer
   },
   middleware: getDefaultMiddleware => {
-    let builder: MiddlewareArray<any> = getDefaultMiddleware();
+    let builder: any = getDefaultMiddleware();
 
     if (!isProd) {
       builder = builder.concat(createLogger({}));
     }
 
-    builder = builder.concat(apiBackend.middleware);
+    builder = builder.concat(apiSlice.middleware);
 
     return builder;
   },

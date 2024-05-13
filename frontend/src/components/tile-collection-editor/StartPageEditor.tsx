@@ -4,11 +4,9 @@ import EditorTopBar from './layout/EditorTopBar.tsx';
 import styled from 'styled-components';
 import EditorCollectionList from './EditorCollectionList';
 import {useAppSelector} from '../../data/hooks';
-import StartPage from '../startpage/StartPage';
+import StartPage from '../tile-collection/StartPage';
 import FormContainer from './FormContainer';
 import {EditorContextProvider, EditorQGuard} from './EditorContext';
-import EditorLoginPage from './EditorLoginPage';
-import {useAuth} from '../../data/auth';
 
 const StartPageEditor: FC = () => {
   // const auth = useAuth();

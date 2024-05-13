@@ -1,26 +1,25 @@
+use axum::Router;
+use axum::routing::get;
+use crate::app_state::AppState;
+
 mod tile_collections;
 mod images;
 mod session;
+mod users;
 
-use actix_web::{web};
-
-pub fn service(cfg: &mut web::ServiceConfig) {
-  cfg
+pub fn make_router() -> Router<AppState> {
+  Router::new()
     // .service(
     //   web::scope("/session")
     //     .route("", web::post().to(session::create))
     //     .route("", web::get().to(session::get))
     //     // .route("", web::delete().to(session::delete))
     // )
-    .service(
-      web::scope("/tile-collections")
-        .service(tile_collections::search)
-        .service(tile_collections::select)
-        .service(tile_collections::update)
-    )
-    .service(
-      web::scope("/images")
-        .route("", web::get().to(images::search))
-    )
-  ;
+    .route_service("/users", users::make_router())
+    .route("/tile-collections", get(tile_collections::search))
+    .route("/tile-collections/:name", get(tile_collections::select).post(tile_collections::update))
+  // .service(
+  //   web::scope("/images")
+  //     .route("", web::get().to(images::search))
+  // )
 }

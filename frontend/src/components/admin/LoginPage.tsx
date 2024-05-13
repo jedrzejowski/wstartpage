@@ -1,16 +1,23 @@
-import React, {FC, useState} from 'react';
-import TextInput from '../input/TextInput';
+import React, {FC, useEffect, useState} from 'react';
+import TextInput from '../input/TextInput.tsx';
 import styled from 'styled-components';
-import Button from '../input/Button';
-import Toolbar from '../Toolbar';
-import {useLoginMutation} from '../../data/api/apiBackend';
+import Button from '../input/Button.tsx';
+import Toolbar from '../Toolbar.tsx';
+import {useLoginMutation} from '../../data/api/apiSlice.ts';
+import {useNavigate} from "react-router-dom";
 
-const EditorLoginPage: FC = props => {
+const LoginPage: FC = props => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const [login, loginResult] = useLoginMutation();
+
+  useEffect(() => {
+    if (!loginResult.isSuccess) return;
+    navigate('/tile-collection-editor');
+  }, [loginResult.isSuccess]);
 
   return <Root>
     <Container>
@@ -33,7 +40,7 @@ const EditorLoginPage: FC = props => {
   }
 };
 
-export default EditorLoginPage;
+export default LoginPage;
 
 const Root = styled.div`
   display: flex;

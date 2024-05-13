@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {TileCollectionSettingsT, Nullable} from '../tileCollection';
-import {apiBackend} from '../api/apiBackend';
+import {apiSlice} from '../api/apiSlice.ts';
 import {AppSelector} from '../redux';
 
 type PageSettingsT = Nullable<TileCollectionSettingsT> & {
@@ -40,7 +40,7 @@ export const settingsSlice = createSlice({
     },
   },
   extraReducers: builder => builder
-    .addMatcher(apiBackend.endpoints.getMergedTileCollection.matchFulfilled, (state, action) => {
+    .addMatcher(apiSlice.endpoints.getMergedTileCollection.matchFulfilled, (state, action) => {
       Object.assign(state, action.payload.settings);
     })
 });

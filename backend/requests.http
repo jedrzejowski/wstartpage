@@ -1,2 +1,7 @@
-GET http://localhost:8080/api/tile-collections
-Authorization: Basic admin admin
+###
+GET {{baseUrl}}/api/users/me
+Authorization: {{authorization}}
+
+###
+GET {{baseUrl}}/api/tile-collections
+Authorization: {{authorization}}

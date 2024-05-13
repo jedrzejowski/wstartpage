@@ -1,9 +1,8 @@
 import type {ReactElement, ReactNode} from 'react';
-import type {UseQueryHookResult} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import type {QueryDefinition} from '@reduxjs/toolkit/query';
 
 function RtkQueryGuard<T>(props: {
-  query: UseQueryHookResult<QueryDefinition<any, any, any, T>, any>
+  query: any;
   children: (data: T) => ReactNode;
   strict?: boolean;
 }): ReactElement | null {

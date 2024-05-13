@@ -2,8 +2,9 @@ mod r#static;
 
 use std::collections::HashMap;
 use std::fmt::Debug;
-use actix_web::web;
+use std::sync::Arc;
 use async_trait::async_trait;
+use axum::extract::State;
 use crate::model::app_user::AppUser;
 use thiserror::Error;
 
@@ -24,11 +25,6 @@ pub enum UserSourceError {
 #[async_trait]
 pub trait UserSource: Sync + Send + Debug {
   async fn auth_user(&self, attributes: HashMap<String, String>) -> Result<AppUser, UserSourceError>;
-
-  fn into_service(self) -> UserSourceService
-    where Self: Sized + 'static {
-    web::Data::new(Box::new(self))
-  }
 }
 
-pub type UserSourceService = web::Data<Box<dyn UserSource>>;
+pub type UserSourceService = Arc<Box<dyn UserSource>>;

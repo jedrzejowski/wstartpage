@@ -1,9 +1,9 @@
 import type {FC} from 'react';
-import StartPageShortcuts from './components/startpage/StartPageShortcuts';
+import StartPageShortcuts from './components/tile-collection/StartPageShortcuts';
 import appRender from './appRender';
 import {useAppSelector} from './data/hooks';
-import {useGetMergedTileCollectionQuery} from './data/api/apiBackend';
-import StartPage from './components/startpage/StartPage';
+import {useGetMergedTileCollectionQuery} from './data/api/apiSlice.ts';
+import StartPage from './components/tile-collection/StartPage';
 
 const Viewer: FC = () => {
 

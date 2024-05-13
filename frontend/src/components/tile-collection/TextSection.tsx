@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {useNormalizedTileSection} from '../../data/slice/normalizedTileCollections';
 import TextWidget, {AddTextWidgetButton} from './TextWidget';
 import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
-import {useIsEditor} from '../editor/EditorContext';
+import {useIsEditor} from '../tile-collection-editor/EditorContext';
 import {useAppDispatch} from '../../data/hooks';
 import clsx from 'clsx';
 

@@ -2,7 +2,7 @@ const fetch = window.fetch;
 
 type SmartUrl = string | string[];
 
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL ?? '/';
+export const BACKEND_URL = '/';
 
 export default function imgUrl(url: SmartUrl): string {
   url = normalizeUrl(url);

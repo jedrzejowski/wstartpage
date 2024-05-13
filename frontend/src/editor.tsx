@@ -1,11 +1,12 @@
-import appRender from './appRender';
+import appRender from './appRender.tsx';
 import {
   HashRouter,
   Routes,
   Route,
-  Link,
 } from "react-router-dom";
-import StartPageEditor from "./components/editor/StartPageEditor.tsx";
+import LoginPage from "./components/admin/LoginPage.tsx";
+import TileEditorPage from "./components/admin/TileEditorPage.tsx";
+import RequireAuth from "./components/RequireAuth.tsx";
 
 const Router = HashRouter;
 
@@ -14,10 +15,22 @@ function App() {
   // <StartPageEditor/>;
   return <Router>
     <Routes>
-      {/*<Route path="/" element={<Home />} />*/}
+      <Route path="/login" element={<LoginPage/>}/>
+      <Route path="*" element={
+        <RequireAuth>
+          <Routes>
+            <Route path="/tile-collection-editor" element={<TileEditorPage/>}/>
+          </Routes>
+        </RequireAuth>
+      }/>
       {/*<Route path="users/*" element={<Users />} />*/}
     </Routes>
   </Router>
+}
+
+
+function NoMatch() {
+  return <div>TODO</div>;
 }
 
 appRender(<App/>);

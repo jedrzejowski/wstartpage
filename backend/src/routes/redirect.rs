@@ -1,22 +1,15 @@
-use actix_web::{get, web, HttpResponse, http};
+use axum::extract::Path;
+use axum::response::{Redirect};
 
-#[get("/~{name}")]
-pub async fn tilda(params: web::Path<String>) -> HttpResponse {
-  let name = params.into_inner();
+pub async fn tilda(Path(name): Path<String>) -> Redirect {
 
   let url = format!("/?tile-collection={}", name);
 
-  HttpResponse::TemporaryRedirect()
-    .append_header((http::header::LOCATION, url))
-    .finish()
+  Redirect::temporary(&url)
 }
 
-#[get("/@{name}")]
-pub async fn monkey(params: web::Path<String>) -> HttpResponse {
-  let name = params.into_inner();
+pub async fn monkey(Path(name): Path<String>) -> Redirect {
   let url = format!("/?tile-collection={}", name);
 
-  HttpResponse::TemporaryRedirect()
-    .append_header((http::header::LOCATION, url))
-    .finish()
+  Redirect::temporary(&url)
 }

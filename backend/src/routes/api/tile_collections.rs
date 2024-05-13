@@ -1,10 +1,12 @@
-use actix_web::{Error, web, HttpResponse};
-use crate::utils::http::AppHttpResult;
+use axum::extract::{Path, Query, State};
+use axum::Json;
+use crate::utils::problem_details::{HttpResult, JsonResult};
 use serde::Deserialize;
-use crate::data_source::{DataSourceError, DataSourceService};
+use crate::data_source::{RepositoryError};
 use crate::model::app_user::AppUser;
-use crate::utils::http::AppHttpError;
+use crate::utils::problem_details::ProblemDetails;
 use crate::model::tile_collection::TileCollection;
+use crate::service::tile_collection::TileCollectionService;
 
 
 #[derive(Debug, Deserialize)]
@@ -13,51 +15,44 @@ pub struct GetIconCollectionQuery {
   recursive_merge: Option<bool>,
 }
 
-#[actix_web::get("/{name}")]
-pub async fn select(
-  data_source: DataSourceService,
-  params: web::Path<String>,
-  query: web::Query<GetIconCollectionQuery>,
-) -> AppHttpResult {
-  let name = params.into_inner();
-
-  let tc = match data_source.get_tile_collection(&name).await {
-    Ok(tc) => tc,
-    Err(DataSourceError::NotFound) => return Err(AppHttpError::not_found("not found")),
-    Err(_) => return Err(AppHttpError::internal(())),
-  };
-
-  if let Some(true) = query.recursive_merge {
-    let tile_collection = tc.resolve_recursive(&data_source).await
-      .map_err(|_err| AppHttpError::internal("error while resolve recursive"))?;
-
-    return Ok(HttpResponse::Ok().json(tile_collection));
-  }
-
-  return Ok(HttpResponse::Ok().json(tc));
-}
-
-#[actix_web::put("/{name}")]
-pub async fn update(
-  _: AppUser,
-  params: web::Path<String>,
-  tile_collection: web::Json<TileCollection>,
-) -> Result<HttpResponse, Error> {
-  let id = params.into_inner();
-
-  println!("{} = {:?}", id, tile_collection);
-
-  return Ok(HttpResponse::Ok().body("ok"));
-}
-
-
-#[actix_web::get("/")]
 pub async fn search(
   _: AppUser, // only for auth
-  data_source: DataSourceService,
-) -> Result<HttpResponse, Error> {
-  let names = data_source.get_tile_collection_names().await
-    .map_err(|_err| AppHttpError::internal(()))?;
+  State(tile_repo): State<TileCollectionService>,
+) -> JsonResult<Vec<String>> {
+  let names = tile_repo.get_all_names().await
+    .map_err(|_err| ProblemDetails::internal(""))?;
 
-  Ok(HttpResponse::Ok().json(names))
+  Ok(Json(names))
+}
+
+
+pub async fn select(
+  tile_repo: State<TileCollectionService>,
+  name: Path<String>,
+  query: Query<GetIconCollectionQuery>,
+) -> JsonResult<TileCollection> {
+  let mut tile_collection = match tile_repo.get_one(&name).await {
+    Ok(tc) => tc,
+    Err(RepositoryError::NotFound) => return Err(ProblemDetails::not_found("not found")),
+    Err(_) => return Err(ProblemDetails::internal("")),
+  };
+
+  if Some(true) == query.recursive_merge {
+    tile_collection = tile_repo.resolve_recursive(&tile_collection).await
+      .map_err(|_err| ProblemDetails::internal("error while resolve recursive"))?;
+  }
+
+  tile_repo.normalize(&mut tile_collection);
+
+  return Ok(Json(tile_collection));
+}
+
+pub async fn update(
+  _: AppUser,
+  Path(id): Path<String>,
+  tile_collection: Json<TileCollection>,
+) -> HttpResult<String> {
+  println!("{} = {:?}", id, tile_collection);
+
+  Ok("ok".to_string())
 }

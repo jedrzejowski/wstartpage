@@ -2,16 +2,21 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {TileCollectionT} from '../tileCollection';
 import {BACKEND_URL} from '../fetch';
 import qs from 'qs';
-import {UserDataT} from '../auth';
+import {UserDataT} from '../slice/auth.ts';
+import {AppRootState} from '../redux.ts';
 
 
-export const apiBackend = createApi({
+export const apiSlice = createApi({
   reducerPath: 'apiBackend',
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}api`,
     credentials: 'include',
-    prepareHeaders(headers, api){
-      // console.log(api.getState());
+    prepareHeaders(headers, api) {
+      const state = api.getState() as AppRootState;
+      const credentials = state.auth.credentials;
+      if (credentials) {
+        headers.set('Authorization', `Basic ${btoa(credentials.username + ':' + credentials.password)}`);
+      }
     }
   }),
 
@@ -19,29 +24,34 @@ export const apiBackend = createApi({
 
   endpoints: (builder) => ({
 
-    getSession: builder.query<UserDataT, void>({
-      query: () => '/session',
+    // getSession: builder.query<UserDataT, void>({
+    //   query: () => '/session',
+    //   providesTags: ['session']
+    // }),
+    //
+    getCurrentUser: builder.query<UserDataT, void>({
+      query: () => '/users/me',
       providesTags: ['session']
     }),
 
     login: builder.mutation<UserDataT, { username: string; password: string; }>({
       query: ({username, password}) => ({
-        url: '/session',
-        method: 'POST',
+        url: '/users/me',
+        method: 'GET',
         headers: {
           'Authorization': `Basic ${btoa(username + ':' + password)}`
-        }
+        },
       }),
       invalidatesTags: ['session'],
     }),
 
-    logout: builder.mutation<void, void>({
-      query: () => ({
-        url: '/session',
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['session'],
-    }),
+    // logout: builder.mutation<void, void>({
+    //   query: () => ({
+    //     url: '/session',
+    //     method: 'DELETE',
+    //   }),
+    //   invalidatesTags: ['session'],
+    // }),
 
     getTileCollection: builder.query<TileCollectionT, string>({
       query: (name) => `/tile-collections/${name}`,
@@ -63,12 +73,12 @@ export const apiBackend = createApi({
 });
 
 export const {
-  useGetSessionQuery,
+  useGetCurrentUserQuery,
   useLoginMutation,
   useGetTileCollectionQuery,
   useGetTileCollectionListQuery,
   useGetMergedTileCollectionQuery,
   useUpdateTileCollectionMutation,
-} = apiBackend;
+} = apiSlice;
 
 

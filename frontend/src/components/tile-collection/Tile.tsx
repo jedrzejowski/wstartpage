@@ -1,9 +1,9 @@
 import React, {FC, MouseEvent, useEffect, useState} from 'react';
 import TileIcon from './TileIcon';
 import styled from 'styled-components';
-import {searchEngine, useSearchQuery} from '../../data/slice/searchSlice';
+import {searchEngine, useSearchQuery} from '../../data/slice/search.ts';
 import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
-import {useIsEditor} from '../editor/EditorContext';
+import {useIsEditor} from '../tile-collection-editor/EditorContext';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
 import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedTileCollections';
 import {makeUniqueId} from '../../data/uniqueId';

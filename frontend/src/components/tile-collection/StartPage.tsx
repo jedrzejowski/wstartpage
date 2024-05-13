@@ -5,7 +5,7 @@ import SearchView from './SearchView';
 import StartPageHeader from './StartPageHeader';
 import {useNormalizedTileCollection} from '../../data/slice/normalizedTileCollections';
 import {useAppSelector} from '../../data/hooks';
-import {useIsEditor} from "../editor/EditorContext.tsx";
+import {useIsEditor} from "../tile-collection-editor/EditorContext.tsx";
 
 const StartPage: FC<({
   tileCollectionName: string;

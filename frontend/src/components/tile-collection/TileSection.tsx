@@ -10,7 +10,7 @@ import {TileContainersT} from '../../data/tileCollection';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
 import {makeUniqueId} from '../../data/uniqueId';
 import clsx from 'clsx';
-import {useIsEditor} from '../editor/EditorContext';
+import {useIsEditor} from '../tile-collection-editor/EditorContext';
 
 const TileSection: FC<{
   sectionId: string;

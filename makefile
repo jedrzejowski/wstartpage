@@ -1,23 +1,12 @@
 
-PKG_VERSION=0.0.16
-DOCKER_TAG?=ajedrzejowski/wstartpage
+IMAGE_VERSION=0.0.18
+IMAGE_NAME?=ajedrzejowski/wstartpage
 
-docker: docker-build docker-push
-
-docker-build:
+image-build:
 	docker build . --pull \
-		--tag ${DOCKER_TAG}:${PKG_VERSION} \
-		--tag ${DOCKER_TAG}:latest
+		--tag ${IMAGE_NAME}:${IMAGE_VERSION} \
+		--tag ${IMAGE_NAME}:latest
 
-docker-push:
-	docker push ${DOCKER_TAG}:${PKG_VERSION}
-	docker push ${DOCKER_TAG}:latest
-
-docker-test:
-	docker run --rm \
-		-e WSTARTPAGE_DASHBOARD_ROOT=/volume/dashboards \
-		-v $(shell pwd)/volume/dashboards:/volume/dashboards \
-    -e WSTARTPAGE_IMAGE_ROOT=/volume/img \
-		-v $(shell pwd)/volume/images:/volume/img \
-		-p 3002:8080 \
-		${DOCKER_TAG}:latest
+image-push:
+	docker push ${IMAGE_NAME}:${IMAGE_VERSION}
+	docker push ${IMAGE_NAME}:latest

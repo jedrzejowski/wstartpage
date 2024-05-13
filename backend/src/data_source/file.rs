@@ -1,34 +1,40 @@
+use std::fmt::{Debug};
+use std::marker::PhantomData;
 use std::path::{Path, PathBuf};
-use async_trait::async_trait;
-use crate::data_source::{DataSource, DataSourceError};
-use crate::model::tile_collection::TileCollection;
+use serde::{Deserialize, Serialize};
+use crate::data_source::{RepositoryError};
 
 #[derive(Debug)]
-pub struct FileDataSource {
+pub struct FileDataSource<T> {
   base_path: PathBuf,
+  phantom_data: PhantomData<T>,
 }
 
-impl FileDataSource {
+impl<T> FileDataSource<T> {
   pub fn from_path(base_path: impl AsRef<Path>) -> Self {
-    Self { base_path: base_path.as_ref().to_path_buf() }
+    Self {
+      base_path: base_path.as_ref().to_path_buf(),
+      phantom_data: PhantomData::default(),
+    }
   }
 }
 
-#[async_trait]
-impl DataSource for FileDataSource {
-  async fn get_tile_collection(&self, name: &str) -> Result<TileCollection, DataSourceError> {
+impl<T> FileDataSource<T>
+  where T: for<'a> Deserialize<'a> + Serialize
+{
+  pub async fn get_one(&self, name: &str) -> Result<T, RepositoryError> {
     let mut yaml_path = self.base_path.clone();
     yaml_path.push(name);
     yaml_path.set_extension("yml");
 
     let file = match std::fs::File::open(yaml_path) {
       Ok(file) => file,
-      Err(_) => return Err(DataSourceError::NotFound),
+      Err(_) => return Err(RepositoryError::NotFound),
     };
 
     let mut json: serde_yaml::Mapping = match serde_yaml::from_reader(file) {
       Ok(json) => json,
-      Err(err) => return Err(DataSourceError::Anyhow(err.into())),
+      Err(err) => return Err(RepositoryError::Anyhow(err.into())),
     };
 
     json.insert(
@@ -36,20 +42,18 @@ impl DataSource for FileDataSource {
       serde_yaml::Value::String(name.to_string()),
     );
 
-    let mut tc = match serde_yaml::from_value(serde_yaml::Value::Mapping(json)) {
-      Ok(tc) => tc,
-      Err(err) => return Err(DataSourceError::Anyhow(err.into())),
+    let entity = match serde_yaml::from_value(serde_yaml::Value::Mapping(json)) {
+      Ok(entity) => entity,
+      Err(err) => return Err(RepositoryError::Anyhow(err.into())),
     };
 
-    TileCollection::normalize(&mut tc);
-
-    return Ok(tc);
+    return Ok(entity);
   }
 
-  async fn get_tile_collection_names(&self) -> Result<Vec<String>, DataSourceError> {
+  pub async fn get_all_names(&self) -> Result<Vec<String>, RepositoryError> {
     let read_dir = match std::fs::read_dir(&self.base_path) {
       Ok(read_dir) => read_dir,
-      Err(err) => return Err(DataSourceError::Anyhow(err.into())),
+      Err(err) => return Err(RepositoryError::Anyhow(err.into())),
     };
 
     Ok(read_dir.flatten().filter(|dir_entry| {
@@ -67,7 +71,7 @@ impl DataSource for FileDataSource {
     }).collect())
   }
 
-  async fn update_tile_collection(&self, name: &str, tl: TileCollection) -> Result<(), DataSourceError> {
+  pub async fn update_one(&self, name: &str, tl: &T) -> Result<(), RepositoryError> {
     todo!()
   }
 }

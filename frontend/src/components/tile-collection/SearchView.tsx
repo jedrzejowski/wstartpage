@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
-import searchSlice, {useSearchQuery} from '../../data/slice/searchSlice';
+import searchSlice, {useSearchQuery} from '../../data/slice/search.ts';
 import {useAppDispatch} from '../../data/hooks';
 import {useEventListener} from 'usehooks-ts';
 

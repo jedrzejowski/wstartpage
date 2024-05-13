@@ -8,7 +8,7 @@ import type {
   NormalizedTileSectionT
 } from '../tileCollection';
 import {makeUniqueId} from '../uniqueId';
-import {apiBackend} from '../api/apiBackend';
+import {apiSlice} from '../api/apiSlice.ts';
 import {AppSelector} from '../redux';
 import {TileContainersT, TileSectionT} from '../tileCollection';
 import {throwErr} from '../../util/function';
@@ -145,10 +145,10 @@ export const normalizedTileCollectionSlice = createSlice({
     },
   },
   extraReducers: (builder) => builder
-    .addMatcher(apiBackend.endpoints.getTileCollection.matchFulfilled, (state, action) => {
+    .addMatcher(apiSlice.endpoints.getTileCollection.matchFulfilled, (state, action) => {
       addCollectionToState(state, action.payload);
     })
-    .addMatcher(apiBackend.endpoints.getMergedTileCollection.matchFulfilled, (state, action) => {
+    .addMatcher(apiSlice.endpoints.getMergedTileCollection.matchFulfilled, (state, action) => {
       addCollectionToState(state, action.payload);
     })
 });

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import React, {FC, MouseEvent} from 'react';
 import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedTileCollections';
 import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
-import {useIsEditor} from '../editor/EditorContext';
+import {useIsEditor} from '../tile-collection-editor/EditorContext';
 import clsx from 'clsx';
 import {useAppDispatch} from '../../data/hooks';
 import {makeUniqueId} from '../../data/uniqueId';

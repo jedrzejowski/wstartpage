@@ -1,18 +1,18 @@
-ARG ALPINE_VERSION=3.14
+ARG ALPINE_VERSION=3.18
+ARG NODE_VERSION=20
 
-FROM node:16-alpine${ALPINE_VERSION} as node-builder
+FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as node-builder
 
 WORKDIR /app
-COPY packages/frontend /app
+COPY frontend /app
 
-RUN npm ci --no-optional
-RUN npm run build-viewer
-RUN npm run build-editor
+RUN npm ci
+RUN npm run build
 
 FROM rust:alpine${ALPINE_VERSION} as rust-builder
 
 WORKDIR /app
-COPY packages/backend /app
+COPY backend /app
 
 ENV RUSTUP_TOOLCHAIN=stable
 RUN apk add build-base --no-cache
@@ -21,11 +21,10 @@ RUN cargo build --release --locked --all-features
 
 FROM alpine:${ALPINE_VERSION}
 
-ENV WSTARTPAGE_STATIC_ROOT=/usr/local/share/wstartpage
+ENV RESOURCES_ROOT=/srv
 
 COPY --from=rust-builder /app/target/release/wstartpage /usr/local/bin/wstartpage
-COPY --from=node-builder /app/build-viewer ${WSTARTPAGE_STATIC_ROOT}
-COPY --from=node-builder /app/build-editor ${WSTARTPAGE_STATIC_ROOT}/editor2
+COPY --from=node-builder /app/dist ${RESOURCES_ROOT}
 
 
 CMD [ "/usr/local/bin/wstartpage" ]
