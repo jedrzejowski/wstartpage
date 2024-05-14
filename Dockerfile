@@ -22,6 +22,7 @@ RUN cargo build --release --locked --all-features
 FROM alpine:${ALPINE_VERSION}
 
 ENV RESOURCES_ROOT=/srv
+ENV USER_SOURCE_TYPE=no
 
 COPY --from=rust-builder /app/target/release/wstartpage /usr/local/bin/wstartpage
 COPY --from=node-builder /app/dist ${RESOURCES_ROOT}

@@ -3,7 +3,7 @@ import TextInput from '../input/TextInput.tsx';
 import styled from 'styled-components';
 import Button from '../input/Button.tsx';
 import Toolbar from '../Toolbar.tsx';
-import {useLoginMutation} from '../../data/api/apiSlice.ts';
+import {useLoginMutation} from '../../data/slice/apiSlice.ts';
 import {useNavigate} from "react-router-dom";
 
 const LoginPage: FC = props => {

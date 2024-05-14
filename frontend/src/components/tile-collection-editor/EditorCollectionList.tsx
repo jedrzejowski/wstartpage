@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
-import {useGetTileCollectionListQuery} from '../../data/api/apiSlice.ts';
+import {useGetTileCollectionListQuery} from '../../data/slice/apiSlice.ts';
 import {
   selectEditorSelectedIconCollectionName,
   updateTileCollectionAction

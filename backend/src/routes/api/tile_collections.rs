@@ -3,7 +3,7 @@ use axum::Json;
 use crate::utils::problem_details::{HttpResult, JsonResult};
 use serde::Deserialize;
 use crate::data_source::{RepositoryError};
-use crate::model::app_user::AppUser;
+use crate::model::user_info::AppUserInfo;
 use crate::utils::problem_details::ProblemDetails;
 use crate::model::tile_collection::TileCollection;
 use crate::service::tile_collection::TileCollectionService;
@@ -16,7 +16,7 @@ pub struct GetIconCollectionQuery {
 }
 
 pub async fn search(
-  _: AppUser, // only for auth
+  _: AppUserInfo, // only for auth
   State(tile_repo): State<TileCollectionService>,
 ) -> JsonResult<Vec<String>> {
   let names = tile_repo.get_all_names().await
@@ -48,7 +48,7 @@ pub async fn select(
 }
 
 pub async fn update(
-  _: AppUser,
+  _: AppUserInfo,
   Path(id): Path<String>,
   tile_collection: Json<TileCollection>,
 ) -> HttpResult<String> {

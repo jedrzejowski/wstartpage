@@ -1,18 +1,12 @@
+use std::env::VarError;
+use std::sync::Arc;
 use std::time::Duration;
 use anyhow::{anyhow, Result};
 use http::Method;
 use serde::Deserialize;
 use tower_http::cors::CorsLayer;
 
-fn make_absolute(path: &mut String) {
-  let os_path = std::path::Path::new(path);
-
-  let full_path = std::fs::canonicalize(os_path)
-    .map_err(|err| anyhow!("directory '{}' not found", path))
-    .unwrap().into_os_string().into_string().unwrap();
-
-  path.replace_range(.., &full_path);
-}
+pub type AppConfigService = Arc<AppConfig>;
 
 #[derive(Deserialize, Debug)]
 pub struct AppConfig {
@@ -26,7 +20,6 @@ pub struct AppConfig {
 
 impl AppConfig {
   pub fn bind(&self) -> impl tokio::net::ToSocketAddrs {
-
     let server_host = match &self.server_host {
       Some(val) => val.clone(),
       None => "127.0.0.1".to_string(),
@@ -48,7 +41,7 @@ impl AppConfig {
     builder.init();
   }
 
-  pub fn read_from_env() -> Result<Self> {
+  pub fn from_env() -> Result<Self> {
     dotenv::dotenv().ok();
 
     let mut config: Self = match envy::from_env() {
@@ -80,5 +73,44 @@ impl AppConfig {
     // })
 
     return cors;
+  }
+
+  pub fn prefixed(&self, prefix: &str) -> PrefixedEnvReader {
+    return PrefixedEnvReader { prefix: prefix.to_string() };
+  }
+}
+
+fn make_absolute(path: &mut String) {
+  let os_path = std::path::Path::new(path);
+
+  let full_path = std::fs::canonicalize(os_path)
+    .map_err(|err| anyhow!("directory '{}' not found", path))
+    .unwrap().into_os_string().into_string().unwrap();
+
+  path.replace_range(.., &full_path);
+}
+
+pub struct PrefixedEnvReader {
+  prefix: String,
+}
+
+impl PrefixedEnvReader {
+  pub fn get_optional(&self, key: &str) -> Option<String> {
+    let var_name = format!("{}_{}", self.prefix, key).to_uppercase();
+
+    match std::env::var(&var_name) {
+      Ok(var) => Some(var),
+      Err(_) => None,
+    }
+  }
+
+  pub fn get_required(&self, key: &str) -> String {
+    let var_name = format!("{}_{}", self.prefix, key).to_uppercase();
+    let var_value = match std::env::var(&var_name) {
+      Ok(var) => var,
+      Err(_) => panic!("required var not found {}", var_name),
+    };
+
+    return var_value;
   }
 }

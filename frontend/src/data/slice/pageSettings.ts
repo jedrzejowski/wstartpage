@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {TileCollectionSettingsT, Nullable} from '../tileCollection';
-import {apiSlice} from '../api/apiSlice.ts';
+import {apiSlice} from './apiSlice.ts';
 import {AppSelector} from '../redux';
 
 type PageSettingsT = Nullable<TileCollectionSettingsT> & {

@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {apiSlice} from '../api/apiSlice.ts';
+import {apiSlice} from './apiSlice.ts';
 
 export interface UserDataT {
   display_name: string;

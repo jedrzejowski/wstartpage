@@ -1,7 +1,7 @@
 import {createContext, FC, ReactNode, useContext} from 'react';
 import {useAppSelector} from '../../data/hooks';
 import {selectEditorSelectedIconCollectionName} from '../../data/slice/normalizedTileCollections';
-import {useGetTileCollectionQuery} from '../../data/api/apiSlice.ts';
+import {useGetTileCollectionQuery} from '../../data/slice/apiSlice.ts';
 import RtkQueryGuard from '../RtkQueryGuard';
 
 const EditorContext = createContext(false);
@@ -17,7 +17,7 @@ export const EditorContextProvider: FC<{ children: ReactNode }> = ({children}) =
 
 export const useIsEditor = () => useContext(EditorContext);
 
-export const EditorQGuard: FC<{ children: ReactNode }> = props => {
+export const EditorQueryGuard: FC<{ children: ReactNode }> = props => {
   const currentCollectionName = useAppSelector(state => state.editor.currentCollectionName);
   const query = useGetTileCollectionQuery(currentCollectionName ?? 'null', {skip: currentCollectionName == null});
 

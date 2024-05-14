@@ -2,7 +2,7 @@ import React, {FC, useState} from 'react';
 import Button from '../input/Button';
 import {useAppSelector, useAppStore} from '../../data/hooks';
 import {getTileCollectionFromState} from '../../data/slice/normalizedTileCollections';
-import {useUpdateTileCollectionMutation} from '../../data/api/apiSlice.ts';
+import {useUpdateTileCollectionMutation} from '../../data/slice/apiSlice.ts';
 
 type MyState = 'idle' | 'fetching';
 

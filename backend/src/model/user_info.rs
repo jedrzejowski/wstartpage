@@ -1,54 +1,49 @@
-use std::future::Future;
-use std::pin::Pin;
+use std::collections::HashMap;
 use async_trait::async_trait;
 use axum::extract::FromRequestParts;
+use axum_extra::{
+  headers::{authorization::Basic, Authorization},
+  TypedHeader,
+};
+use axum_extra::typed_header::TypedHeaderRejection;
 use http::request::Parts;
 use crate::utils::problem_details::ProblemDetails;
 use serde::{Deserialize, Serialize};
+use crate::app_state::AppState;
+use crate::service::user_source::{UserSourceError, UserSourceService};
 
 const SESSION_KEY: &str = "app_user";
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct AppUser {
+pub struct AppUserInfo {
   pub display_name: String,
   pub username: String,
 }
 
 #[async_trait]
-impl<S> FromRequestParts<S> for AppUser
-  where
-    S: Send + Sync
+impl FromRequestParts<AppState> for AppUserInfo
 {
   type Rejection = ProblemDetails;
 
   // Required method
-  async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
-    // let basic_auth = match BasicAuth::from_request(&req, &mut Payload::None).into_inner() {
-    //   Ok(basic_auth) => basic_auth,
-    //   Err(_) => return Err(ProblemDetails::bad_request("basic auth parse failed")),
-    // };
-    //
-    // let username = basic_auth.user_id();
-    // let password = match basic_auth.password() {
-    //   None => return Err(ProblemDetails::bad_request("")),
-    //   Some(password) => password,
-    // };
-    //
-    // let user_source: &UserSourceService = req.app_data().unwrap();
-    // let app_user = user_source.auth_user(HashMap::from([
-    //   ("username".to_owned(), username.to_owned()),
-    //   ("password".to_owned(), password.to_owned()),
-    // ])).await;
-    //
-    // match app_user {
-    //   Ok(app_user) => Ok(app_user),
-    //   Err(_) => Err(ProblemDetails::unauthorized(())),
-    // }
+  async fn from_request_parts(parts: &mut Parts, state: &AppState) -> Result<Self, Self::Rejection> {
+    let basic_auth = TypedHeader::<Authorization<Basic>>::from_request_parts(parts, state).await;
+    let basic_auth = match basic_auth {
+      Ok(ok) => ok,
+      Err(err) => return Err(ProblemDetails::bad_request("failed to parse authorization header")),
+    };
 
-    Ok(AppUser {
-      display_name: "DisplayName".to_string(),
-      username: "root".to_string(),
-    })
+    let user_info = state.user_source_service.auth_user(HashMap::from([
+      ("username".to_owned(), basic_auth.username().to_owned()),
+      ("password".to_owned(), basic_auth.password().to_owned()),
+    ])).await;
+
+    let user_info = match user_info {
+      Ok(ok) => ok,
+      Err(err) => return Err(ProblemDetails::unauthorized("failed to authorize user")),
+    };
+
+    Ok(user_info)
 
     //
     // let app_user = AppUser {

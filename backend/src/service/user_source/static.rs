@@ -3,8 +3,8 @@ use std::path::Path;
 use anyhow::{anyhow, Context};
 use async_trait::async_trait;
 use serde::Deserialize;
-use crate::model::app_user::AppUser;
-use crate::user_source::{UserSource, UserSourceError};
+use crate::model::user_info::AppUserInfo;
+use super::{UserSource, UserSourceError};
 
 #[derive(Debug)]
 pub struct StaticUserSource {
@@ -19,7 +19,7 @@ struct StaticUser {
 }
 
 impl StaticUserSource {
-  pub async fn from_csv_file(path: impl AsRef<Path>) -> anyhow::Result<Self> {
+  pub fn from_csv_file(path: impl AsRef<Path>) -> anyhow::Result<Self> {
     let mut reader = csv::Reader::from_path(path)
       .context("reading file")?;
 
@@ -34,18 +34,18 @@ impl StaticUserSource {
 
 #[async_trait]
 impl UserSource for StaticUserSource {
-  async fn auth_user(&self, attributes: HashMap<String, String>) -> Result<AppUser, UserSourceError> {
+  async fn auth_user(&self, attributes: HashMap<String, String>) -> Result<AppUserInfo, UserSourceError> {
     let username = attributes.get("username").ok_or(UserSourceError::BadRequest)?;
     let password = attributes.get("password").ok_or(UserSourceError::BadRequest)?;
 
     let user = self.users.iter().find(|user| &user.username == username)
-      .ok_or(UserSourceError::UserNotFound(username.to_owned()))?;
+      .ok_or(UserSourceError::Unauthorized)?;
 
     if &user.password != password {
-      return Err(UserSourceError::WrongCredentials);
+      return Err(UserSourceError::Unauthorized);
     }
 
-    Ok(AppUser {
+    Ok(AppUserInfo {
       display_name: user.display_name.to_owned(),
       username: user.username.to_owned(),
     })

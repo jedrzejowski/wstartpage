@@ -1,4 +1,4 @@
-import {useGetCurrentUserQuery} from "../data/api/apiSlice.ts";
+import {useGetCurrentUserQuery} from "../data/slice/apiSlice.ts";
 import {Navigate, useLocation} from "react-router-dom";
 import {FC, ReactNode} from "react";
 

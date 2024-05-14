@@ -1,19 +1,22 @@
 import AppLayout from "../AppLayout.tsx";
 import EditorCollectionList from "../tile-collection-editor/EditorCollectionList.tsx";
-import {EditorContextProvider, EditorQGuard} from "../tile-collection-editor/EditorContext.tsx";
+import {EditorContextProvider, EditorQueryGuard} from "../tile-collection-editor/EditorContext.tsx";
 import styled from "styled-components";
-import {useAppSelector} from "../../data/hooks.ts";
+import {EditorTopBar} from "../tile-collection-editor/layout/EditorTopBar.tsx";
 import StartPage from "../tile-collection/StartPage.tsx";
+import {useAppSelector} from "../../data/hooks.ts";
+import {memo} from "react";
+import FormContainer from "../tile-collection-editor/FormContainer.tsx";
 
 function TileEditorPage() {
   return <EditorContextProvider>
     <Root>
       <AppLayout
         fixed
-        // top={<HPanel border="bottom"><EditorTopBar/></HPanel>}
-        // middle={<StartPagePreview/>}
+        top={<HPanel border="bottom"><EditorTopBar/></HPanel>}
+        middle={<StartPagePreview/>}
         left={<VPanel border="right"><EditorCollectionList/></VPanel>}
-        // right={<VPanel border="left"><EditorQGuard><FormContainer/></EditorQGuard></VPanel>}
+        right={<VPanel border="left"><EditorQueryGuard><FormContainer/></EditorQueryGuard></VPanel>}
       />
     </Root>
   </EditorContextProvider>
@@ -25,15 +28,15 @@ const Root = styled.div`
   height: 100vh;
 `;
 
-// const StartPagePreview = React.memo(props => {
-//   const selectedIconCollectionName = useAppSelector(state => state.editor.currentCollectionName);
-//
-//   if (!selectedIconCollectionName) {
-//     return null;
-//   }
-//
-//   return <EditorQGuard><StartPage tileCollectionName={selectedIconCollectionName}/></EditorQGuard>;
-// });
+const StartPagePreview = memo(props => {
+  const selectedIconCollectionName = useAppSelector(state => state.editor.currentCollectionName);
+
+  if (!selectedIconCollectionName) {
+    return null;
+  }
+
+  return <EditorQueryGuard><StartPage tileCollectionName={selectedIconCollectionName}/></EditorQueryGuard>;
+});
 
 const HPanel = styled.div<{ border: 'top' | 'bottom' }>`
   width: 100%;

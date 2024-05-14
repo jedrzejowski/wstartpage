@@ -4,7 +4,7 @@ import {settingsSlice} from './slice/pageSettings';
 import editorSlice from './slice/editor';
 import {normalizedTileCollectionSlice} from './slice/normalizedTileCollections';
 import {createLogger} from 'redux-logger';
-import {apiSlice} from './api/apiSlice.ts';
+import {apiSlice} from './slice/apiSlice.ts';
 import {isProd} from '../const.ts';
 import {authSlice} from './slice/auth.ts';
 

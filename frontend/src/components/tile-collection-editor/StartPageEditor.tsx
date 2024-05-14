@@ -6,7 +6,7 @@ import EditorCollectionList from './EditorCollectionList';
 import {useAppSelector} from '../../data/hooks';
 import StartPage from '../tile-collection/StartPage';
 import FormContainer from './FormContainer';
-import {EditorContextProvider, EditorQGuard} from './EditorContext';
+import {EditorContextProvider, EditorQueryGuard} from './EditorContext';
 
 const StartPageEditor: FC = () => {
   // const auth = useAuth();
@@ -22,7 +22,7 @@ const StartPageEditor: FC = () => {
         top={<HPanel border="bottom"><EditorTopBar/></HPanel>}
         middle={<StartPagePreview/>}
         left={<VPanel border="right"><EditorCollectionList/></VPanel>}
-        right={<VPanel border="left"><EditorQGuard><FormContainer/></EditorQGuard></VPanel>}
+        right={<VPanel border="left"><EditorQueryGuard><FormContainer/></EditorQueryGuard></VPanel>}
       />
     </Root>
   </EditorContextProvider>;
@@ -39,7 +39,7 @@ const StartPagePreview = React.memo(props => {
     return null;
   }
 
-  return <EditorQGuard><StartPage tileCollectionName={selectedIconCollectionName}/></EditorQGuard>;
+  return <EditorQueryGuard><StartPage tileCollectionName={selectedIconCollectionName}/></EditorQueryGuard>;
 });
 
 const HPanel = styled.div<{ border: 'top' | 'bottom' }>`

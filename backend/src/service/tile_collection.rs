@@ -1,36 +1,23 @@
 use std::collections::{HashSet, VecDeque};
-use std::ops::Deref;
 use std::sync::Arc;
 use anyhow::{anyhow, Result};
-use axum::extract::FromRef;
-use crate::app_config::AppConfig;
 use crate::data_source::{FileDataSource, RepositoryResult};
 use crate::model::tile_collection::{Icon, TextIcon, TileCollection, TileSection};
+use crate::service::app_config::AppConfigService;
 
-#[derive(Clone)]
-pub struct TileCollectionService(Arc<Inner>);
+pub type TileCollectionService = Arc<TilesCollections>;
 
-impl TileCollectionService {
-  pub fn from_config(app_config: &AppConfig) -> TileCollectionService {
-    TileCollectionService(Arc::new(Inner {
-      file_data_source: FileDataSource::from_path(&app_config.tile_collections_root),
-    }))
-  }
-}
-
-impl Deref for TileCollectionService {
-  type Target = Inner;
-
-  fn deref(&self) -> &Self::Target {
-    &self.0
-  }
-}
-
-pub struct Inner {
+pub struct TilesCollections {
   file_data_source: FileDataSource<TileCollection>,
 }
 
-impl Inner {
+impl TilesCollections {
+  pub fn new(app_config: &AppConfigService) -> Self {
+    Self {
+      file_data_source: FileDataSource::from_path(&app_config.tile_collections_root),
+    }
+  }
+
   pub fn normalize(&self, tile_collection: &mut TileCollection) {
     normalize_container(&mut tile_collection.top);
     normalize_container(&mut tile_collection.middle);

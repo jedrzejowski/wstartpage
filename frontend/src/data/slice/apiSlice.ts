@@ -1,8 +1,8 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {TileCollectionT} from '../tileCollection';
-import {BACKEND_URL} from '../fetch';
+import {TileCollectionT} from '../tileCollection.ts';
+import {BACKEND_URL} from '../fetch.ts';
 import qs from 'qs';
-import {UserDataT} from '../slice/auth.ts';
+import {UserDataT} from './auth.ts';
 import {AppRootState} from '../redux.ts';
 
 
@@ -24,16 +24,6 @@ export const apiSlice = createApi({
 
   endpoints: (builder) => ({
 
-    // getSession: builder.query<UserDataT, void>({
-    //   query: () => '/session',
-    //   providesTags: ['session']
-    // }),
-    //
-    getCurrentUser: builder.query<UserDataT, void>({
-      query: () => '/users/me',
-      providesTags: ['session']
-    }),
-
     login: builder.mutation<UserDataT, { username: string; password: string; }>({
       query: ({username, password}) => ({
         url: '/users/me',
@@ -45,13 +35,10 @@ export const apiSlice = createApi({
       invalidatesTags: ['session'],
     }),
 
-    // logout: builder.mutation<void, void>({
-    //   query: () => ({
-    //     url: '/session',
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: ['session'],
-    // }),
+    getCurrentUser: builder.query<UserDataT, void>({
+      query: () => '/users/me',
+      providesTags: ['session']
+    }),
 
     getTileCollection: builder.query<TileCollectionT, string>({
       query: (name) => `/tile-collections/${name}`,

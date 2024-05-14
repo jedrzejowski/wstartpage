@@ -1,10 +1,11 @@
-use axum::Router;
+use axum::{Json};
+use axum::response::IntoResponse;
+use crate::model::user_info::AppUserInfo;
 
-pub fn make_router() -> Router {
-  Router::new()
+
+pub async fn me(
+  app_user: AppUserInfo,
+) -> impl IntoResponse {
+
+  Json(app_user)
 }
-
-// #[actix_web::get("/me")]
-// pub async fn get_me(app_user: AppUser) -> HttpResponse {
-//   return HttpResponse::Ok().json(app_user);
-// }

@@ -15,7 +15,7 @@ pub fn make_router() -> Router<AppState> {
     //     .route("", web::get().to(session::get))
     //     // .route("", web::delete().to(session::delete))
     // )
-    .route_service("/users", users::make_router())
+    .route("/users/me", get(users::me))
     .route("/tile-collections", get(tile_collections::search))
     .route("/tile-collections/:name", get(tile_collections::select).post(tile_collections::update))
   // .service(

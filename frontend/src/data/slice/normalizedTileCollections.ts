@@ -8,7 +8,7 @@ import type {
   NormalizedTileSectionT
 } from '../tileCollection';
 import {makeUniqueId} from '../uniqueId';
-import {apiSlice} from '../api/apiSlice.ts';
+import {apiSlice} from './apiSlice.ts';
 import {AppSelector} from '../redux';
 import {TileContainersT, TileSectionT} from '../tileCollection';
 import {throwErr} from '../../util/function';

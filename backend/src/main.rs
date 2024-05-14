@@ -1,8 +1,6 @@
-mod app_config;
 mod utils;
 mod routes;
 mod model;
-mod user_source;
 mod data_source;
 mod app_state;
 mod service;
@@ -12,24 +10,23 @@ use std::sync::Arc;
 use anyhow::Result;
 use axum::Router;
 use axum::routing::get;
-use crate::app_config::AppConfig;
+use crate::service::app_config::{AppConfig, AppConfigService};
 use crate::app_state::AppState;
-use crate::service::tile_collection::TileCollectionService;
-use crate::user_source::UserSource;
+use crate::service::tile_collection::{TilesCollections};
+use crate::service::user_source;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-  let app_config = AppConfig::read_from_env()?;
+  let app_config = AppConfig::from_env()?;
   app_config.init_logger();
+  let app_config: AppConfigService = app_config.into();
 
-  let app_config = Arc::new(app_config);
-
-  // let user_source = user_source::StaticUserSource::from_csv_file("./misc/dev-users.csv").await?;
+  let user_source = user_source::from_config(&app_config)?;
 
   let app_state = AppState {
     app_config: app_config.clone(),
-    // user_source_service: Arc::new(Box::new(user_source)),
-    tile_collection_service: TileCollectionService::from_config(&app_config),
+    user_source_service: user_source,
+    tile_collection_service: TilesCollections::new(&app_config).into(),
   };
 
   let layer_builder = tower::ServiceBuilder::new();
@@ -43,7 +40,8 @@ async fn main() -> Result<()> {
     .route("/~:name", get(routes::redirect::tilda))
     .route("/@:name", get(routes::redirect::monkey))
     .nest("/api", routes::api::make_router())
-    .route("/", get(routes::index::serve))
+    .route("/", get(routes::frontend::viewer))
+    .route("/editor", get(routes::frontend::editor))
     .nest_service("/img", ServeDir::new(&app_config.images_root))
     .fallback_service(ServeDir::new(&app_config.resources_root))
     .layer(layer_builder)

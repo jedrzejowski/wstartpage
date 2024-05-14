@@ -1,10 +1,11 @@
 use std::fmt;
+use axum::body::Body;
 use axum::Json;
 use axum::response::{IntoResponse, Response};
 use http::StatusCode;
 
 pub type HttpResult<T> = Result<T, ProblemDetails>;
-pub type JsonResult<T> = Result<Json<T>, ProblemDetails>;
+pub type JsonResult<T> = HttpResult<Json<T>>;
 
 #[derive(Debug)]
 pub struct ProblemDetails {
@@ -50,6 +51,9 @@ impl fmt::Display for ProblemDetails {
 
 impl IntoResponse for ProblemDetails {
   fn into_response(self) -> Response {
-    self.status_code.into_response()
+    Response::builder()
+      .status(self.status_code)
+      .body(Body::empty())
+      .unwrap()
   }
 }
