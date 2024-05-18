@@ -21,7 +21,7 @@ struct StaticUser {
 impl StaticUserSource {
   pub fn from_csv_file(path: impl AsRef<Path>) -> anyhow::Result<Self> {
     let mut reader = csv::Reader::from_path(path)
-      .context("reading file")?;
+      .context("reading csv file")?;
 
     let mut users = vec![];
     for record in reader.deserialize() {

@@ -25,12 +25,14 @@ const LoginPage: FC = props => {
       <TextInput label="Użytkownik" value={username} onValueChange={setUsername}/>
       <TextInput label="Hasło" value={password} onValueChange={setPassword}/>
 
-      <Toolbar
-        left={<>
+      <Toolbar>
+        <Toolbar.Left>
           {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-        </>}
-        right={<Button onClick={submit}>Login</Button>}
-      />
+        </Toolbar.Left>
+        <Toolbar.Right>
+          <Button onClick={submit}>Login</Button>
+        </Toolbar.Right>
+      </Toolbar>
 
     </Container>
   </Root>;

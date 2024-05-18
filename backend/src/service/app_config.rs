@@ -6,7 +6,7 @@ use http::Method;
 use serde::Deserialize;
 use tower_http::cors::CorsLayer;
 
-pub type AppConfigService = Arc<AppConfig>;
+pub type AppConfigBean = Arc<AppConfig>;
 
 #[derive(Deserialize, Debug)]
 pub struct AppConfig {

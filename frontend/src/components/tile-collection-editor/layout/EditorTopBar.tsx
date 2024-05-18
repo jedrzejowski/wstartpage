@@ -4,10 +4,14 @@ import SaveButton from '../SaveButton.tsx';
 import Toolbar from '../../Toolbar.tsx';
 
 export const EditorTopBar: FC = props => {
-  return <Toolbar
-    left={<Title>WStartpage</Title>}
-    right={<SaveButton/>}
-  />;
+  return <Toolbar>
+    <Toolbar.Left>
+      <Title>WStartpage</Title>
+    </Toolbar.Left>
+    <Toolbar.Right>
+      <SaveButton/>
+    </Toolbar.Right>
+  </Toolbar>
 };
 
 const Title = styled.h1`

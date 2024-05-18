@@ -3,7 +3,7 @@ import {useAppDispatch, useAppSelector} from '../../data/hooks';
 import {useGetTileCollectionListQuery} from '../../data/slice/apiSlice.ts';
 import {
   selectEditorSelectedIconCollectionName,
-  updateTileCollectionAction
+  tileMutActions,
 } from '../../data/slice/normalizedTileCollections';
 import {setEditorSelectedTileCollectionNameAction} from '../../data/slice/editor';
 import {List, ListItem} from '../ui/List';
@@ -44,7 +44,7 @@ export const EditorCollectionList: FC = React.memo(props => {
             onClick(e) {
               e.stopPropagation();
               if (!selectedIconCollectionName) return;
-              dispatch(updateTileCollectionAction({
+              dispatch(tileMutActions.updateTileCollection({
                 collectionName: selectedIconCollectionName,
                 collection: {
                   includes: [...includedCollectionsInCurrentlyEditedCollection, collectionName]

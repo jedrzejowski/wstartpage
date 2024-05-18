@@ -10,7 +10,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use axum::Router;
 use axum::routing::get;
-use crate::service::app_config::{AppConfig, AppConfigService};
+use crate::service::app_config::{AppConfig, AppConfigBean};
 use crate::app_state::AppState;
 use crate::service::tile_collection::{TilesCollections};
 use crate::service::user_source;
@@ -19,7 +19,7 @@ use crate::service::user_source;
 async fn main() -> Result<()> {
   let app_config = AppConfig::from_env()?;
   app_config.init_logger();
-  let app_config: AppConfigService = app_config.into();
+  let app_config: AppConfigBean = app_config.into();
 
   let user_source = user_source::from_config(&app_config)?;
 

@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {TileContainersT} from '../../data/tileCollection';
+import {TileContainerNameT} from '../../data/tileCollection';
 import TileSection, {AddTileSectionButton} from './TileSection';
 import styled from 'styled-components';
 import TextSection from './TextSection';
@@ -11,7 +11,7 @@ const TileContainer: FC<{
   textOnly?: boolean;
   direction?: 'column' | 'row'
   sections: string[];
-  containerName: TileContainersT;
+  containerName: TileContainerNameT;
 }> = props => {
   const {
     iconCollectionName,

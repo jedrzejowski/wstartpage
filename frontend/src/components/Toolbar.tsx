@@ -1,39 +1,41 @@
 import React, {FC, ReactNode} from 'react';
 import styled from 'styled-components';
 
-interface Props {
-  left?: ReactNode;
-  middle?: ReactNode;
-  right?: ReactNode;
-}
-
-const Toolbar: FC<Props> = props => {
+function Toolbar(props: {
+  children: ReactNode;
+}) {
 
   return <Root>
 
-    {props.left && <Left>{props.left}</Left>}
-
-    <Middle>{props.middle}</Middle>
-
-    {props.right && <Right>{props.right}</Right>}
+    {props.children}
 
   </Root>;
-};
-
-export default Toolbar;
-
+}
 
 const Root = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const Left = styled.div`
-`;
-
-const Middle = styled.div`
+Toolbar.Expand = styled.div`
   flex-grow: 1;
 `;
 
-const Right = styled.div`
+Toolbar.Left = styled.div`
+  display: flex;
+  flex-grow: 1;
 `;
+
+Toolbar.Middle = styled.div`
+  display: flex;
+  flex-grow: 1;
+`;
+
+Toolbar.Right = styled.div`
+  display: flex;
+  flex-grow: 1;
+  justify-content: right;
+`;
+
+
+export default Toolbar;

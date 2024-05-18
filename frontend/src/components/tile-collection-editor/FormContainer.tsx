@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
-import TileForm from './TileForm';
+import TileEditForm from './TileEditForm.tsx';
 import {useAppSelector} from '../../data/hooks';
-import TileCollectionForm from './TileCollectionForm';
-import TileSectionForm from './TileSectionForm';
+import TileCollectionEditForm from './TileCollectionEditForm.tsx';
+import TileSectionEditForm from './TileSectionEditForm.tsx';
 
 export const FormContainer: FC = React.memo(props => {
   const selectedObj = useAppSelector(state => state.editor.selectedObj);
@@ -12,15 +12,15 @@ export const FormContainer: FC = React.memo(props => {
   }
 
   if ('tileCollectionName' in selectedObj) {
-    return <TileCollectionForm tileCollectionName={selectedObj.tileCollectionName}/>;
+    return <TileCollectionEditForm tileCollectionName={selectedObj.tileCollectionName}/>;
   }
 
   if ('sectionId' in selectedObj) {
-    return <TileSectionForm sectionId={selectedObj.sectionId}/>;
+    return <TileSectionEditForm sectionId={selectedObj.sectionId}/>;
   }
 
   if ('tileId' in selectedObj) {
-    return <TileForm tileId={selectedObj.tileId}/>;
+    return <TileEditForm tileId={selectedObj.tileId}/>;
   }
 
   return null;

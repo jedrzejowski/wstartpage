@@ -1,34 +1,30 @@
 import React, {FC, MouseEvent, useEffect, useState} from 'react';
 import TileIcon from './TileIcon';
 import styled from 'styled-components';
-import {searchEngine, useSearchQuery} from '../../data/slice/search.ts';
+import {isUserTileSearchMatch, useUserTileSearchQuery} from '../../data/slice/userTileSearch.ts';
 import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
 import {useIsEditor} from '../tile-collection-editor/EditorContext';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
-import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedTileCollections';
+import {useNormalizedTile, tileMutActions} from '../../data/slice/normalizedTileCollections';
 import {makeUniqueId} from '../../data/uniqueId';
 
 const Tile: FC<{
   tileId: string;
 }> = ({tileId}) => {
-  const searchQuery = useSearchQuery();
-  const [visible, setVisible] = useState(true);
+  const searchQuery = useUserTileSearchQuery();
+  const [isDisclaimedBySearch, setIsDisclaimedBySearch] = useState(false);
   const showTitles = useAppSelector(state => state.pageSettings.showTitles) ?? true;
   const widget = useNormalizedTile(tileId);
   const isSelected = useIsSelectedInEditor('tile', tileId);
   const isEditor = useIsEditor();
   const dispatch = useAppDispatch();
 
-  if (!widget) {
-    throw new Error();
-  }
-
   useEffect(() => {
 
     if (searchQuery) {
-      setVisible(widget.title ? searchEngine(searchQuery, widget.title) : false);
+      setIsDisclaimedBySearch(widget.title ? !isUserTileSearchMatch(searchQuery, widget.title) : true);
     } else {
-      setVisible(true);
+      setIsDisclaimedBySearch(false);
     }
   }, [searchQuery]);
 
@@ -38,10 +34,8 @@ const Tile: FC<{
     <Root
       href={url}
       target="_parent"
-      style={{
-        display: visible ? undefined : 'none',
-      }}
       $isSelected={isSelected}
+      $isDisclaimedBySearch={isDisclaimedBySearch}
       onClick={handleClick}
     >
       <IconRoot>
@@ -73,12 +67,12 @@ export const AddTileButton: FC<{
   </AddButtonRoot>;
 
   function handleClick() {
-    dispatch(addTileAction({sectionId, tileId: makeUniqueId()}));
+    dispatch(tileMutActions.addTile({sectionId, tileId: makeUniqueId()}));
   }
 });
 
 
-const Root = styled.a<{ $isSelected: boolean }>`
+const Root = styled.a<{ $isSelected: boolean, $isDisclaimedBySearch: boolean }>`
   display: block;
   cursor: pointer;
   width: ${props => props.theme.iconSize}px;
@@ -93,6 +87,8 @@ const Root = styled.a<{ $isSelected: boolean }>`
     outline: 2px solid rgb(0 102 255 / 55%);
     outline-offset: ${props.theme.spacing()}
     ` : ''}
+
+  opacity: ${props => props.$isDisclaimedBySearch ? 0.15 : 1};
 `;
 
 const IconRoot = styled.div`

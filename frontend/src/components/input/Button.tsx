@@ -32,7 +32,7 @@ const ButtonRoot = styled.button`
   align-items: center;
   background: white;
   outline: none;
-  padding: ${props => props.theme.spacing(0.5, 1)};
+  padding: ${props => props.theme.spacing(1, 2)};
   cursor: pointer;
 
   & > span + span {

@@ -1,24 +1,19 @@
-import React, {ChangeEvent, FC} from 'react';
+import {FC, memo} from 'react';
 import TextInput from '../input/TextInput';
-import {
-  moveTileAction,
-  updateTileAction, updateTileIconAction,
-  useNormalizedTile
-} from '../../data/slice/normalizedTileCollections';
-import type {TileT, TextIconT, UrlIconT} from '../../data/tileCollection';
+import {tileMutActions, useNormalizedTile} from '../../data/slice/normalizedTileCollections';
+import type {TileT, TextIconT} from '../../data/tileCollection';
 import {useAppDispatch} from '../../data/hooks';
-import CheckBoxInput from '../input/CheckBoxInput';
 import {isTextIconT, isUrlIconT} from '../../data/tileCollection';
 import ColorInput from '../input/ColorInput';
-import {FlexExpand, HFlexContainer, PaddedRoot} from '../UtilityElements';
+import {PaddedRoot} from '../UtilityElements';
 import Button from '../input/Button';
 import NumberInput from '../input/NumberInput';
 import MdiIcon from '../MdiIcon';
 import SelectInput from '../input/SelectInput';
+import Toolbar from "../Toolbar.tsx";
 
-export const TileForm: FC<{
-  tileId: string;
-}> = React.memo(({tileId}) => {
+function TileEditForm(props: { tileId: string; }) {
+  const {tileId} = props;
   const tile = useNormalizedTile(tileId);
   const dispatch = useAppDispatch();
 
@@ -28,13 +23,13 @@ export const TileForm: FC<{
 
   return <PaddedRoot>
 
-    <HFlexContainer>
+    <Toolbar>
       <Button onClick={handleMoveToLeftClick} startIcon="arrow-left"/>
-      <FlexExpand/>
+      <Toolbar.Expand/>
       <Button onClick={handleDeleteClick} startIcon={<MdiIcon icon="delete" color="red"/>}/>
-      <FlexExpand/>
+      <Toolbar.Expand/>
       <Button onClick={handleMoveToRightClick} startIcon="arrow-right"/>
-    </HFlexContainer>
+    </Toolbar>
 
     <TextInput label="Tytuł" value={tile.title} onValueChange={handleChangeFactory('title')}/>
     <TextInput label="URL" value={tile.url} onValueChange={handleChangeFactory('url')}/>
@@ -42,7 +37,7 @@ export const TileForm: FC<{
     <SelectInput<null | 'text' | 'url'>
       label="Typ ikony"
       value={isTextIconT(tile.icon) ? 'text' : isUrlIconT(tile.icon) ? 'url' : null}
-      onValueChange={(value) => dispatch(updateTileIconAction({tileId, iconType: value}))}
+      onValueChange={(value) => dispatch(tileMutActions.updateTileIcon({tileId, iconType: value}))}
       options={[
         {value: null, label: 'Brak'},
         {value: 'text', label: 'Tekst'},
@@ -59,25 +54,24 @@ export const TileForm: FC<{
 
   function handleChangeFactory<K extends keyof TileT>(field: K) {
     return (newValue: TileT[K]) => {
-      dispatch(updateTileAction({tileId, tile: {[field]: newValue}}));
+      dispatch(tileMutActions.updateTile({tileId, tile: {[field]: newValue}}));
     };
   }
 
-  function handleMoveToLeftClick(e: React.MouseEvent) {
-    dispatch(moveTileAction({tileId, offset: -1}));
+  function handleMoveToLeftClick() {
+    dispatch(tileMutActions.moveTile({tileId, offset: -1}));
   }
 
-  function handleDeleteClick(e: React.MouseEvent) {
-
+  function handleDeleteClick() {
+    dispatch(tileMutActions.deleteTile({tileId}));
   }
 
-  function handleMoveToRightClick(e: React.MouseEvent) {
-    dispatch(moveTileAction({tileId, offset: 1}));
+  function handleMoveToRightClick() {
+    dispatch(tileMutActions.moveTile({tileId, offset: 1}));
   }
-});
+}
 
-
-export default TileForm;
+export default memo(TileEditForm);
 
 const TextIconEditor: FC<{ value: TextIconT; onValueChange: (value: TextIconT) => void; }> = props => {
   const {value, onValueChange} = props;

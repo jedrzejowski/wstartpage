@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
-import searchSlice, {useSearchQuery} from '../../data/slice/search.ts';
+import userTileSearchSlice, {useUserTileSearchQuery} from '../../data/slice/userTileSearch.ts';
 import {useAppDispatch} from '../../data/hooks';
 import {useEventListener} from 'usehooks-ts';
 
 const SearchView: FC = props => {
-  const searchQuery = useSearchQuery();
+  const searchQuery = useUserTileSearchQuery();
   const dispatch = useAppDispatch();
 
   useEventListener('keydown', event => {
@@ -15,21 +15,21 @@ const SearchView: FC = props => {
     }
 
     if (event.code.match(/^Key[A-Z]$/)) {
-      dispatch(searchSlice.actions.append(event.key));
+      dispatch(userTileSearchSlice.actions.append(event.key));
     }
 
     if (event.code === 'Backspace') {
-      dispatch(searchSlice.actions.backspace());
+      dispatch(userTileSearchSlice.actions.backspace());
     }
 
     if (event.code === 'Escape') {
-      dispatch(searchSlice.actions.clear());
+      dispatch(userTileSearchSlice.actions.clear());
     }
   });
 
   return (
     <Root>
-      {searchQuery}
+      {searchQuery?.toUpperCase()}
     </Root>
   );
 };

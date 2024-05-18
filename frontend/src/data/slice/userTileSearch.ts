@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import type {AppRootState} from '../redux';
 import {useAppSelector} from '../hooks';
 
 interface SearchState {
@@ -10,8 +9,8 @@ const initialState: SearchState = {
   query: null,
 };
 
-export const searchSlice = createSlice({
-  name: 'search',
+export const userTileSearchSlice = createSlice({
+  name: 'userTileSearch',
   initialState,
   reducers: {
     clear(state) {
@@ -29,10 +28,10 @@ export const searchSlice = createSlice({
 });
 
 
-export const useSearchQuery = () => useAppSelector(state => state.search.query);
+export const useUserTileSearchQuery = () => useAppSelector(state => state.userTileSearch.query);
 
-export default searchSlice;
+export default userTileSearchSlice;
 
-export function searchEngine(query: string, text: string): boolean {
+export function isUserTileSearchMatch(query: string, text: string): boolean {
   return text.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) >= 0;
 }

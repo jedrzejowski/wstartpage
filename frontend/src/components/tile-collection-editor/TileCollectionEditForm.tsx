@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
-import {updateTileCollectionAction, useNormalizedTileCollection} from '../../data/slice/normalizedTileCollections';
+import {tileMutActions, useNormalizedTileCollection} from '../../data/slice/normalizedTileCollections';
 import EditableList, {EditableListChangeAction} from '../input/EditableList';
 import {useAppDispatch} from '../../data/hooks';
 import {PaddedRoot} from '../UtilityElements';
 import Typography from '../ui/Typography';
 
-export const TileCollectionForm: FC<{
+export const TileCollectionEditForm: FC<{
   tileCollectionName: string;
 }> = props => {
   const {tileCollectionName} = props;
@@ -37,7 +37,7 @@ export const TileCollectionForm: FC<{
       copyOfIncludes.splice(action.index, 1);
     }
 
-    dispatch(updateTileCollectionAction({
+    dispatch(tileMutActions.updateTileCollection({
       collectionName: tileCollectionName,
       collection: {
         includes: copyOfIncludes,
@@ -46,5 +46,5 @@ export const TileCollectionForm: FC<{
   }
 };
 
-export default React.memo(TileCollectionForm);
+export default React.memo(TileCollectionEditForm);
 

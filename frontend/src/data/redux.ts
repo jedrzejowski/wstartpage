@@ -1,5 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit';
-import searchSlice from './slice/search.ts';
+import userTileSearchSlice from './slice/userTileSearch.ts';
 import {settingsSlice} from './slice/pageSettings';
 import editorSlice from './slice/editor';
 import {normalizedTileCollectionSlice} from './slice/normalizedTileCollections';
@@ -10,7 +10,7 @@ import {authSlice} from './slice/auth.ts';
 
 export const reduxStore = configureStore({
   reducer: {
-    [searchSlice.name]: searchSlice.reducer,
+    [userTileSearchSlice.name]: userTileSearchSlice.reducer,
     [settingsSlice.name]: settingsSlice.reducer,
     [editorSlice.name]: editorSlice.reducer,
     [normalizedTileCollectionSlice.name]: normalizedTileCollectionSlice.reducer,

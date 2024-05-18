@@ -40,7 +40,7 @@ export type NormalizedTileSectionT = Normalize<TileSectionT, 'tiles'>;
 
 export type TileContainerT = TileSectionT[];
 
-export type TileContainersT =
+export type TileContainerNameT =
   | 'top'
   | 'middle'
   | 'left'
@@ -51,7 +51,7 @@ export type TileCollectionT = {
   readonly name: string;
   includes: string[] | null;
   settings: Partial<TileCollectionSettingsT>;
-} & Record<TileContainersT, TileContainerT | null>;
+} & Record<TileContainerNameT, TileContainerT | null>;
 
 export interface TileCollectionSettingsT {
   logoUrl: string;
@@ -61,7 +61,7 @@ export interface TileCollectionSettingsT {
   zoomLevel: number;
 }
 
-export type NormalizedTileCollectionT = Normalize<TileCollectionT, TileContainersT>;
+export type NormalizedTileCollectionT = Normalize<TileCollectionT, TileContainerNameT>;
 
 export function textIconFromStr(iconText: string): TextIconT {
   const data: any = {};

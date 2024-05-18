@@ -6,7 +6,7 @@ use crate::data_source::{RepositoryError};
 use crate::model::user_info::AppUserInfo;
 use crate::utils::problem_details::ProblemDetails;
 use crate::model::tile_collection::TileCollection;
-use crate::service::tile_collection::TileCollectionService;
+use crate::service::tile_collection::TilesCollectionsBean;
 
 
 #[derive(Debug, Deserialize)]
@@ -17,7 +17,7 @@ pub struct GetIconCollectionQuery {
 
 pub async fn search(
   _: AppUserInfo, // only for auth
-  State(tile_repo): State<TileCollectionService>,
+  State(tile_repo): State<TilesCollectionsBean>,
 ) -> JsonResult<Vec<String>> {
   let names = tile_repo.get_all_names().await
     .map_err(|_err| ProblemDetails::internal(""))?;
@@ -27,7 +27,7 @@ pub async fn search(
 
 
 pub async fn select(
-  tile_repo: State<TileCollectionService>,
+  tile_repo: State<TilesCollectionsBean>,
   name: Path<String>,
   query: Query<GetIconCollectionQuery>,
 ) -> JsonResult<TileCollection> {
@@ -49,10 +49,12 @@ pub async fn select(
 
 pub async fn update(
   _: AppUserInfo,
+  tile_repo: State<TilesCollectionsBean>,
   Path(id): Path<String>,
   tile_collection: Json<TileCollection>,
-) -> HttpResult<String> {
-  println!("{} = {:?}", id, tile_collection);
+) -> HttpResult<()> {
 
-  Ok("ok".to_string())
+  tile_repo.update_one(&id, &tile_collection).await?;
+
+  Ok(())
 }

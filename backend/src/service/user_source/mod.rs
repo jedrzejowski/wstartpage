@@ -10,7 +10,7 @@ use crate::model::user_info::AppUserInfo;
 use thiserror::Error;
 
 pub use r#static::StaticUserSource;
-use crate::service::app_config::AppConfigService;
+use crate::service::app_config::AppConfigBean;
 use crate::service::user_source::no_user_source::NoUserSource;
 
 #[derive(Error, Debug)]
@@ -30,7 +30,7 @@ pub trait UserSource: Sync + Send + Debug {
 
 pub type UserSourceService = Arc<Box<dyn UserSource>>;
 
-pub fn from_config(app_config: &AppConfigService) -> anyhow::Result<UserSourceService> {
+pub fn from_config(app_config: &AppConfigBean) -> anyhow::Result<UserSourceService> {
   let config = app_config.prefixed("user_source");
 
   match config.get_required("type").as_str() {

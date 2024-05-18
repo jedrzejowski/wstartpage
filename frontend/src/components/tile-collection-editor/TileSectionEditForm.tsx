@@ -1,6 +1,7 @@
-import React, {ChangeEvent, FC} from 'react';
+import {memo, FC} from 'react';
 import {
-  normalizedTileCollectionSlice, updateTileSectionAction,
+  tileMutActions,
+  normalizedTileCollectionSlice,
   useNormalizedTileSection
 } from '../../data/slice/normalizedTileCollections';
 import {useAppDispatch} from '../../data/hooks';
@@ -11,7 +12,7 @@ import type {NormalizedTileSectionT} from '../../data/tileCollection';
 import NumberInput from '../input/NumberInput';
 import MdiIcon from '../MdiIcon';
 
-const TileSectionForm: FC<{
+const TileSectionEditForm: FC<{
   sectionId: string;
 }> = ({sectionId}) => {
   const section = useNormalizedTileSection(sectionId);
@@ -52,22 +53,22 @@ const TileSectionForm: FC<{
         [field]: newValue,
       };
 
-      dispatch(updateTileSectionAction({sectionId, section: newSection}));
+      dispatch(tileMutActions.updateTileSection({sectionId, section: newSection}));
     };
   }
 
-  function handleMoveToLeftClick(e: React.MouseEvent) {
+  function handleMoveToLeftClick() {
     dispatch(normalizedTileCollectionSlice.actions.moveIconSection({sectionId, offset: -1}));
   }
 
-  function handleDeleteClick(e: React.MouseEvent) {
-
+  function handleDeleteClick() {
+    dispatch(normalizedTileCollectionSlice.actions.deleteTileSection({sectionId}));
   }
 
-  function handleMoveToRightClick(e: React.MouseEvent) {
+  function handleMoveToRightClick() {
     dispatch(normalizedTileCollectionSlice.actions.moveIconSection({sectionId, offset: 1}));
   }
 };
 
 
-export default React.memo(TileSectionForm);
+export default memo(TileSectionEditForm);

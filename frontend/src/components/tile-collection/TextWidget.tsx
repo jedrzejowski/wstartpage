@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React, {FC, MouseEvent} from 'react';
-import {useNormalizedTile, addTileAction} from '../../data/slice/normalizedTileCollections';
+import {useNormalizedTile, tileMutActions} from '../../data/slice/normalizedTileCollections';
 import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
 import {useIsEditor} from '../tile-collection-editor/EditorContext';
 import clsx from 'clsx';
@@ -48,7 +48,7 @@ export const AddTextWidgetButton: FC<{
   </AddButtonRoot>;
 
   function handleClick() {
-    dispatch(addTileAction({sectionId, tileId: makeUniqueId()}));
+    dispatch(tileMutActions.addTile({sectionId, tileId: makeUniqueId()}));
   }
 });
 

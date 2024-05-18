@@ -5,7 +5,7 @@ use axum::Json;
 use crate::utils::problem_details::{JsonResult, ProblemDetails};
 use serde::Deserialize;
 use crate::model::image_attrs::ImageAttrs;
-use crate::service::app_config::AppConfigService;
+use crate::service::app_config::AppConfigBean;
 use crate::utils::security::assert_path_not_backwards;
 
 
@@ -15,8 +15,8 @@ pub struct SearchQuery {
 }
 
 pub async fn search(
-  app_config: State<AppConfigService>,
-  Query(query): Query<SearchQuery>,
+    app_config: State<AppConfigBean>,
+    Query(query): Query<SearchQuery>,
 ) -> JsonResult<Vec<ImageAttrs>> {
   assert_path_not_backwards(&query.path)?;
 

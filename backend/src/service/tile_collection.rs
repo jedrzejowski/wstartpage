@@ -3,18 +3,18 @@ use std::sync::Arc;
 use anyhow::{anyhow, Result};
 use crate::data_source::{FileDataSource, RepositoryResult};
 use crate::model::tile_collection::{Icon, TextIcon, TileCollection, TileSection};
-use crate::service::app_config::AppConfigService;
+use crate::service::app_config::AppConfigBean;
 
-pub type TileCollectionService = Arc<TilesCollections>;
+pub type TilesCollectionsBean = Arc<TilesCollections>;
 
 pub struct TilesCollections {
-  file_data_source: FileDataSource<TileCollection>,
+  data_source: FileDataSource<TileCollection>,
 }
 
 impl TilesCollections {
-  pub fn new(app_config: &AppConfigService) -> Self {
+  pub fn new(app_config: &AppConfigBean) -> Self {
     Self {
-      file_data_source: FileDataSource::from_path(&app_config.tile_collections_root),
+      data_source: FileDataSource::from_path(&app_config.tile_collections_root),
     }
   }
 
@@ -79,7 +79,7 @@ impl TilesCollections {
         continue;
       }
 
-      let icon_collection = self.file_data_source.get_one(&name).await
+      let icon_collection = self.data_source.get_one(&name).await
         .map_err(|_| anyhow!("collection {} not found", &name))?;
 
       if let Some(includes) = &icon_collection.includes {
@@ -96,11 +96,15 @@ impl TilesCollections {
   }
 
   pub async fn get_all_names(&self) -> RepositoryResult<Vec<String>> {
-    self.file_data_source.get_all_names().await
+    self.data_source.get_all_names().await
   }
 
   pub async fn get_one(&self, name: &str) -> RepositoryResult<TileCollection> {
-    self.file_data_source.get_one(name).await
+    self.data_source.get_one(name).await
+  }
+
+  pub async fn update_one(&self, name: &str, tile_collection: &TileCollection) -> RepositoryResult<()> {
+    self.data_source.update_one(name, tile_collection).await
   }
 }
 

@@ -1,11 +1,6 @@
 import {createSlice, Draft, PayloadAction} from '@reduxjs/toolkit';
 import {useAppSelector} from '../hooks';
-import {
-  addTileAction,
-  addTileSectionAction,
-  updateTileAction,
-  updateTileSectionAction
-} from './normalizedTileCollections';
+import {anyTileMutAction, tileMutActions} from './normalizedTileCollections';
 
 interface EditorStateT {
   currentCollectionName: string | null;
@@ -38,18 +33,21 @@ export const editorSlice = createSlice({
     },
   },
   extraReducers: (builder) => builder
-    .addCase(addTileAction, (state, action) => {
+    .addCase(tileMutActions.addTile, (state, action) => {
       const {tileId} = action.payload;
       state.selectedObj = {tileId};
-      markCurrentCollectionAsEdited(state);
     })
-    .addCase(addTileSectionAction, (state, action) => {
+    .addCase(tileMutActions.addTileSection, (state, action) => {
       const {sectionId} = action.payload;
       state.selectedObj = {sectionId};
-      markCurrentCollectionAsEdited(state);
     })
-    .addCase(updateTileAction, markCurrentCollectionAsEdited)
-    .addCase(updateTileSectionAction, markCurrentCollectionAsEdited)
+    .addCase(tileMutActions.deleteTile, (state, action) => {
+      state.selectedObj = null;
+    })
+    .addCase(tileMutActions.deleteTileSection, (state, action) => {
+      state.selectedObj = null;
+    })
+    .addMatcher(anyTileMutAction, markCurrentCollectionAsEdited)
 });
 
 export const {

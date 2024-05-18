@@ -3,10 +3,10 @@ import Tile, {AddTileButton} from './Tile';
 import styled, {useTheme} from 'styled-components';
 import {isNumber} from '../../util/typescript';
 import {isMobile} from 'react-device-detect';
-import {addTileSectionAction, useNormalizedTileSection} from '../../data/slice/normalizedTileCollections';
+import {tileMutActions, useNormalizedTileSection} from '../../data/slice/normalizedTileCollections';
 import {setEditorSelectedObjAction, useIsSelectedInEditor} from '../../data/slice/editor';
 import {HFlexContainer} from '../UtilityElements';
-import {TileContainersT} from '../../data/tileCollection';
+import {TileContainerNameT} from '../../data/tileCollection';
 import {useAppDispatch, useAppSelector} from '../../data/hooks';
 import {makeUniqueId} from '../../data/uniqueId';
 import clsx from 'clsx';
@@ -77,7 +77,7 @@ const TileSection: FC<{
 
 export const AddTileSectionButton: FC<{
   iconCollectionName: string;
-  containerName: TileContainersT;
+  containerName: TileContainerNameT;
 }> = React.memo(({iconCollectionName, containerName}) => {
   const dispatch = useAppDispatch();
 
@@ -86,7 +86,7 @@ export const AddTileSectionButton: FC<{
   </AddButtonRoot>;
 
   function handleClick() {
-    dispatch(addTileSectionAction({
+    dispatch(tileMutActions.addTileSection({
       iconCollectionName,
       containerName,
       sectionId: makeUniqueId()
