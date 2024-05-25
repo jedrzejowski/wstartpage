@@ -1,9 +1,9 @@
-import React, {DOMAttributes, FC} from 'react';
+import React, {DOMAttributes, FC, InputHTMLAttributes} from 'react';
 import styled from 'styled-components';
 import {useUniqueId} from '../../data/uniqueId';
 import {BaseInputProps} from './BaseInput';
 
-export type TextInputProps = DOMAttributes<HTMLInputElement> & BaseInputProps<string> & {
+export type TextInputProps = InputHTMLAttributes<HTMLInputElement> & BaseInputProps<string> & {
   password?: boolean;
 };
 
@@ -34,7 +34,8 @@ const TextInput: FC<TextInputProps> = (props) => {
 
 const Root = styled.div`
   box-sizing: border-box;
-  background: white;
+  background: ${props => props.theme.color.background};
+  color: ${props => props.theme.color.text};
   border: 1px solid ${props => props.theme.color.border};
 
   &:focus-within {
@@ -58,7 +59,7 @@ const Input = styled.input`
   outline: none;
   border: none;
   font-size: 1em;
-
+  color: ${props => props.theme.color.text};
 `;
 
 export default TextInput;

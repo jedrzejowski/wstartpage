@@ -8,11 +8,11 @@ import StartPage from './components/tile-collection/StartPage';
 const Viewer: FC = () => {
 
   const tileCollectionName = useAppSelector(state => state.pageSettings.viewerTileCollectionName);
-  const qq = useGetMergedTileCollectionQuery(tileCollectionName ?? '', {skip: !tileCollectionName});
+  const query = useGetMergedTileCollectionQuery(tileCollectionName ?? '', {skip: !tileCollectionName});
 
 
   return <>
-    {qq.isSuccess && <StartPage tileCollectionName={tileCollectionName + '?recursiveMerged'}/>}
+    {query.isSuccess && <StartPage tileCollectionName={tileCollectionName + '?recursiveMerged'}/>}
   </>;
 };
 

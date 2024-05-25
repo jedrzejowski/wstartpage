@@ -1,8 +1,8 @@
-use crate::utils::problem_details::{ProblemDetails, HttpResult};
+use crate::utils::problem_details::{ProblemDetails};
 
 pub fn assert_path_not_backwards<S: AsRef<str>>(path: S) -> Result<(), ProblemDetails> {
-  if path.as_ref().starts_with("..") {
-    return Err(ProblemDetails::bad_request("path starts with two dots"));
+  if path.as_ref().contains("..") {
+    return Err(ProblemDetails::bad_request("path contains two dots"));
   }
 
   return Ok(());

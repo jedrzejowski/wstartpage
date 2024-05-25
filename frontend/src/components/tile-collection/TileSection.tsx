@@ -98,7 +98,7 @@ const SectionRoot = styled.div`
   width: ${isMobile ? 'inherit' : 'max-content'};
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: ${props => props.theme.color.background};
 
   margin: ${props => props.theme.spacing()};
   padding: ${props => props.theme.spacing()} ${props => props.theme.spacing(2)};

@@ -39,7 +39,7 @@ const Tile: FC<{
       onClick={handleClick}
     >
       <IconRoot>
-        <TileIcon icon={widget.icon ?? '!text=: (&bgColor=#0079d9&fontSize=32'}/>
+        <TileIcon icon={widget.icon}/>
       </IconRoot>
 
       <TitleRoot $visible={showTitles}>
@@ -84,8 +84,8 @@ const Root = styled.a<{ $isSelected: boolean, $isDisclaimedBySearch: boolean }>`
   margin-bottom: ${props => props.theme.spacing(0.5)};
 
   ${props => props.$isSelected ? `
-    outline: 2px solid rgb(0 102 255 / 55%);
-    outline-offset: ${props.theme.spacing()}
+    outline: ${props.theme.spacing()} solid rgb(0 102 255 / 55%);
+    outline-offset: ${props.theme.spacing()};
     ` : ''}
 
   opacity: ${props => props.$isDisclaimedBySearch ? 0.15 : 1};
@@ -98,7 +98,7 @@ const IconRoot = styled.div`
 const TitleRoot = styled.div<{ $visible: boolean }>`
   display: ${props => props.$visible ? 'block' : 'none'};
   width: 100%;
-  color: black;
+  color: ${props => props.theme.color.text};
   cursor: pointer;
   text-align: center;
   text-decoration: none;

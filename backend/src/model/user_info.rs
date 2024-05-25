@@ -5,12 +5,10 @@ use axum_extra::{
   headers::{authorization::Basic, Authorization},
   TypedHeader,
 };
-use axum_extra::typed_header::TypedHeaderRejection;
 use http::request::Parts;
 use crate::utils::problem_details::ProblemDetails;
 use serde::{Deserialize, Serialize};
 use crate::app_state::AppState;
-use crate::service::user_source::{UserSourceError, UserSourceService};
 
 const SESSION_KEY: &str = "app_user";
 

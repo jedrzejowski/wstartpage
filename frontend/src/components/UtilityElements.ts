@@ -26,7 +26,7 @@ export const SmallButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: ${props => props.theme.buttonHoverBg};
+    background: ${props => props.theme.color.hover};
   }
 `;
 

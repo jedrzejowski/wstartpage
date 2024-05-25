@@ -2,33 +2,26 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {useAppSelector} from '../hooks';
 
 interface SearchState {
-  query: string | null;
+  searchQuery: string;
 }
 
 const initialState: SearchState = {
-  query: null,
+  searchQuery: '',
 };
 
 export const userTileSearchSlice = createSlice({
   name: 'userTileSearch',
   initialState,
   reducers: {
-    clear(state) {
-      state.query = null;
-    },
-    append(state, action: PayloadAction<string>) {
-      state.query = (state.query ?? '') + action.payload;
-    },
-    backspace(state) {
-      if (state.query) {
-        state.query = state.query.substr(0, state.query.length - 1);
-      }
+    setUserSearchQueryAction(state, action: PayloadAction<{ searchQuery: string; }>) {
+      state.searchQuery = action.payload.searchQuery;
     },
   }
 });
 
+export const {setUserSearchQueryAction} = userTileSearchSlice.actions;
 
-export const useUserTileSearchQuery = () => useAppSelector(state => state.userTileSearch.query);
+export const useUserTileSearchQuery = () => useAppSelector(state => state.userTileSearch.searchQuery);
 
 export default userTileSearchSlice;
 

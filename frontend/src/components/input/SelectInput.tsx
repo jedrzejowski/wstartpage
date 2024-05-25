@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import {noop} from '../../util/typescript';
 import {useEventListener} from 'usehooks-ts';
 
+export type SelectInputOptions<T> = Readonly<{ readonly value: T, readonly  label: ReactNode }[]>
+
 export type SelectInputProps<T = any> = BaseInputProps<T> & {
-  options: Readonly<{ readonly value: T, readonly  label: ReactNode }[]>;
+  options: SelectInputOptions<T>;
 }
 
 function SelectInput<T>(props: SelectInputProps<T>): ReactElement | null {
@@ -113,7 +115,7 @@ const Option = styled(BaseOption)`
 
 const PopupRoot = styled.div`
   position: fixed;
-  background: ${props => props.theme.color.background1};
+  background: ${props => props.theme.color.background};
   border: 1px solid ${props => props.theme.color.border};
   box-shadow: ${props => props.theme.shadow()};
 `;

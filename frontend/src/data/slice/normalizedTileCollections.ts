@@ -83,7 +83,9 @@ export const normalizedTileCollectionSlice = createSlice({
           };
           break;
         case 'url':
-          tile.icon = '';
+          tile.icon = {
+            url: '',
+          };
           break;
         case null:
           tile.icon = null;
@@ -250,9 +252,7 @@ export function getTileCollectionFromState(state: NormalizedTileCollectionStateT
 
   function unnormalizaTileCollection(iconCollection: NormalizedTileCollectionT): TileCollectionT {
     return {
-      name: iconCollection.name,
-      includes: iconCollection.includes,
-      settings: iconCollection.settings,
+      ...iconCollection,
       top: unnormalizeIconSections(iconCollection.top),
       left: unnormalizeIconSections(iconCollection.left),
       right: unnormalizeIconSections(iconCollection.right),

@@ -22,12 +22,12 @@ declare module 'styled-components' {
     selectedOutline(): string;
 
     iconSize: number;
-    buttonHoverBg: string;
     zoomFactor: number;
 
     color: {
-      background0: string;
-      background1: string;
+      bodyBackground: string;
+      background: string;
+      text: string;
       border: string;
       hover: string;
       selected: string;
@@ -37,7 +37,7 @@ declare module 'styled-components' {
   }
 }
 
-export const defaultTheme: DefaultTheme = {
+const lightTheme: DefaultTheme = {
   baseSpacing: 6,
   baseFontSize: 16,
 
@@ -71,12 +71,12 @@ export const defaultTheme: DefaultTheme = {
     ].join('');
   },
   iconSize: 64,
-  buttonHoverBg: '#bbbebf',
   zoomFactor: 1,
 
   color: {
-    background0: '#fcfcfc',
-    background1: 'white',
+    bodyBackground: 'rgb(252, 252, 252)',
+    background: 'white',
+    text: '#000',
     border: '#bbbebf',
     hover: 'rgb(0,0,0,0.12)',
     selected: 'rgb(0,0,0,0.25)',
@@ -87,6 +87,18 @@ export const defaultTheme: DefaultTheme = {
   }
 };
 
+const darkTheme: DefaultTheme = {
+  ...lightTheme,
+  color: {
+    bodyBackground: 'black',
+    background: '#222222',
+    text: '#FFF',
+    border: '#bbbebf',
+    hover: 'rgb(0,0,0,0.12)',
+    selected: 'rgb(0,0,0,0.25)',
+  },
+}
+
 const GlobalStyle = createGlobalStyle<{}>`
   body {
     margin: 0;
@@ -94,8 +106,9 @@ const GlobalStyle = createGlobalStyle<{}>`
     font-family: sans-serif;
 
     background-attachment: fixed;
-    background-color: #fcfcfc;
+    background-color: ${props => props.theme.color.bodyBackground};
     background-position: 0 0;
+    color: ${props => props.theme.color.text};
   }
 
   body::-webkit-scrollbar {
@@ -106,7 +119,7 @@ const GlobalStyle = createGlobalStyle<{}>`
 export const ThemeProvider: FC<{
   children: ReactNode;
 }> = (props) => {
-  const [theme, setTheme] = useState(defaultTheme);
+  const [theme, setTheme] = useState(lightTheme);
 
   const zoomLevel = useAppSelector(selectPageSettingsZoomLevel);
 
@@ -115,9 +128,9 @@ export const ThemeProvider: FC<{
 
     setTheme({
       ...theme,
-      baseSpacing: defaultTheme.baseSpacing * zoomFactor,
-      iconSize: defaultTheme.iconSize * zoomFactor,
-      baseFontSize: defaultTheme.baseFontSize * zoomFactor,
+      baseSpacing: lightTheme.baseSpacing * zoomFactor,
+      iconSize: lightTheme.iconSize * zoomFactor,
+      baseFontSize: lightTheme.baseFontSize * zoomFactor,
       zoomFactor: zoomFactor,
     });
 

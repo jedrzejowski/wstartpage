@@ -2,7 +2,7 @@ use std::collections::{HashSet, VecDeque};
 use std::sync::Arc;
 use anyhow::{anyhow, Result};
 use crate::data_source::{FileDataSource, RepositoryResult};
-use crate::model::tile_collection::{Icon, TextIcon, TileCollection, TileSection};
+use crate::model::tile_collection::{Icon, TileCollection, TileCollectionTheme, TileSection};
 use crate::service::app_config::AppConfigBean;
 
 pub type TilesCollectionsBean = Arc<TilesCollections>;
@@ -19,6 +19,10 @@ impl TilesCollections {
   }
 
   pub fn normalize(&self, tile_collection: &mut TileCollection) {
+    if None == tile_collection.theme {
+      tile_collection.theme = Some(TileCollectionTheme::SystemDefault);
+    }
+
     normalize_container(&mut tile_collection.top);
     normalize_container(&mut tile_collection.middle);
     normalize_container(&mut tile_collection.right);
@@ -31,6 +35,7 @@ impl TilesCollections {
 
     return TileCollection {
       name,
+      theme: first.theme.clone(),
       includes: None,
       settings: first.settings.clone(),
       top: Some(tile_collections.into_iter()
@@ -57,11 +62,14 @@ impl TilesCollections {
   }
 
   pub async fn resolve_recursive(&self, tile_collection: &TileCollection) -> Result<TileCollection> {
+    let new_name = format!("{}?recursiveMerged", &tile_collection.name);
     let mut names_done = HashSet::new();
     let mut names_todo = match &tile_collection.includes {
       Some(names) => {
         if names.is_empty() {
-          return Ok(tile_collection.clone());
+          let mut tile_collection = tile_collection.clone();
+          tile_collection.name = new_name;
+          return Ok(tile_collection);
         }
 
         VecDeque::from(names.to_vec())
@@ -90,7 +98,7 @@ impl TilesCollections {
     }
 
     return Ok(Self::merge(
-      format!("{}?recursiveMerged", &tile_collection.name),
+      new_name,
       &tile_collections,
     ));
   }
@@ -113,28 +121,28 @@ fn normalize_container(container: &mut Option<Vec<TileSection>>) {
     for section in sections {
       for tile in &mut section.tiles {
         match &tile.icon {
-          Some(Icon::ImageIcon(icon)) => {
+          Some(Icon::Legacy(icon)) => {
             if icon.chars().nth(0).unwrap() == '!' {
-              let mut text_icon = TextIcon {
-                text: String::from(""),
-                bg_color: String::from(""),
-                font_size: 16,
-              };
+              let mut text = String::from("");
+              let mut bg_color = String::from("");
+              let mut font_size = 16;
 
               for part in icon[1..].split('&') {
                 let split: Vec<&str> = part.split('=').collect();
 
                 if split.len() == 2 {
                   match split[0] {
-                    "text" => { text_icon.text = String::from(split[1]); }
-                    "bgColor" => { text_icon.bg_color = String::from(split[1]); }
-                    "fontSize" => { text_icon.font_size = split[1].parse().unwrap(); }
+                    "text" => { text = String::from(split[1]); }
+                    "bgColor" => { bg_color = String::from(split[1]); }
+                    "fontSize" => { font_size = split[1].parse().unwrap(); }
                     _ => {}
                   }
                 }
               }
 
-              tile.icon = Some(Icon::TextIcon(text_icon));
+              tile.icon = Some(Icon::TextIcon { text, bg_color, font_size });
+            } else {
+              tile.icon = Some(Icon::UrlIcon { url: icon.to_owned() });
             }
           }
           _ => {}

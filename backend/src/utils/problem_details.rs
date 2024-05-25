@@ -57,3 +57,10 @@ impl IntoResponse for ProblemDetails {
       .unwrap()
   }
 }
+
+impl From<std::io::Error> for ProblemDetails {
+  fn from(value: std::io::Error) -> Self {
+    log::error!("std::io::Error {}", value);
+    ProblemDetails::internal("internal error")
+  }
+}

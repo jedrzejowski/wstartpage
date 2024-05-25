@@ -5,3 +5,7 @@ Authorization: {{authorization}}
 ###
 GET {{baseUrl}}/api/tile-collections
 Authorization: {{authorization}}
+
+###
+GET {{baseUrl}}/api/images?path=./google
+Authorization: {{authorization}}

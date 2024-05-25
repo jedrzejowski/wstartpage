@@ -3,7 +3,7 @@ import Button from '../input/Button';
 import {useAppSelector, useAppStore} from '../../data/hooks';
 import {getTileCollectionFromState} from '../../data/slice/normalizedTileCollections';
 import {useUpdateTileCollectionMutation} from '../../data/slice/apiSlice.ts';
-import Dialog from "../Dialog.tsx";
+import Dialog, {DialogActionFooter, DialogTitle} from "../Dialog.tsx";
 
 type MyState = 'idle' | 'fetching' | 'error' | 'success';
 
@@ -23,15 +23,15 @@ export const SaveButton: FC = props => {
     </Button>
 
     <Dialog open={myState == 'success'}>
-      <Dialog.Title>
+      <DialogTitle>
         {myState == 'success' && 'Zapisano'}
         {myState == 'error' && 'Wystąpił błąd'}
-      </Dialog.Title>
-      <Dialog.ActionFooter>
+      </DialogTitle>
+      <DialogActionFooter>
         <Button onClick={() => setMyState('idle')}>
           OK
         </Button>
-      </Dialog.ActionFooter>
+      </DialogActionFooter>
     </Dialog>
   </>;
 

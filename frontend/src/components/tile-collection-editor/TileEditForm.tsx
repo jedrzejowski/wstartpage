@@ -1,7 +1,7 @@
-import {FC, memo} from 'react';
+import {FC, memo, useState} from 'react';
 import TextInput from '../input/TextInput';
 import {tileMutActions, useNormalizedTile} from '../../data/slice/normalizedTileCollections';
-import type {TileT, TextIconT} from '../../data/tileCollection';
+import type {TileT, TextIconT, UrlIconT} from '../../data/tileCollection';
 import {useAppDispatch} from '../../data/hooks';
 import {isTextIconT, isUrlIconT} from '../../data/tileCollection';
 import ColorInput from '../input/ColorInput';
@@ -11,6 +11,7 @@ import NumberInput from '../input/NumberInput';
 import MdiIcon from '../MdiIcon';
 import SelectInput from '../input/SelectInput';
 import Toolbar from "../Toolbar.tsx";
+import ImageDialog from "../admin/ImageDialog.tsx";
 
 function TileEditForm(props: { tileId: string; }) {
   const {tileId} = props;
@@ -45,10 +46,10 @@ function TileEditForm(props: { tileId: string; }) {
       ]}
     />
 
-    {isTextIconT(tile.icon) ? (<>
+    {isTextIconT(tile.icon) ? (
       <TextIconEditor value={tile.icon} onValueChange={handleChangeFactory('icon')}/>
-    </>) : isUrlIconT(tile.icon) ? (
-      <TextInput label="Adres ikony" value={tile.icon ?? ''} onValueChange={handleChangeFactory('icon')}/>
+    ) : isUrlIconT(tile.icon) ? (
+      <UrlIconEditor value={tile.icon} onValueChange={handleChangeFactory('icon')}/>
     ) : null}
   </PaddedRoot>;
 
@@ -91,6 +92,33 @@ const TextIconEditor: FC<{ value: TextIconT; onValueChange: (value: TextIconT) =
       label="Wielkość czcionki ikonyy"
       value={value.fontSize}
       onValueChange={fontSize => onValueChange({...value, fontSize})}
+    />
+  </>;
+};
+
+const UrlIconEditor: FC<{
+  value: UrlIconT;
+  onValueChange: (value: UrlIconT) => void;
+}> = props => {
+  const {value, onValueChange} = props;
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+
+  return <>
+    <TextInput
+      label="Adres ikony"
+      value={value.url}
+      readOnly
+      onFocus={() => setIsImageDialogOpen(true)}
+    />
+
+    <ImageDialog
+      title="Wybierz obrazek"
+      open={isImageDialogOpen}
+      onFilePicked={file => {
+        onValueChange({...value, url: file.fullPath});
+        setIsImageDialogOpen(false);
+      }}
+      onClose={() => setIsImageDialogOpen(false)}
     />
   </>;
 };

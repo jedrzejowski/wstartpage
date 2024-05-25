@@ -18,6 +18,7 @@ pub fn make_router() -> Router<AppState> {
     .route("/users/me", get(users::me))
     .route("/tile-collections", get(tile_collections::search))
     .route("/tile-collections/:name", get(tile_collections::select).put(tile_collections::update))
+    .route("/images", get(images::search))
   // .service(
   //   web::scope("/images")
   //     .route("", web::get().to(images::search))

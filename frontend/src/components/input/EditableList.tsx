@@ -55,7 +55,7 @@ function Item<T>(props: {
   const itemComponents = itemRender(item);
 
   return <ListItem
-    main={itemComponents.main}
+    primary={itemComponents.main}
     actions={[
       {icon: 'arrow-up', onClick: handleClickUp, disabled: isFirst},
       {icon: 'arrow-down', onClick: handleClickDown, disabled: isLast},

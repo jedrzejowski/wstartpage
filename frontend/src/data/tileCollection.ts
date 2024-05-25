@@ -3,11 +3,10 @@ export type Nullable<T> = {
   [P in keyof T]: T[P] | null;
 };
 
-
-export type UrlIconT = string;
+export type UrlIconT = { url: string };
 
 export function isUrlIconT(icon: AnyIconT | null): icon is UrlIconT {
-  return typeof icon === 'string';
+  return icon !== null && 'url' in icon;
 }
 
 export type TextIconT = {
@@ -17,7 +16,7 @@ export type TextIconT = {
 };
 
 export function isTextIconT(icon: AnyIconT | null): icon is TextIconT {
-  return icon !== null && typeof icon === 'object';
+  return icon !== null && 'text' in icon;
 }
 
 export type AnyIconT = UrlIconT | TextIconT;
@@ -47,8 +46,15 @@ export type TileContainerNameT =
   | 'right'
   | 'bottom';
 
+export enum TileCollectionTheme {
+  LIGHT = 'LIGHT',
+  DARK = 'DARK',
+  SYSTEM_DEFAULT = 'SYSTEM_DEFAULT',
+}
+
 export type TileCollectionT = {
   readonly name: string;
+  theme: TileCollectionTheme;
   includes: string[] | null;
   settings: Partial<TileCollectionSettingsT>;
 } & Record<TileContainerNameT, TileContainerT | null>;
@@ -62,23 +68,3 @@ export interface TileCollectionSettingsT {
 }
 
 export type NormalizedTileCollectionT = Normalize<TileCollectionT, TileContainerNameT>;
-
-export function textIconFromStr(iconText: string): TextIconT {
-  const data: any = {};
-  iconText = iconText.substring(1);
-  const params = new URLSearchParams(iconText);
-  for (let [key, value] of params.entries()) {
-    data[key] = value;
-  }
-
-  return {
-    text: data.text ?? '',
-    bgColor: data.bgColor ?? '',
-    fontSize: data.fontSize ?? '',
-  };
-}
-
-export function textIconToStr(iconText: TextIconT): string {
-  // @ts-ignore
-  return '!' + new URLSearchParams(iconText).toString();
-}

@@ -4,6 +4,7 @@ import {BACKEND_URL} from '../fetch.ts';
 import qs from 'qs';
 import {UserDataT} from './auth.ts';
 import {AppRootState} from '../redux.ts';
+import {ImageInode} from '../images.ts';
 
 
 export const apiSlice = createApi({
@@ -44,7 +45,7 @@ export const apiSlice = createApi({
       query: (name) => `/tile-collections/${name}`,
     }),
     getMergedTileCollection: builder.query<TileCollectionT, string>({
-      query: (name) => `/tile-collections/${name}?${qs.stringify({recursiveMerge: true})}`,
+      query: (name) => `/tile-collections/${name}?` + qs.stringify({recursiveMerge: true}),
     }),
     getTileCollectionList: builder.query<string[], void>({
       query: () => `/tile-collections`,
@@ -55,6 +56,9 @@ export const apiSlice = createApi({
         method: 'PUT',
         body: tileCollection,
       }),
+    }),
+    browseImageDirectory: builder.query<ImageInode[], { path: string; query?: string; }>({
+      query: (args) => `/images?` + qs.stringify(args),
     }),
   }),
 });

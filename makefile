@@ -1,5 +1,5 @@
 
-IMAGE_VERSION=0.0.19
+IMAGE_VERSION=0.0.20
 IMAGE_NAME?=ajedrzejowski/wstartpage
 
 image-build:

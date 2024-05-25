@@ -1,6 +1,9 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
-import userTileSearchSlice, {useUserTileSearchQuery} from '../../data/slice/userTileSearch.ts';
+import {
+  setUserSearchQueryAction,
+  useUserTileSearchQuery
+} from '../../data/slice/userTileSearch.ts';
 import {useAppDispatch} from '../../data/hooks';
 import {useEventListener} from 'usehooks-ts';
 
@@ -15,21 +18,27 @@ const SearchView: FC = props => {
     }
 
     if (event.code.match(/^Key[A-Z]$/)) {
-      dispatch(userTileSearchSlice.actions.append(event.key));
+      dispatch(setUserSearchQueryAction({
+        searchQuery: searchQuery + event.key,
+      }));
     }
 
-    if (event.code === 'Backspace') {
-      dispatch(userTileSearchSlice.actions.backspace());
+    if (event.code === 'Backspace' && searchQuery.length > 0) {
+      dispatch(setUserSearchQueryAction({
+        searchQuery: searchQuery.substring(0, searchQuery.length - 1),
+      }));
     }
 
     if (event.code === 'Escape') {
-      dispatch(userTileSearchSlice.actions.clear());
+      dispatch(setUserSearchQueryAction({
+        searchQuery: '',
+      }));
     }
   });
 
   return (
     <Root>
-      {searchQuery?.toUpperCase()}
+      {searchQuery.toUpperCase()}
     </Root>
   );
 };

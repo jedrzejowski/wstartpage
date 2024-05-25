@@ -27,7 +27,11 @@ export const ListItemRoot = styled.div<{ selected?: boolean }>`
 
 export const ListItemText = styled.div`
   flex-grow: 1;
-  height:  1.15em;
+  height: 1.15em;
+
+  svg + & {
+    margin-left: ${props => props.theme.spacing(1)};
+  }
 `;
 
 export const ListItemActions = styled.div`
@@ -50,15 +54,21 @@ export const ListItemActionRoot = styled.div<{ disabled?: boolean }>`
 `;
 
 export const ListItem: FC<{
-  main: ReactNode;
+  primary: ReactNode;
+  icon?: MdiIconKey;
   actions?: (ItemActionProps | null)[];
   onClick?: (e: MouseEvent) => void;
   selected?: boolean;
 }> = props => {
 
   return <ListItemRoot onClick={props.onClick} selected={props.selected}>
+
+    {props.icon && (
+      <MdiIcon icon={props.icon}/>
+    )}
+
     <ListItemText>
-      {props.main}
+      {props.primary}
     </ListItemText>
 
     {props.actions && (
@@ -68,7 +78,6 @@ export const ListItem: FC<{
     )}
   </ListItemRoot>;
 };
-
 
 
 export const ListItemAction: FC<ItemActionProps> = props => {

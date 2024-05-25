@@ -31,7 +31,7 @@ export const EditorCollectionList: FC = React.memo(props => {
 
       return <ListItem
         key={collectionName}
-        main={<>
+        primary={<>
           {collectionName}
           {editedIconCollections.includes(collectionName) ? '*' : null}
         </>}
