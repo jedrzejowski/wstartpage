@@ -75,8 +75,8 @@ impl AppConfig {
     return cors;
   }
 
-  pub fn prefixed(&self, prefix: &str) -> PrefixedEnvReader {
-    return PrefixedEnvReader { prefix: prefix.to_string() };
+  pub fn prefixed_reader(&self, prefix: &str) -> ConfigReader {
+    return ConfigReader { prefix: prefix.to_string() };
   }
 }
 
@@ -90,11 +90,15 @@ fn make_absolute(path: &mut String) {
   path.replace_range(.., &full_path);
 }
 
-pub struct PrefixedEnvReader {
+pub struct ConfigReader {
   prefix: String,
 }
 
-impl PrefixedEnvReader {
+impl ConfigReader {
+  pub fn prefixed(&self, prefix: &str) -> ConfigReader {
+    return ConfigReader { prefix: format!("{}_{}", self.prefix, prefix) };
+  }
+
   pub fn get_optional(&self, key: &str) -> Option<String> {
     let var_name = format!("{}_{}", self.prefix, key).to_uppercase();
 

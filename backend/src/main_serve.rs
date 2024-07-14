@@ -6,7 +6,6 @@ mod app_state;
 mod service;
 
 use tower_http::services::{ServeDir, ServeFile};
-use std::sync::Arc;
 use anyhow::Result;
 use axum::Router;
 use axum::routing::get;

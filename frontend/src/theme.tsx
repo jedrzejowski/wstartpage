@@ -102,13 +102,12 @@ const darkTheme: DefaultTheme = {
 const GlobalStyle = createGlobalStyle<{}>`
   body {
     margin: 0;
-    color: black;
+    color: ${props => props.theme.color.text};
     font-family: sans-serif;
 
     background-attachment: fixed;
     background-color: ${props => props.theme.color.bodyBackground};
     background-position: 0 0;
-    color: ${props => props.theme.color.text};
   }
 
   body::-webkit-scrollbar {
