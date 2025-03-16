@@ -23,7 +23,7 @@ async fn main() -> Result<()> {
 
   let app_state = AppState {
     app_config: app_config.clone(),
-    user_source_service: user_source,
+    user_source: user_source,
     // tile_collection_service: TilesCollections::new(&app_config).into(),
   };
 

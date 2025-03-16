@@ -30,7 +30,7 @@ impl FromRequestParts<AppState> for AppUserInfo
       Err(err) => return Err(ProblemDetails::bad_request("failed to parse authorization header")),
     };
 
-    let user_info = state.user_source_service.auth_user(HashMap::from([
+    let user_info = state.user_source.auth_user(HashMap::from([
       ("username".to_owned(), basic_auth.username().to_owned()),
       ("password".to_owned(), basic_auth.password().to_owned()),
     ])).await;

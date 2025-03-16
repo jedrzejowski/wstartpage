@@ -1,14 +1,12 @@
 use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::path::Path;
-use std::sync::Arc;
 use anyhow::{anyhow, Result, Context};
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha512};
 use crate::model::user_info::AppUserInfo;
-use crate::service::app_config::AppConfigBean;
-use super::{UserSource, UserSourceBean, UserSourceError};
+use super::{UserSource, UserSourceError};
 
 #[derive(Debug, Default)]
 pub struct StaticFileUserSource {
@@ -18,13 +16,15 @@ pub struct StaticFileUserSource {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 struct StaticUser {
+  #[serde(rename = "displayName")]
   display_name: String,
   username: String,
-  password_hash: String,
+  password: String,
 }
 
 #[derive(Debug, Clone)]
 enum Algo {
+  PlainText,
   Sha512,
 }
 
@@ -32,22 +32,6 @@ impl StaticFileUserSource {
   pub fn new() -> Self {
     Self::default()
   }
-
-  pub fn from_config(app_config: &AppConfigBean) -> Result<UserSourceBean> {
-    let mut this = StaticFileUserSource::new();
-
-    let cfg_reader = app_config.cfg_reader("user_source");
-
-    if let Some(algo_str) = cfg_reader.get_optional("algo") {
-      this.set_algo_from_string(algo_str)?;
-    }
-
-    let file_path = cfg_reader.get_required("file");
-    this.load_users_from_file(file_path)?;
-
-    Ok(Arc::new(Box::new(this)))
-  }
-
 
   pub fn set_algo_from_string(&mut self, algo_str: impl AsRef<str>) -> Result<()> {
     self.algo = Algo::try_from_string(algo_str)?;
@@ -77,7 +61,9 @@ impl UserSource for StaticFileUserSource {
       .find(|user| &user.username == username)
       .ok_or(UserSourceError::Unauthorized)?;
 
-    if !self.algo.verify(password, &user.password_hash) {
+    dbg!(&user);
+
+    if !self.algo.verify(password, &user.password) {
       return Err(UserSourceError::Unauthorized);
     }
 
@@ -92,26 +78,36 @@ impl Algo {
   pub fn try_from_string(algo_str: impl AsRef<str>) -> Result<Algo> {
     return Ok(match algo_str.as_ref() {
       "sha512" => Algo::Sha512,
+      "plain" => Algo::PlainText,
       alg => return Err(anyhow!("unknown algorithm named '{}'", alg))
     });
   }
 
-  pub fn hash(&self, password: impl AsRef<[u8]>) -> String {
+  pub fn hash(&self, password: impl AsRef<str>) -> String {
     match &self {
+      Algo::PlainText => {
+        password.as_ref().to_string()
+      }
       Algo::Sha512 => {
         let mut hasher = Sha512::new();
-        hasher.update(password);
-        return hex::encode(hasher.finalize());
+        hasher.update(password.as_ref());
+        hex::encode(hasher.finalize())
       }
-    };
+    }
   }
 
   pub fn verify(&self, password: &String, hash: &String) -> bool {
     match &self {
-      Algo::Sha512 => {
-        return &self.hash(password) == hash;
+      Algo::PlainText => {
+        dbg!(password);
+        dbg!(hash);
+        dbg!(password == hash);
+        password == hash
       }
-    };
+      Algo::Sha512 => {
+        &self.hash(password) == hash
+      }
+    }
   }
 }
 

@@ -31,22 +31,23 @@ pub trait UserSource: Sync + Send + Debug {
 pub type UserSourceBean = Arc<Box<dyn UserSource>>;
 
 pub fn from_config(app_config: &AppConfigBean) -> Result<UserSourceBean> {
-  let config = app_config.cfg_reader("user_source");
+  let cfg_reader = app_config.cfg_reader("user_source");
 
-  match config.get_required("type").as_str() {
+  match cfg_reader.get_required("type").as_str() {
     "no" | "false" => {
       let us = NoUserSource::new();
       return Ok(Arc::new(Box::new(us)));
     }
-    "static" | "staticfile" => {
+    "static" | "static_file" => {
       let mut sfus = StaticFileUserSource::new();
 
-      if let Some(algo_str) = config.get_optional("algo") {
+      let file_path = cfg_reader.get_required("file");
+      log::info!("creating static file user source from file: {}", file_path);
+      sfus.load_users_from_file(file_path)?;
+
+      if let Some(algo_str) = cfg_reader.get_optional("algo") {
         sfus.set_algo_from_string(algo_str)?;
       }
-
-      let file_path = config.get_required("file");
-      sfus.load_users_from_file(file_path)?;
 
       return Ok(Arc::new(Box::new(sfus)));
     }
