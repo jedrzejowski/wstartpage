@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::future::Future;
 use async_trait::async_trait;
 use axum::extract::FromRequestParts;
 use axum_extra::{
@@ -18,12 +19,10 @@ pub struct AppUserInfo {
   pub username: String,
 }
 
-#[async_trait]
 impl FromRequestParts<AppState> for AppUserInfo
 {
   type Rejection = ProblemDetails;
 
-  // Required method
   async fn from_request_parts(parts: &mut Parts, state: &AppState) -> Result<Self, Self::Rejection> {
     let basic_auth = TypedHeader::<Authorization<Basic>>::from_request_parts(parts, state).await;
     let basic_auth = match basic_auth {

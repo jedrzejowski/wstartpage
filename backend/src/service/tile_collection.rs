@@ -1,8 +1,8 @@
 use std::collections::{HashSet, VecDeque};
 use std::sync::Arc;
 use anyhow::{anyhow, Result};
-use crate::data_source::{FileDataSource, RepositoryResult};
-use crate::model::tile_collection::{Icon, TileCollection, TileCollectionTheme, TileSection};
+use crate::data_source::{FileDataSource, DataSourceResult};
+use crate::model::tile_collection2::{Icon, TileCollection, TileCollectionTheme, TileSection};
 use crate::service::app_config::AppConfigBean;
 
 pub type TilesCollectionsBean = Arc<TilesCollections>;
@@ -103,15 +103,15 @@ impl TilesCollections {
     ));
   }
 
-  pub async fn get_all_names(&self) -> RepositoryResult<Vec<String>> {
+  pub async fn get_all_names(&self) -> DataSourceResult<Vec<String>> {
     self.data_source.get_all_names().await
   }
 
-  pub async fn get_one(&self, name: &str) -> RepositoryResult<TileCollection> {
+  pub async fn get_one(&self, name: &str) -> DataSourceResult<TileCollection> {
     self.data_source.get_one(name).await
   }
 
-  pub async fn update_one(&self, name: &str, tile_collection: &TileCollection) -> RepositoryResult<()> {
+  pub async fn update_one(&self, name: &str, tile_collection: &TileCollection) -> DataSourceResult<()> {
     self.data_source.update_one(name, tile_collection).await
   }
 }

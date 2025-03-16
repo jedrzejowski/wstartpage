@@ -5,13 +5,12 @@ mod data_source;
 mod app_state;
 mod service;
 
-use tower_http::services::{ServeDir, ServeFile};
+use tower_http::services::{ServeDir};
 use anyhow::Result;
 use axum::Router;
 use axum::routing::get;
 use crate::service::app_config::{AppConfig, AppConfigBean};
 use crate::app_state::AppState;
-use crate::service::tile_collection::{TilesCollections};
 use crate::service::user_source;
 
 #[tokio::main]
@@ -25,7 +24,7 @@ async fn main() -> Result<()> {
   let app_state = AppState {
     app_config: app_config.clone(),
     user_source_service: user_source,
-    tile_collection_service: TilesCollections::new(&app_config).into(),
+    // tile_collection_service: TilesCollections::new(&app_config).into(),
   };
 
   let layer_builder = tower::ServiceBuilder::new();

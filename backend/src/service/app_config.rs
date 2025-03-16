@@ -1,9 +1,9 @@
-use std::env::VarError;
-use std::sync::Arc;
-use std::time::Duration;
 use anyhow::{anyhow, Result};
 use http::Method;
 use serde::Deserialize;
+use std::env::VarError;
+use std::sync::Arc;
+use std::time::Duration;
 use tower_http::cors::CorsLayer;
 
 pub type AppConfigBean = Arc<AppConfig>;
@@ -45,7 +45,9 @@ impl AppConfig {
     dotenv::dotenv().ok();
 
     let mut config: Self = match envy::from_env() {
-      Err(envy::Error::MissingValue(value)) => return Err(anyhow!("missing env var {}", value.to_uppercase())),
+      Err(envy::Error::MissingValue(value)) => {
+        return Err(anyhow!("missing env var {}", value.to_uppercase()))
+      }
       other => other,
     }?;
 
@@ -64,7 +66,11 @@ impl AppConfig {
 
     let mut cors = CorsLayer::new()
       .allow_methods([Method::GET, Method::POST])
-      .allow_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT, http::header::CONTENT_TYPE])
+      .allow_headers(vec![
+        http::header::AUTHORIZATION,
+        http::header::ACCEPT,
+        http::header::CONTENT_TYPE,
+      ])
       .max_age(Duration::from_secs(3600));
     //
     // .allowed_origin("https://www.rust-lang.org/")
@@ -75,8 +81,10 @@ impl AppConfig {
     return cors;
   }
 
-  pub fn prefixed_reader(&self, prefix: &str) -> ConfigReader {
-    return ConfigReader { prefix: prefix.to_string() };
+  pub fn cfg_reader(&self, prefix: &str) -> ConfigReader {
+    ConfigReader {
+      prefix: prefix.to_string(),
+    }
   }
 }
 
@@ -85,7 +93,10 @@ fn make_absolute(path: &mut String) {
 
   let full_path = std::fs::canonicalize(os_path)
     .map_err(|err| anyhow!("directory '{}' not found", path))
-    .unwrap().into_os_string().into_string().unwrap();
+    .unwrap()
+    .into_os_string()
+    .into_string()
+    .unwrap();
 
   path.replace_range(.., &full_path);
 }
@@ -95,8 +106,10 @@ pub struct ConfigReader {
 }
 
 impl ConfigReader {
-  pub fn prefixed(&self, prefix: &str) -> ConfigReader {
-    return ConfigReader { prefix: format!("{}_{}", self.prefix, prefix) };
+  pub fn prefixed(&self, prefix: &str) -> Self {
+    Self {
+      prefix: format!("{}_{}", self.prefix, prefix),
+    }
   }
 
   pub fn get_optional(&self, key: &str) -> Option<String> {
@@ -115,6 +128,6 @@ impl ConfigReader {
       Err(_) => panic!("required var not found {}", var_name),
     };
 
-    return var_value;
+    var_value
   }
 }

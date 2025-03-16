@@ -4,23 +4,18 @@ use std::fmt::Debug;
 use std::ops::Deref;
 
 pub use file::FileDataSource;
-use crate::utils::problem_details::ProblemDetails;
 
 #[derive(thiserror::Error, Debug)]
-pub enum RepositoryError {
+pub enum DataSourceError {
   #[error("not found")]
   NotFound,
   #[error("internal error")]
   Anyhow(#[from] anyhow::Error),
 }
 
-pub type RepositoryResult<T> = Result<T, RepositoryError>;
+pub type DataSourceResult<T> = Result<T, DataSourceError>;
 
-impl From<RepositoryError> for ProblemDetails {
-  fn from(value: RepositoryError) -> Self {
-    todo!()
-  }
-}
+
 
 // #[async_trait]
 // pub trait DataSource: Sync + Send + Debug {

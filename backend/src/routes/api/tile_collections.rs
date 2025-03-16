@@ -2,10 +2,10 @@ use axum::extract::{Path, Query, State};
 use axum::Json;
 use crate::utils::problem_details::{HttpResult, JsonResult};
 use serde::Deserialize;
-use crate::data_source::{RepositoryError};
+use crate::data_source::{DataSourceError};
 use crate::model::user_info::AppUserInfo;
 use crate::utils::problem_details::ProblemDetails;
-use crate::model::tile_collection::TileCollection;
+use crate::model::tile_collection2::TileCollection;
 use crate::service::tile_collection::TilesCollectionsBean;
 
 
@@ -33,7 +33,7 @@ pub async fn select(
 ) -> JsonResult<TileCollection> {
   let mut tile_collection = match tile_repo.get_one(&name).await {
     Ok(tc) => tc,
-    Err(RepositoryError::NotFound) => return Err(ProblemDetails::not_found("not found")),
+    Err(DataSourceError::NotFound) => return Err(ProblemDetails::not_found("not found")),
     Err(_) => return Err(ProblemDetails::internal("")),
   };
 

@@ -31,7 +31,7 @@ pub trait UserSource: Sync + Send + Debug {
 pub type UserSourceBean = Arc<Box<dyn UserSource>>;
 
 pub fn from_config(app_config: &AppConfigBean) -> Result<UserSourceBean> {
-  let config = app_config.prefixed_reader("user_source");
+  let config = app_config.cfg_reader("user_source");
 
   match config.get_required("type").as_str() {
     "no" | "false" => {
@@ -39,16 +39,16 @@ pub fn from_config(app_config: &AppConfigBean) -> Result<UserSourceBean> {
       return Ok(Arc::new(Box::new(us)));
     }
     "static" | "staticfile" => {
-      let us = StaticFileUserSource::new();
+      let mut sfus = StaticFileUserSource::new();
 
       if let Some(algo_str) = config.get_optional("algo") {
-        us.set_algo_from_string(algo_str)?;
+        sfus.set_algo_from_string(algo_str)?;
       }
 
       let file_path = config.get_required("file");
-      us.load_users_from_file(file_path)?;
+      sfus.load_users_from_file(file_path)?;
 
-      return Ok(Arc::new(Box::new(us)));
+      return Ok(Arc::new(Box::new(sfus)));
     }
     value => panic!("unknown type '{}'", value),
   };

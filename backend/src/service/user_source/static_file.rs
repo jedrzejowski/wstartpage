@@ -1,20 +1,17 @@
 use std::borrow::Borrow;
 use std::collections::HashMap;
-use std::ops::Deref;
 use std::path::Path;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use anyhow::{anyhow, Result, Context};
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha512};
 use crate::model::user_info::AppUserInfo;
-use super::{UserSource, UserSourceError};
+use crate::service::app_config::AppConfigBean;
+use super::{UserSource, UserSourceBean, UserSourceError};
 
 #[derive(Debug, Default)]
-pub struct StaticFileUserSource(Mutex<Arc<InnerState>>);
-
-#[derive(Debug, Default, Clone)]
-struct InnerState {
+pub struct StaticFileUserSource {
   algo: Algo,
   users: Vec<StaticUser>,
 }
@@ -36,55 +33,51 @@ impl StaticFileUserSource {
     Self::default()
   }
 
-  pub fn set_algo_from_string(&self, algo_str: impl AsRef<str>) -> Result<()> {
-    let algo = Algo::try_from_string(algo_str)?;
+  pub fn from_config(app_config: &AppConfigBean) -> Result<UserSourceBean> {
+    let mut this = StaticFileUserSource::new();
 
-    let mut inner_state = self.get_inner_state().deref().clone();
+    let cfg_reader = app_config.cfg_reader("user_source");
 
-    inner_state.algo = algo;
+    if let Some(algo_str) = cfg_reader.get_optional("algo") {
+      this.set_algo_from_string(algo_str)?;
+    }
 
-    self.set_inner_state(inner_state);
+    let file_path = cfg_reader.get_required("file");
+    this.load_users_from_file(file_path)?;
+
+    Ok(Arc::new(Box::new(this)))
+  }
+
+
+  pub fn set_algo_from_string(&mut self, algo_str: impl AsRef<str>) -> Result<()> {
+    self.algo = Algo::try_from_string(algo_str)?;
 
     Ok(())
   }
 
-  pub fn load_users_from_file(&self, path: impl AsRef<Path>) -> Result<()> {
-    let mut inner_state = self.get_inner_state().deref().clone();
-
+  pub fn load_users_from_file(&mut self, path: impl AsRef<Path>) -> Result<()> {
     let mut reader = csv::Reader::from_path(path)
       .context("reading csv file")?;
 
     for record in reader.deserialize() {
-      inner_state.users.push(record?);
+      self.users.push(record?);
     }
 
-    self.set_inner_state(inner_state);
-
     Ok(())
-  }
-
-  fn get_inner_state(&self) -> Arc<InnerState> {
-    self.0.lock().unwrap().clone()
-  }
-
-  fn set_inner_state(&self, new_inner_state: InnerState) {
-    let mut inner_state = self.0.lock().unwrap();
-    *inner_state = Arc::new(new_inner_state);
   }
 }
 
 #[async_trait]
 impl UserSource for StaticFileUserSource {
   async fn auth_user(&self, attributes: HashMap<String, String>) -> Result<AppUserInfo, UserSourceError> {
-    let inner_state = self.get_inner_state();
     let username = attributes.get("username").ok_or(UserSourceError::BadAttributes)?;
     let password = attributes.get("password").ok_or(UserSourceError::BadAttributes)?;
 
-    let user = inner_state.users.iter()
+    let user = self.users.iter()
       .find(|user| &user.username == username)
       .ok_or(UserSourceError::Unauthorized)?;
 
-    if !inner_state.algo.verify(password, &user.password_hash) {
+    if !self.algo.verify(password, &user.password_hash) {
       return Err(UserSourceError::Unauthorized);
     }
 
